@@ -1,0 +1,66 @@
+/*
+ * fangUI · Flat —— FangBox 同款扁平风
+ * 没有阴影、没有渐变，层级全靠 3% / 5% 明度微差 + 1px 线。
+ * 安静、耐看、不扎眼。
+ */
+
+[data-ui="flat"] { --shadow-1: none; --shadow-2: none; }
+
+[data-ui="flat"] .fu-card,
+[data-ui="flat"] .fu-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+}
+[data-ui="flat"] .fu-card:hover { background: var(--surface-2); }
+[data-ui="flat"] .fu-panel { background: var(--surface-2); border-radius: var(--r-lg); }
+
+[data-ui="flat"] .fu-btn {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
+}
+[data-ui="flat"] .fu-btn:hover  { background: var(--surface-3); border-color: var(--border-strong); }
+[data-ui="flat"] .fu-btn:active { background: var(--border); }
+
+[data-ui="flat"] .fu-btn--accent {
+  background: var(--accent); color: var(--accent-ink); border-color: transparent;
+}
+[data-ui="flat"] .fu-btn--accent:hover  { background: var(--accent-hover); }
+[data-ui="flat"] .fu-btn--accent:active { background: var(--accent-active); }
+
+[data-ui="flat"] .fu-input {
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  outline: none;
+  transition: border-color var(--t-fast) var(--ease-out);
+}
+[data-ui="flat"] .fu-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+
+[data-ui="flat"] .fu-switch {
+  width: 40px; height: 22px; border-radius: 11px;
+  background: var(--surface-3); border: 1px solid var(--border);
+  position: relative; cursor: pointer;
+  transition: background var(--t-move) var(--ease-out);
+}
+[data-ui="flat"] .fu-switch::after {
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform var(--t-move) var(--ease-spring), background var(--t-fast);
+}
+[data-ui="flat"] .fu-switch[aria-checked="true"] { background: var(--accent); border-color: transparent; }
+[data-ui="flat"] .fu-switch[aria-checked="true"]::after { transform: translateX(18px); background: var(--accent-ink); }
+
+[data-ui="flat"] .fu-progress { height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; }
+[data-ui="flat"] .fu-progress > div { height: 100%; background: var(--accent); border-radius: 3px; transition: width var(--t-move) var(--ease-out); }

@@ -1,0 +1,114 @@
+/*
+ * fangUI · Neu —— 轻拟物
+ * 是轻拟物，不是拟物：不做塑料质感，只做「柔」。
+ * 两种子模式：
+ *   data-neu="solid"  普通轻拟物 —— 双阴影营造凸起 / 凹陷
+ *   data-neu="glass"  玻璃轻拟物 —— 全员半透明，像磨砂玻璃在凸起
+ *
+ * 玻璃难点：阴影会被 backdrop-filter 的毛玻璃放大并透出来，
+ * 所以玻璃模式的阴影一律走外圈 drop-shadow（不画在元素底下），
+ * 凸起感改由内侧 1px 高光描边承担。
+ */
+
+/* ════ 子模式一：普通轻拟物（实底） ════ */
+[data-ui="neu"][data-neu="solid"],
+[data-ui="neu"]:not([data-neu]) {
+  --neu-out: 5px 5px 10px var(--neu-dark), -5px -5px 10px var(--neu-light);
+  --neu-in:  inset 3px 3px 6px var(--neu-dark), inset -3px -3px 6px var(--neu-light);
+  --neu-dark: rgba(0 0 0 / 0.07);
+  --neu-light: rgba(255 255 255 / 0.55);
+}
+[data-ui="neu"][data-mode="dark"] {
+  --neu-dark: rgba(0 0 0 / 0.45);
+  --neu-light: rgba(255 255 255 / 0.045);
+}
+
+[data-ui="neu"] .fu-card,
+[data-ui="neu"] .fu-panel {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  box-shadow: var(--neu-out);
+}
+[data-ui="neu"] .fu-panel { background: var(--bg); box-shadow: none; }
+
+[data-ui="neu"] .fu-btn {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--surface); color: var(--text);
+  border: none; border-radius: var(--r-sm);
+  box-shadow: var(--neu-out);
+  cursor: pointer;
+  transition: box-shadow var(--t-fast) var(--ease-out);
+}
+[data-ui="neu"] .fu-btn:hover  { box-shadow: 6px 6px 12px var(--neu-dark), -6px -6px 12px var(--neu-light); }
+[data-ui="neu"] .fu-btn:active { box-shadow: var(--neu-in); }       /* 按下 = 凹陷 */
+
+[data-ui="neu"] .fu-btn--accent {
+  background: var(--accent); color: var(--accent-ink);
+  box-shadow: 5px 5px 10px var(--neu-dark), -5px -5px 10px var(--neu-light);
+}
+[data-ui="neu"] .fu-btn--accent:active { box-shadow: inset 3px 3px 6px rgba(0 0 0 / 0.25); }
+
+[data-ui="neu"] .fu-input {
+  width: 100%; padding: var(--sp-2) var(--sp-3);
+  background: var(--bg); color: var(--text);
+  border: none; border-radius: var(--r-sm);
+  box-shadow: var(--neu-in);                                  /* 输入框 = 凹下去 */
+  outline: none;
+}
+[data-ui="neu"] .fu-input:focus { box-shadow: var(--neu-in), 0 0 0 3px var(--accent-ring); }
+
+[data-ui="neu"] .fu-switch {
+  width: 40px; height: 22px; border-radius: 11px;
+  background: var(--surface); box-shadow: var(--neu-in);
+  position: relative; cursor: pointer;
+}
+[data-ui="neu"] .fu-switch::after {
+  content: ""; position: absolute; top: 1px; left: 1px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--surface); box-shadow: var(--neu-out);
+  transition: transform var(--t-move) var(--ease-spring), background var(--t-fast);
+}
+[data-ui="neu"] .fu-switch[aria-checked="true"] { background: var(--accent-soft); }
+[data-ui="neu"] .fu-switch[aria-checked="true"]::after { transform: translateX(18px); background: var(--accent); }
+
+/* ════ 子模式二：玻璃轻拟物 ════ */
+[data-ui="neu"][data-neu="glass"] {
+  --glass-bg: var(--surface) / 0.55;
+  --neu-dark: rgba(0 0 0 / 0.10);
+  --neu-light: rgba(255 255 255 / 0.35);
+}
+
+[data-ui="neu"][data-neu="glass"] .fu-card,
+[data-ui="neu"][data-neu="glass"] .fu-btn,
+[data-ui="neu"][data-neu="glass"] .fu-input {
+  background: hsl(var(--fu-h) 24% 96% / 0.55);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid rgba(255 255 255 / 0.35);            /* 内侧高光描边 = 玻璃棱边 */
+  box-shadow:
+    0 1px 0 rgba(255 255 255 / 0.45) inset,              /* 顶棱高光 */
+    0 8px 24px rgba(0 0 0 / 0.08),                        /* 外圈投影，不透过 */
+    var(--neu-out);
+}
+[data-mode="dark"] [data-ui="neu"][data-neu="glass"] .fu-card,
+[data-mode="dark"] [data-ui="neu"][data-neu="glass"] .fu-btn {
+  background: hsl(var(--fu-h) 18% 22% / 0.5);
+  border-color: rgba(255 255 255 / 0.08);
+}
+
+[data-ui="neu"][data-neu="glass"] .fu-card { border-radius: var(--r-lg); padding: var(--sp-4); }
+[data-ui="neu"][data-neu="glass"] .fu-panel {
+  background: hsl(var(--fu-h) 24% 92% / 0.4);
+  backdrop-filter: blur(20px) saturate(1.5);
+  border-radius: var(--r-lg); padding: var(--sp-4);
+}
+
+[data-ui="neu"][data-neu="glass"] .fu-btn { color: var(--text); border-radius: var(--r-sm); }
+[data-ui="neu"][data-neu="glass"] .fu-btn:hover  { background: hsl(var(--fu-h) 24% 98% / 0.65); }
+[data-ui="neu"][data-neu="glass"] .fu-btn:active { background: hsl(var(--fu-h) 24% 92% / 0.7); }
+[data-ui="neu"][data-neu="glass"] .fu-btn--accent {
+  background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.75);
+  color: var(--accent-ink); border-color: rgba(255 255 255 / 0.4);
+}

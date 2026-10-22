@@ -1,0 +1,100 @@
+/*
+ * fangUI · 核心令牌
+ * 三风格（flat / neu / liquid）× 三模式（light / dark / natural）共用一套令牌。
+ *
+ * 铁律：
+ * 1. 不用纯色 —— 严禁 #FFFFFF、#000000，最亮 #f2f2f0，最深 #17171a。
+ * 2. 界面差异化只走 3% / 5% 微差 —— 相邻层级明度差不超过 5%。
+ * 3. 主题色无限多 —— 只存 HSL 三原值（--fu-h/s/l），所有强调色实时推导，改色一行 JS。
+ * 4. 组件只准引用变量，禁止写死颜色。
+ */
+
+:root {
+  /* ── 主题色：只存三个原值，全组件实时推导 ── */
+  --fu-h: 205;              /* 色相 0-360 */
+  --fu-s: 72%;              /* 饱和度 */
+  --fu-l: 55%;              /* 明度基准 */
+
+  /* 强调色族（从三原值实时推导） */
+  --accent:            hsl(var(--fu-h) var(--fu-s) calc(var(--fu-l) - 8%));
+  --accent-hover:      hsl(var(--fu-h) var(--fu-s) calc(var(--fu-l) - 16%));
+  --accent-active:     hsl(var(--fu-h) var(--fu-s) calc(var(--fu-l) - 24%));
+  --accent-soft:       hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.12);
+  --accent-ring:       hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.35);
+  --accent-ink:        #f2f2f0;
+
+  /* 状态色（仅用于状态，不作强调） */
+  --ok:    #1a8f4c;
+  --warn:  #b7791f;
+  --error: #d92d20;
+
+  /* 间距 / 圆角 */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-6: 24px; --sp-8: 32px;
+  --r-sm: 6px;  --r-md: 10px; --r-lg: 14px;
+
+  --font-ui: system-ui, "Microsoft YaHei", "Segoe UI", sans-serif;
+  --font-mono: "Cascadia Mono", "Consolas", monospace;
+
+  /* 动效时长：短到刚好有感觉，又不拖节奏 */
+  --t-blur-in: 140ms;   /* 进场去模糊，肉眼几乎看不出但少了就差点意思 */
+  --t-fast: 120ms;
+  --t-move: 220ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);        /* fangui 出场 */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);  /* fangui 弹跳 */
+}
+
+/* ── 亮色模式（默认）—— 基底 #f2f2f0 系，相邻差 3% ── */
+[data-mode="light"] {
+  --bg:         #eeefec;
+  --bg-subtle:  #e9eae7;   /* +3% */
+  --surface:    #f2f2f0;
+  --surface-2:  #ececea;   /* -3% */
+  --surface-3:  #e5e5e3;   /* -5% */
+  --border:     #e0e0de;
+  --border-strong: #d4d4d2;
+  --text:       #26262a;
+  --text-muted: #6d6d72;
+  --text-faint: #a3a3a8;
+  --divider:    #e3e3e1;
+  color-scheme: light;
+}
+
+/* ── 深色模式 —— 基底 #1c1c20 系，相邻差 3% ── */
+[data-mode="dark"] {
+  --bg:         #1c1c20;
+  --bg-subtle:  #1f1f24;   /* +3% */
+  --surface:    #232329;
+  --surface-2:  #28282f;   /* +5% */
+  --surface-3:  #2f2f38;
+  --border:     #33333c;
+  --border-strong: #41414c;
+  --text:       #e6e6e2;
+  --text-muted: #9a9aa2;
+  --text-faint: #66666e;
+  --divider:    #2b2b32;
+  --accent-ink: #1c1c20;
+  color-scheme: dark;
+}
+
+/* ── 自然模式 —— 暖调纸感，护眼低刺激 ── */
+[data-mode="natural"] {
+  --bg:         #ece9e2;
+  --bg-subtle:  #e7e4dd;
+  --surface:    #f0ede6;
+  --surface-2:  #e9e6df;
+  --surface-3:  #e1ded7;
+  --border:     #dbd8d0;
+  --border-strong: #ccc9c0;
+  --text:       #2d2b26;
+  --text-muted: #736f65;
+  --text-faint: #a5a198;
+  --divider:    #e0ddd5;
+  color-scheme: light;
+}
+
+/* ── 主题色切换 API（JS 调这一句即可）──
+   FangUI.accent(200, 72, 55)            任意 HSL
+   FangUI.accent("#6fc0ff")              任意颜色，自动解析成 HSL
+   FangUI.preset("sakura" | "ocean" ...) 预设色板
+*/

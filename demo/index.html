@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-ui="flat" data-mode="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fangUI · 三风格演示</title>
+<link rel="stylesheet" href="../src/core/tokens.css">
+<link rel="stylesheet" href="../src/core/flat.css">
+<link rel="stylesheet" href="../src/core/neu.css">
+<link rel="stylesheet" href="../src/core/liquid.css">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: var(--font-ui); background: var(--bg); color: var(--text);
+    min-height: 100vh; padding: var(--sp-6); display: flex; flex-direction: column; gap: var(--sp-6);
+    transition: background var(--t-move) var(--ease-out), color var(--t-move) var(--ease-out);
+  }
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); }
+  h1 { font-size: 20px; margin-right: auto; }
+  h1 small { color: var(--text-muted); font-weight: normal; font-size: 12px; margin-left: var(--sp-2); }
+  .bar { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
+  .bar .lbl { color: var(--text-muted); font-size: 12px; margin: 0 var(--sp-1); }
+  .swatches { display: flex; gap: 6px; }
+  .sw { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; }
+  .sw:hover { transform: scale(1.12); transition: transform var(--t-fast) var(--ease-spring); }
+  main { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--sp-4); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; margin-top: var(--sp-3); }
+  .fu-input { max-width: 100%; }
+  .fu-progress { margin-top: var(--sp-3); }
+  h3 { font-size: 13px; color: var(--text-muted); margin-bottom: var(--sp-2); }
+  .fu-ai-ask__title { font-weight: 600; margin-bottom: 4px; }
+  .fu-ai-ask__sub { font-size: 12px; color: var(--text-muted); margin-bottom: var(--sp-3); }
+  .fu-ai-ask__list { display: grid; gap: var(--sp-2); }
+  .fu-ai-ask__opt { flex-direction: column; align-items: flex-start; text-align: left; }
+  .fu-ai-ask__opt span { font-size: 12px; color: var(--text-muted); }
+  .fu-compare { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); margin-top: var(--sp-2); }
+  .fu-compare__pane { cursor: pointer; padding: var(--sp-3); border-radius: var(--r-md); border: 1px dashed var(--border-strong); }
+  .fu-compare__pane:hover { border-color: var(--accent); }
+  .fu-compare__label { font-size: 12px; color: var(--text-muted); margin-bottom: var(--sp-2); text-align: center; }
+  .caret { animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  #liquid-host { position: fixed; inset: 0; z-index: -1; background: linear-gradient(135deg, hsl(var(--fu-h) 40% 70%), hsl(calc(var(--fu-h) + 60) 40% 60%)); }
+  [data-ui="liquid"] ~ main, [data-ui="liquid"] header { position: relative; }
+</style>
+</head>
+<body>
+<div id="liquid-host"></div>
+
+<header>
+  <h1>fangUI<small>三风格 · 三模式 · 无限主题色</small></h1>
+  <div class="bar">
+    <span class="lbl">风格</span>
+    <button class="fu-btn" data-set="flat">Flat</button>
+    <button class="fu-btn" data-set="neu">Neu</button>
+    <button class="fu-btn" data-set="neu-g">Neu·Glass</button>
+    <button class="fu-btn" data-set="liquid">Liquid</button>
+    <span class="lbl">模式</span>
+    <button class="fu-btn" data-mode="light">亮</button>
+    <button class="fu-btn" data-mode="dark">暗</button>
+    <button class="fu-btn" data-mode="natural">自然</button>
+    <div class="swatches" id="swatches"></div>
+  </div>
+</header>
+
+<main>
+  <section class="fu-card">
+    <h3>按钮 · 输入 · 开关</h3>
+    <button class="fu-btn">普通</button>
+    <button class="fu-btn fu-btn--accent">强调</button>
+    <div class="row">
+      <input class="fu-input" placeholder="输入点什么…">
+    </div>
+    <div class="row">
+      <div class="fu-switch" role="switch" aria-checked="false"></div>
+      <div class="fu-switch" role="switch" aria-checked="true"></div>
+    </div>
+    <div class="fu-progress"><div style="width: 62%"></div></div>
+  </section>
+
+  <section class="fu-card">
+    <h3>动效</h3>
+    <p id="type-target" style="min-height: 22px; font-size: 14px;"></p>
+    <div class="row">
+      <button class="fu-btn" id="btn-type">打字机</button>
+      <button class="fu-btn" id="btn-blurin">进场去模糊</button>
+      <button class="fu-btn" id="btn-bounce">弹跳</button>
+    </div>
+  </section>
+
+  <section class="fu-card">
+    <h3>AI 协作</h3>
+    <p style="font-size: 13px; color: var(--text-muted);">没选风格时主动提问；两个风格并排对比，点边即选定。</p>
+    <div class="row">
+      <button class="fu-btn" id="btn-ask">主动提问卡</button>
+      <button class="fu-btn" id="btn-compare">风格对比</button>
+    </div>
+    <div id="ai-host"></div>
+  </section>
+</main>
+
+<script type="module">
+  import "../src/fangui.js";
+  import "../src/motion/fangui-motion.js";
+  import "../src/ai/fangui-ai.js";
+
+  const { motion, ai, accent, preset, setMode, PRESETS } = window.FangUI;
+
+  // 风格 / 模式切换
+  document.querySelectorAll("[data-set]").forEach((b) =>
+    b.addEventListener("click", () => ai.setMode(b.dataset.set)));
+  document.querySelectorAll("[data-mode]").forEach((b) =>
+    b.addEventListener("click", () => setMode(b.dataset.mode)));
+
+  // 主题色盘（预设 + 随机无限主题色）
+  const sw = document.getElementById("swatches");
+  Object.keys(PRESETS).forEach((k) => {
+    const [h, s, l] = PRESETS[k];
+    const d = document.createElement("div");
+    d.className = "sw";
+    d.style.background = `hsl(${h} ${s}% ${l}%)`;
+    d.title = k;
+    d.addEventListener("click", () => preset(k));
+    sw.appendChild(d);
+  });
+  const rnd = document.createElement("div");
+  rnd.className = "sw";
+  rnd.title = "随机主题色（无限多）";
+  rnd.style.background = "conic-gradient(red, yellow, lime, cyan, blue, magenta, red)";
+  rnd.addEventListener("click", () => accent(
+    Math.floor(Math.random() * 360),
+    40 + Math.floor(Math.random() * 45),
+    40 + Math.floor(Math.random() * 25)));
+  sw.appendChild(rnd);
+
+  // 动效演示
+  const target = document.getElementById("type-target");
+  document.getElementById("btn-type").addEventListener("click", () =>
+    motion.typewriter(target, { ms: 40 }));
+  document.getElementById("btn-blurin").addEventListener("click", () =>
+    motion.blurIn(document.querySelector("main > section")));
+  document.getElementById("btn-bounce").addEventListener("click", () =>
+    motion.bounce(document.querySelector("main > section")));
+
+  // AI 协作演示
+  document.getElementById("btn-ask").addEventListener("click", () => {
+    document.documentElement.removeAttribute("data-ui");
+    ai.promptStyle(document.getElementById("ai-host"));
+  });
+  document.getElementById("btn-compare").addEventListener("click", () =>
+    ai.compare(document.getElementById("ai-host"), () => {
+      const c = document.createElement("div");
+      c.className = "fu-card";
+      c.innerHTML = '<button class="fu-btn fu-btn--accent">同一组组件</button> <button class="fu-btn">两种风格</button>';
+      return c;
+    }, { left: "flat", right: "neu-g" }));
+
+  // 开场
+  motion.typewriter(target, { ms: 30 });
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+/*
+ * fangUI · Liquid —— 液态玻璃
+ * 整合小方工作室 liquid-glass-web 引擎（WebGL 折射 + SDF 圆角）。
+ *
+ * 用法：
+ *   <html data-ui="liquid">        启用液态玻璃风格
+ *   FangUI.liquid.enable()         动态加载引擎并渲染
+ *   <div data-liquid>              移动端白名单：只有带此属性的元素才开液态玻璃，其余回退磨砂（性能铁律）
+ *
+ * 引擎负责「折射 + 高光流动」，CSS 负责面板结构与可读性兜底。
+ */
+
+[data-ui="liquid"] .fu-card,
+[data-ui="liquid"] .fu-panel {
+  background: hsl(var(--fu-h) 30% 96% / 0.42);
+  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  border: 1px solid rgba(255 255 255 / 0.4);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  box-shadow:
+    0 1px 0 rgba(255 255 255 / 0.6) inset,
+    0 -1px 0 rgba(0 0 0 / 0.04) inset,
+    0 10px 30px rgba(0 0 0 / 0.10);
+}
+[data-mode="dark"] [data-ui="liquid"] .fu-card,
+[data-mode="dark"] [data-ui="liquid"] .fu-panel {
+  background: hsl(var(--fu-h) 20% 20% / 0.45);
+  border-color: rgba(255 255 255 / 0.10);
+}
+
+/* 液态可拖拽感：悬浮时轻微上浮 + 高光偏移 */
+[data-ui="liquid"] .fu-card { transition: transform var(--t-move) var(--ease-out), box-shadow var(--t-move) var(--ease-out); }
+[data-ui="liquid"] .fu-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255 255 255 / 0.7) inset,
+    0 14px 36px rgba(0 0 0 / 0.13);
+}
+
+[data-ui="liquid"] .fu-btn {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: hsl(var(--fu-h) 30% 96% / 0.5);
+  backdrop-filter: blur(12px) saturate(1.5);
+  color: var(--text);
+  border: 1px solid rgba(255 255 255 / 0.45);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-spring);
+}
+[data-ui="liquid"] .fu-btn:hover  { background: hsl(var(--fu-h) 30% 98% / 0.6); }
+[data-ui="liquid"] .fu-btn:active { transform: scale(0.97); }
+[data-ui="liquid"] .fu-btn--accent {
+  background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.8);
+  color: var(--accent-ink); border-color: rgba(255 255 255 / 0.5);
+}
+
+[data-ui="liquid"] .fu-input {
+  width: 100%; padding: var(--sp-2) var(--sp-3);
+  background: hsl(var(--fu-h) 30% 90% / 0.35);
+  backdrop-filter: blur(10px);
+  color: var(--text);
+  border: 1px solid rgba(255 255 255 / 0.3);
+  border-radius: var(--r-sm);
+  outline: none;
+}
+[data-ui="liquid"] .fu-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+
+[data-ui="liquid"] .fu-switch {
+  width: 40px; height: 22px; border-radius: 11px;
+  background: hsl(var(--fu-h) 30% 88% / 0.5);
+  border: 1px solid rgba(255 255 255 / 0.4);
+  position: relative; cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+[data-ui="liquid"] .fu-switch::after {
+  content: ""; position: absolute; top: 1px; left: 1px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(255 255 255 / 0.85);
+  box-shadow: 0 1px 3px rgba(0 0 0 / 0.2);
+  transition: transform var(--t-move) var(--ease-spring);
+}
+[data-ui="liquid"] .fu-switch[aria-checked="true"] { background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.7); }
+[data-ui="liquid"] .fu-switch[aria-checked="true"]::after { transform: translateX(18px); }
+
+/* 引擎层容器：全屏玻璃折射画布（桌面端） */
+[data-ui="liquid"] .fu-liquid-canvas {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+[data-ui="liquid"] .fu-app { position: relative; z-index: 1; }
