@@ -68,6 +68,25 @@ FangBox 同款。没有阴影没有渐变，层级全靠 3% / 5% 明度微差加
 | `FangUI.ai.compare(host, opts)` | **风格对比**：同一组组件左右并排渲染两种风格，点哪边用哪边 |
 | `FangUI.ai.mode() / setMode()` | 读 / 写当前风格，自动记住 |
 
+### 玻璃折射（refract.js）
+
+`FangUI.refract.makeGlass(el, params)` 让任意元素获得**真实折射**（SVG 位移图 + feDisplacementMap，liquid-glass-web 展示页同款算法）：
+
+| 参数 | 含义 | 范围 |
+| --- | --- | --- |
+| `ref` | 折射率 | 0.2 – 2.5 |
+| `edge` | 折射圈厚度 | 0.4 – 3 |
+| `rad` | 圆角 | 0 – 1 |
+| `tint` | 白度 | 0 – 0.5 |
+| `blur` | 背景模糊 | 0 – 6px |
+
+- **Liquid** 用全套五滑块；**Neu·Glass** 只要折射（ref 固定低档）+ 一个**半透明度**滑块
+- Neu·Glass 的凸起感靠**强遮罩**：深色内衬压住透底阴影 + 内侧高光描边 + 外圈投影——半透明也不会脏
+
+### 背景上传
+
+`demo/index.html` 支持上传任意图片当背景；Flat 默认那个「不纯的白」（#f2f2f0），Neu·Glass 和 Liquid 默认雪山图——玻璃效不效，一眼就能看出来。
+
 ### 主题色与模式（fangui.js）
 
 ```js
