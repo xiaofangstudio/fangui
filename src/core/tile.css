@@ -130,16 +130,16 @@
 }
 [data-ui="tile"] .fu-tile--wide { grid-column: span 2; }
 
-/* 多彩磁贴：红橙黄绿青蓝紫各归各位，仍然低饱和不刺眼；
-   渐变统一「左下暗 → 右上亮」，白字白 icon 通用 */
-[data-ui="tile"] .fu-tile[data-hue="1"] { --t-c1: hsl(4   62% 60%); --t-c2: hsl(4   55% 38%); }  /* 红 */
-[data-ui="tile"] .fu-tile[data-hue="2"] { --t-c1: hsl(28  70% 60%); --t-c2: hsl(22  65% 40%); }  /* 橙 */
-[data-ui="tile"] .fu-tile[data-hue="3"] { --t-c1: hsl(48  65% 58%); --t-c2: hsl(38  70% 40%); }  /* 黄 */
-[data-ui="tile"] .fu-tile[data-hue="4"] { --t-c1: hsl(145 52% 52%); --t-c2: hsl(150 55% 32%); }  /* 绿 */
-[data-ui="tile"] .fu-tile[data-hue="5"] { --t-c1: hsl(190 55% 55%); --t-c2: hsl(195 60% 35%); }  /* 青 */
-[data-ui="tile"] .fu-tile[data-hue="6"] { --t-c1: hsl(215 60% 60%); --t-c2: hsl(220 60% 38%); }  /* 蓝 */
-[data-ui="tile"] .fu-tile[data-hue="7"] { --t-c1: hsl(268 45% 60%); --t-c2: hsl(270 50% 38%); }  /* 紫 */
-[data-ui="tile"] .fu-tile[data-hue="8"] { --t-c1: hsl(330 55% 60%); --t-c2: hsl(335 55% 38%); }  /* 粉 */
+/* 多彩磁贴：小天才式低饱和糖果色——红橙黄绿青蓝紫粉各归各位，
+   饱和度压低到舒服的程度；渐变统一「左下暗 → 右上亮」，白字白 icon 通用 */
+[data-ui="tile"] .fu-tile[data-hue="1"] { --t-c1: hsl(4   42% 66%); --t-c2: hsl(4   38% 50%); }  /* 红 */
+[data-ui="tile"] .fu-tile[data-hue="2"] { --t-c1: hsl(28  52% 66%); --t-c2: hsl(22  46% 50%); }  /* 橙 */
+[data-ui="tile"] .fu-tile[data-hue="3"] { --t-c1: hsl(45  52% 60%); --t-c2: hsl(38  52% 46%); }  /* 黄 */
+[data-ui="tile"] .fu-tile[data-hue="4"] { --t-c1: hsl(145 36% 58%); --t-c2: hsl(150 38% 42%); }  /* 绿 */
+[data-ui="tile"] .fu-tile[data-hue="5"] { --t-c1: hsl(190 40% 60%); --t-c2: hsl(195 42% 44%); }  /* 青 */
+[data-ui="tile"] .fu-tile[data-hue="6"] { --t-c1: hsl(215 44% 64%); --t-c2: hsl(220 42% 48%); }  /* 蓝 */
+[data-ui="tile"] .fu-tile[data-hue="7"] { --t-c1: hsl(268 34% 64%); --t-c2: hsl(270 36% 48%); }  /* 紫 */
+[data-ui="tile"] .fu-tile[data-hue="8"] { --t-c1: hsl(330 38% 66%); --t-c2: hsl(335 40% 50%); }  /* 粉 */
 
 [data-ui="tile"] .fu-tile:hover { filter: saturate(1.08) brightness(1.05); }
 
@@ -155,14 +155,16 @@
 [data-ui="tile"] .fu-tile.is-ghost   { opacity: 0.35; filter: grayscale(0.4); }
 [data-ui="tile"] .fu-tile:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
 
-/* ── 大白 icon：不要图标座，就是一块够大的纯白图形 ── */
+/* ── 大白 icon：固定尺寸的图标盒，所有磁贴的图标严丝合缝对齐 ── */
 [data-ui="tile"] .fu-tile__ico {
-  width: auto; height: auto; padding: 0;
-  background: none; border: none;
+  width: 48px; height: 48px;
+  display: grid; place-items: center;
+  background: none; border: none; padding: 0;
   -webkit-backdrop-filter: none; backdrop-filter: none;
+  flex: none;
 }
 [data-ui="tile"] .fu-tile__ico svg {
-  width: 44px; height: 44px;
+  width: 40px; height: 40px;
   fill: none; stroke: #ffffff;
   stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
 }
