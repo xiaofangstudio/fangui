@@ -60,6 +60,7 @@
       feImage.setAttribute("width", W); feImage.setAttribute("height", H);
       const data = new Uint8ClampedArray(W * H * 4);
       const raw = [];
+      const amp = 26 * p.ref * p.strength;   /* 最大位移：固定像素，不随元素变大而放大 */
       let maxScale = 0;
       for (let i = 0; i < data.length; i += 4) {
         const x = (i / 4) % W, y = Math.floor(i / 4 / W);
@@ -67,8 +68,7 @@
         const d = roundedRectSDF(ix, iy, 0.3, 0.2, p.rad);
         const disp = smoothStep(0.8, 0, d - 0.15 / p.edge / p.strength);
         const s = smoothStep(0, 1, disp);
-        const px = (ix * s + 0.5) * W, py = (iy * s + 0.5) * H;
-        const dx = px - x, dy = py - y;
+        const dx = ix * 2 * s * amp, dy = iy * 2 * s * amp;
         maxScale = Math.max(maxScale, Math.abs(dx), Math.abs(dy));
         raw.push(dx, dy);
       }
@@ -81,7 +81,7 @@
       }
       ctx.putImageData(new ImageData(data, W, H), 0, 0);
       feImage.setAttributeNS(XLINK, "href", canvas.toDataURL());
-      feDisp.setAttribute("scale", String(maxScale * p.ref));
+      feDisp.setAttribute("scale", String(maxScale));
       el.style.backdropFilter = `url(#${fid}_filter) blur(${p.blur}px) contrast(1.2) brightness(1.05) saturate(1.1)`;
       el.style.webkitBackdropFilter = el.style.backdropFilter;
       if (p.tint >= 0) el.style.background = `rgba(255,255,255,${p.tint})`;
