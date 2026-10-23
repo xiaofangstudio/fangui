@@ -14,6 +14,19 @@
   const XLINK = "http://www.w3.org/1999/xlink";
   let uid = 0;
 
+  /* 棱边高光环样式：注入一次，全局共享 */
+  if (!document.getElementById("fu-refract-style")) {
+    const s = document.createElement("style");
+    s.id = "fu-refract-style";
+    s.textContent =
+      ".fu-liquid-rim{box-shadow:" +
+      "inset 0 1px 1px rgba(255,255,255,.9)," +                              /* 顶棱锐高光 */
+      "inset 0 -1px 1px rgba(0,0,0,.06)," +                                  /* 底棱微暗：厚度 */
+      "inset 0 0 var(--lg-rim,6px) rgba(255,255,255,var(--lg-glow,.2))," +   /* 边缘折射泛光 */
+      "inset 0 0 calc(var(--lg-rim,6px)*.45) rgba(255,255,255,calc(var(--lg-glow,.2)*.7));}";
+    document.head.appendChild(s);
+  }
+
   const smoothStep = (a, b, t) => {
     t = Math.max(0, Math.min(1, (t - a) / (b - a)));
     return t * t * (3 - 2 * t);
@@ -82,10 +95,22 @@
       ctx.putImageData(new ImageData(data, W, H), 0, 0);
       feImage.setAttributeNS(XLINK, "href", canvas.toDataURL());
       feDisp.setAttribute("scale", String(maxScale));
-      el.style.backdropFilter = `url(#${fid}_filter) blur(${p.blur}px) contrast(1.2) brightness(1.05) saturate(1.1)`;
+      /* 关键教训：backdrop-filter 里只要带 url(#svg) 整条链在 Chromium 会静默失效，
+         所以模糊/提亮/增饱和走纯 CSS（见下），SVG 位移只作为可选增强 */
+      el.style.backdropFilter = `blur(${p.blur}px) brightness(1.12) saturate(1.8)`;
       el.style.webkitBackdropFilter = el.style.backdropFilter;
+      /* 棱边折射高光环：模拟玻璃边缘把背景光弯进来 */
+      rim.style.setProperty("--lg-rim", (7 * p.edge * p.strength).toFixed(1) + "px");
+      rim.style.setProperty("--lg-glow", Math.min(0.45, 0.22 * p.ref).toFixed(2));
       if (p.tint >= 0) el.style.background = `rgba(255,255,255,${p.tint})`;
     }
+
+    const rim = document.createElement("span");
+    rim.className = "fu-liquid-rim";
+    rim.style.cssText = "position:absolute;inset:0;pointer-events:none;border-radius:inherit;";
+
+    if (getComputedStyle(el).position === "static") el.style.position = "relative";
+    el.appendChild(rim);
 
     update();
     const ro = new ResizeObserver(update);
@@ -94,7 +119,7 @@
       update,
       setStrength(s) { p.strength = s; update(); },
       set(key, val) { if (key in p) { p[key] = val; update(); } },
-      destroy() { ro.disconnect(); svg.remove(); el.style.backdropFilter = ""; },
+      destroy() { ro.disconnect(); svg.remove(); rim.remove(); el.style.backdropFilter = ""; },
     };
   }
 

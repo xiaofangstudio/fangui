@@ -73,6 +73,13 @@
   }
 
   /* ── Liquid 全页皆玻璃：顶栏、分组、搜索框、图标格全变液态玻璃 ── */
+  /* 暗色下背景压暗：亮雪在暗玻璃后面太刺眼，先给背景冻一层暗霜 */
+  [data-mode="dark"][data-ui="liquid"] body::before {
+    content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    backdrop-filter: blur(18px) brightness(.5) saturate(1.15);
+    -webkit-backdrop-filter: blur(18px) brightness(.5) saturate(1.15);
+    background: hsl(var(--fu-h) 25% 8% / 0.38);
+  }
   [data-ui="liquid"] header,
   [data-ui="liquid"] .grp,
   [data-ui="liquid"] #sub-preview,
@@ -88,6 +95,7 @@
     box-shadow: 0 1px 0 rgba(255 255 255 / 0.55) inset, 0 8px 24px rgba(0,0,0,.08);
   }
   [data-mode="dark"][data-ui="liquid"] header,
+  [data-mode="dark"][data-ui="liquid"] { --text-muted: hsl(var(--fu-h) 15% 74%); }
   [data-mode="dark"][data-ui="liquid"] .grp,
   [data-mode="dark"][data-ui="liquid"] #sub-preview,
   [data-mode="dark"][data-ui="liquid"] #icon-search,
@@ -366,7 +374,7 @@
     /* 液态玻璃 = 真引擎上 UI：所有卡片 + 顶栏全部接真实折射（tint:-1 保留 CSS 半透明底） */
     if (ui === "liquid") {
       document.querySelectorAll("main .fu-card, header").forEach((el) => {
-        if (!uiGlass.has(el)) uiGlass.set(el, refract.makeGlass(el, { ...P, tint: -1, blur: 14, ref: 1.6 }));
+        if (!uiGlass.has(el)) uiGlass.set(el, refract.makeGlass(el, { ...P, tint: -1, blur: 26, ref: 1.6 }));
       });
     } else detachLiquid();
   }
