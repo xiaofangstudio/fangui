@@ -88,14 +88,14 @@
   [data-ui="liquid"] .icon-preview,
   [data-ui="liquid"] .toast,
   [data-ui="liquid"] .fu-compare__pane {
-    background: hsl(var(--fu-h) 30% 96% / 0.32);
-    backdrop-filter: blur(22px) saturate(1.7);
-    -webkit-backdrop-filter: blur(22px) saturate(1.7);
-    border: 1px solid rgba(255 255 255 / 0.4);
-    box-shadow: 0 1px 0 rgba(255 255 255 / 0.55) inset, 0 8px 24px rgba(0,0,0,.08);
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(14px) saturate(1.5);
+    -webkit-backdrop-filter: blur(14px) saturate(1.5);
+    border: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,.18), 0 -6px 14px inset rgba(0,0,0,.10);
   }
-  [data-mode="dark"][data-ui="liquid"] header,
   [data-mode="dark"][data-ui="liquid"] { --text-muted: hsl(var(--fu-h) 15% 74%); }
+  [data-mode="dark"][data-ui="liquid"] header,
   [data-mode="dark"][data-ui="liquid"] .grp,
   [data-mode="dark"][data-ui="liquid"] #sub-preview,
   [data-mode="dark"][data-ui="liquid"] #icon-search,
@@ -103,8 +103,7 @@
   [data-mode="dark"][data-ui="liquid"] .icon-preview,
   [data-mode="dark"][data-ui="liquid"] .toast,
   [data-mode="dark"][data-ui="liquid"] .fu-compare__pane {
-    background: hsl(var(--fu-h) 20% 20% / 0.42);
-    border-color: rgba(255 255 255 / 0.12);
+    background: rgba(12, 15, 22, 0.30);
   }
 
   /* 玻璃风格可读性：弱化文字直接上正文色，别让标题消失在天空里 */
@@ -338,7 +337,7 @@
 
   /* ── 背景 ── */
   let bgUpload = null;
-  const DEFAULT_BG = { "neu-g": "assets/snow-mountain.jpg", liquid: "assets/snow-mountain.jpg" };
+  const DEFAULT_BG = { "neu-g": "bg/bg-1.jpg", liquid: "bg/bg-1.jpg" };
   function applyBg() {
     const ui = ai.mode();
     const url = bgUpload || DEFAULT_BG[ui] || null;
@@ -374,7 +373,7 @@
     /* 液态玻璃 = 真引擎上 UI：所有卡片 + 顶栏全部接真实折射（tint:-1 保留 CSS 半透明底） */
     if (ui === "liquid") {
       document.querySelectorAll("main .fu-card, header").forEach((el) => {
-        if (!uiGlass.has(el)) uiGlass.set(el, refract.makeGlass(el, { ...P, tint: -1, blur: 26, ref: 1.6 }));
+        if (!uiGlass.has(el)) uiGlass.set(el, refract.makeGlass(el, { ...P, tint: -1, blur: 10, ref: 1.6 }));
       });
     } else detachLiquid();
   }

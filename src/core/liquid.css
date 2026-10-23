@@ -1,14 +1,9 @@
 /*
  * fangUI · Liquid —— 液态玻璃
- * 整合小方工作室 liquid-glass-web 引擎（WebGL 折射 + SDF 圆角）。
- *
- * 用法：
- *   <html data-ui="liquid">        启用液态玻璃风格
- *   FangUI.liquid.enable()         动态加载引擎并渲染
- *   <div data-liquid>              移动端白名单：只有带此属性的元素才开液态玻璃，其余回退磨砂（性能铁律）
- *
- * 引擎负责「折射 + 高光流动」，CSS 负责面板结构与可读性兜底。
- * 铁律：液态模式下整页皆玻璃，圆角全场最大。
+ * 铁律：玻璃本体就是玻璃，不涂渐变色不刷漆。
+ * 折射全部交给引擎（refract.js，库原版算法），CSS 只负责：
+ *   极淡 tint（保证字可读）+ 库式阴影 + 结构圆角。
+ * 引擎接管后元素上的 backdrop-filter 由引擎写入（含 SVG 位移链）。
  */
 
 [data-ui="liquid"] {
@@ -20,86 +15,73 @@
 
 [data-ui="liquid"] .fu-card,
 [data-ui="liquid"] .fu-panel {
-  background: linear-gradient(160deg, hsl(var(--fu-h) 40% 98% / 0.62), hsl(var(--fu-h) 40% 88% / 0.38));
-  backdrop-filter: blur(26px) saturate(1.8) brightness(1.1);
-  -webkit-backdrop-filter: blur(26px) saturate(1.8) brightness(1.1);
-  border: 1px solid hsl(0 0% 100% / 0.65);
+  background: rgba(255, 255, 255, 0.32);   /* 淡白磨砂底：透但不露，字要可读 */
+  border: none;
   padding: var(--sp-4);
-  box-shadow:
-    0 1px 0 hsl(0 0% 100% / 0.85) inset,          /* 顶棱强高光：玻璃厚度感 */
-    0 -1px 0 hsl(var(--fu-h) 30% 30% / 0.08) inset,
-    0 12px 34px hsl(var(--fu-h) 40% 20% / 0.16);  /* 玻璃块的投影 */
+  /* 库原版阴影：外投影 + 内圈暗晕 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25), 0 -10px 25px inset rgba(0, 0, 0, 0.15);
 }
 [data-mode="dark"][data-ui="liquid"] .fu-card,
 [data-mode="dark"][data-ui="liquid"] .fu-panel {
-  background: hsl(var(--fu-h) 20% 18% / 0.68);
-  border-color: rgba(255 255 255 / 0.12);
-}
-[data-mode="dark"][data-ui="liquid"] .fu-btn {
-  background: hsl(var(--fu-h) 20% 24% / 0.6);
-  border-color: rgba(255 255 255 / 0.14);
-}
-[data-mode="dark"][data-ui="liquid"] .fu-btn:hover {
-  background: hsl(var(--fu-h) 20% 30% / 0.7);
+  background: rgba(12, 15, 22, 0.24);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 -10px 25px inset rgba(0, 0, 0, 0.25);
 }
 
-/* 液态可拖拽感：悬浮时轻微上浮 + 高光偏移 */
+/* 液态可拖拽感：悬浮轻微上浮 */
 [data-ui="liquid"] .fu-card { transition: transform var(--t-move) var(--ease-out), box-shadow var(--t-move) var(--ease-out); }
 [data-ui="liquid"] .fu-card:hover {
   transform: translateY(-2px);
-  box-shadow:
-    0 1px 0 rgba(255 255 255 / 0.7) inset,
-    0 14px 36px rgba(0 0 0 / 0.13);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28), 0 -10px 25px inset rgba(0, 0, 0, 0.15);
 }
 
 [data-ui="liquid"] .fu-btn {
   display: inline-flex; align-items: center; gap: var(--sp-2);
   padding: var(--sp-2) var(--sp-4);
-  background: hsl(var(--fu-h) 30% 96% / 0.5);
-  backdrop-filter: blur(12px) saturate(1.5);
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px) saturate(1.5);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
   color: var(--text);
-  border: 1px solid rgba(255 255 255 / 0.45);
+  border: none;
   border-radius: var(--r-sm);
   cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18), 0 -4px 10px inset rgba(0, 0, 0, 0.10);
   transition: background var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-spring);
 }
-[data-ui="liquid"] .fu-btn:hover  { background: hsl(var(--fu-h) 30% 98% / 0.6); }
+[data-ui="liquid"] .fu-btn:hover  { background: rgba(255, 255, 255, 0.32); }
 [data-ui="liquid"] .fu-btn:active { transform: scale(0.97); }
 [data-ui="liquid"] .fu-btn--accent {
-  background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.8);
-  color: var(--accent-ink); border-color: rgba(255 255 255 / 0.5);
+  background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.75);
+  color: var(--accent-ink);
 }
 
 [data-ui="liquid"] .fu-input {
   width: 100%; padding: var(--sp-2) var(--sp-3);
-  background: hsl(var(--fu-h) 30% 90% / 0.35);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--text);
-  border: 1px solid rgba(255 255 255 / 0.3);
+  border: none;
   border-radius: var(--r-sm);
   outline: none;
+  box-shadow: 0 -4px 10px inset rgba(0, 0, 0, 0.10);
 }
-[data-ui="liquid"] .fu-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+[data-ui="liquid"] .fu-input:focus { box-shadow: 0 -4px 10px inset rgba(0, 0, 0, 0.10), 0 0 0 3px var(--accent-ring); }
 
 [data-ui="liquid"] .fu-switch {
   width: 40px; height: 22px; border-radius: 11px;
-  background: hsl(var(--fu-h) 30% 88% / 0.5);
-  border: 1px solid rgba(255 255 255 / 0.4);
+  background: rgba(255, 255, 255, 0.16);
+  border: none;
   position: relative; cursor: pointer;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 -4px 8px inset rgba(0, 0, 0, 0.12);
 }
 [data-ui="liquid"] .fu-switch::after {
   content: ""; position: absolute; top: 1px; left: 1px;
   width: 18px; height: 18px; border-radius: 50%;
-  background: rgba(255 255 255 / 0.85);
-  box-shadow: 0 1px 3px rgba(0 0 0 / 0.2);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   transition: transform var(--t-move) var(--ease-spring);
 }
 [data-ui="liquid"] .fu-switch[aria-checked="true"] { background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.7); }
 [data-ui="liquid"] .fu-switch[aria-checked="true"]::after { transform: translateX(18px); }
-
-/* 引擎层容器：全屏玻璃折射画布（桌面端） */
-[data-ui="liquid"] .fu-liquid-canvas {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-}
-[data-ui="liquid"] .fu-app { position: relative; z-index: 1; }

@@ -74,11 +74,12 @@
 [data-ui="neu"] .fu-switch[aria-checked="true"]::after { transform: translateX(18px); background: var(--accent); }
 
 /* ════ 子模式二：玻璃轻拟物 ════
-   铁律：全员半透明 + 极高品质重磨砂（blur 拉满），
-   磨砂磨砂磨砂——摸上去就该是块顶级磨砂玻璃 */
+   铁律：新拟物的四件套——主体、阴影、背景、高光——全部改半透明磨砂，
+   没有实底，雪山要从每块玻璃后面透出来 */
 [data-ui="neu"][data-neu="glass"] {
-  --neu-dark: rgba(0 0 0 / 0.10);
-  --neu-light: rgba(255 255 255 / 0.35);
+  /* 阴影也半透明：磨砂玻璃的凸起靠透出来的光影，不靠实色 */
+  --neu-dark: rgba(0 0 0 / 0.06);
+  --neu-light: rgba(255 255 255 / 0.18);
   /* 全场统一重磨砂参数 */
   --frost: blur(34px) saturate(1.9) brightness(1.05);
 }
@@ -89,13 +90,14 @@
 [data-ui="neu"][data-neu="glass"] .fu-input,
 [data-ui="neu"][data-neu="glass"] .fu-switch,
 [data-ui="neu"][data-neu="glass"] .fu-progress {
-  background: hsl(var(--fu-h) 30% 97% / 0.52);          /* 全员半透明，磨砂够厚也能读字 */
+  background: hsl(var(--fu-h) 20% 100% / 0.30);          /* 主体半透明磨砂 */
   backdrop-filter: var(--frost);
   -webkit-backdrop-filter: var(--frost);
-  border: 1px solid rgba(255 255 255 / 0.45);            /* 玻璃棱边 */
+  border: none;                                           /* 不画棱边，玻璃自己会透 */
   box-shadow:
-    0 1px 0 rgba(255 255 255 / 0.5) inset,               /* 顶棱高光 */
-    0 8px 28px rgba(0 0 0 / 0.08),                        /* 外圈投影，不透过 */
+    0 1px 0 rgba(255 255 255 / 0.28) inset,               /* 高光半透明 */
+    0 -8px 20px rgba(0 0 0 / 0.10) inset,                 /* 内圈暗晕半透明 */
+    0 8px 24px rgba(0 0 0 / 0.10),                        /* 外圈投影半透明 */
     var(--neu-out);
 }
 [data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-card,
@@ -104,20 +106,24 @@
 [data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-input,
 [data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-switch,
 [data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-progress {
-  background: hsl(var(--fu-h) 18% 20% / 0.42);
-  border-color: rgba(255 255 255 / 0.10);
+  background: hsl(var(--fu-h) 18% 16% / 0.32);
+  box-shadow:
+    0 1px 0 rgba(255 255 255 / 0.08) inset,
+    0 -8px 20px rgba(0 0 0 / 0.25) inset,
+    0 8px 24px rgba(0 0 0 / 0.28),
+    var(--neu-out);
 }
 
 [data-ui="neu"][data-neu="glass"] .fu-card { border-radius: var(--r-lg); padding: var(--sp-4); }
 [data-ui="neu"][data-neu="glass"] .fu-panel {
-  background: hsl(var(--fu-h) 30% 92% / 0.30);
+  background: hsl(var(--fu-h) 20% 100% / 0.18);
   border-radius: var(--r-lg); padding: var(--sp-4);
 }
 
 [data-ui="neu"][data-neu="glass"] .fu-btn { color: var(--text); border-radius: var(--r-sm); }
-[data-ui="neu"][data-neu="glass"] .fu-btn:hover  { background: hsl(var(--fu-h) 30% 98% / 0.5); }
-[data-ui="neu"][data-neu="glass"] .fu-btn:active { background: hsl(var(--fu-h) 30% 90% / 0.55); }
+[data-ui="neu"][data-neu="glass"] .fu-btn:hover  { background: hsl(var(--fu-h) 20% 100% / 0.40); }
+[data-ui="neu"][data-neu="glass"] .fu-btn:active { background: hsl(var(--fu-h) 20% 92% / 0.42); }
 [data-ui="neu"][data-neu="glass"] .fu-btn--accent {
-  background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.6);
-  color: var(--accent-ink); border-color: rgba(255 255 255 / 0.45);
+  background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.55);
+  color: var(--accent-ink);
 }
