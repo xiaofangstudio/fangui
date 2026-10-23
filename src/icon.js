@@ -66,7 +66,8 @@
     }
     const host = el || document.createElement("i");
     host.classList.add("fu-icon");
-    const txt = await svgOf(item);
+    // IconPark 源文件写死 stroke/fill="#333"——替换成 currentColor，暗色模式自动变白
+    const txt = (await svgOf(item)).replace(/#333/gi, "currentColor");
     if (txt) host.innerHTML = txt;
     const svg = host.querySelector("svg");
     if (svg) {

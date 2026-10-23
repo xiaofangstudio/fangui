@@ -8,15 +8,22 @@
  *   <div data-liquid>              移动端白名单：只有带此属性的元素才开液态玻璃，其余回退磨砂（性能铁律）
  *
  * 引擎负责「折射 + 高光流动」，CSS 负责面板结构与可读性兜底。
+ * 铁律：液态模式下整页皆玻璃，圆角全场最大。
  */
+
+[data-ui="liquid"] {
+  --r-sm: 14px;   /* 全场最大圆角 */
+  --r-md: 22px;
+  --r-lg: 30px;
+  --tile-r: 32px;
+}
 
 [data-ui="liquid"] .fu-card,
 [data-ui="liquid"] .fu-panel {
-  background: hsl(var(--fu-h) 30% 96% / 0.42);
-  backdrop-filter: blur(18px) saturate(1.6);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
-  border: 1px solid rgba(255 255 255 / 0.4);
-  border-radius: var(--r-lg);
+  background: hsl(var(--fu-h) 30% 96% / 0.38);
+  backdrop-filter: blur(22px) saturate(1.7);
+  -webkit-backdrop-filter: blur(22px) saturate(1.7);
+  border: 1px solid rgba(255 255 255 / 0.42);
   padding: var(--sp-4);
   box-shadow:
     0 1px 0 rgba(255 255 255 / 0.6) inset,

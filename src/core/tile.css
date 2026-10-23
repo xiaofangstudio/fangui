@@ -130,11 +130,16 @@
 }
 [data-ui="tile"] .fu-tile--wide { grid-column: span 2; }
 
-/* 同色相阶梯：由深到亮四档，鲜艳但不高饱和；渐变统一往右上提亮 */
-[data-ui="tile"] .fu-tile[data-hue="1"] { --t-c1: hsl(var(--fu-h) 72% 62%); --t-c2: hsl(var(--fu-h) 62% 40%); }
-[data-ui="tile"] .fu-tile[data-hue="2"] { --t-c1: hsl(var(--fu-h) 68% 56%); --t-c2: hsl(var(--fu-h) 60% 35%); }
-[data-ui="tile"] .fu-tile[data-hue="3"] { --t-c1: hsl(var(--fu-h) 64% 50%); --t-c2: hsl(var(--fu-h) 56% 31%); }
-[data-ui="tile"] .fu-tile[data-hue="4"] { --t-c1: hsl(var(--fu-h) 60% 45%); --t-c2: hsl(var(--fu-h) 52% 27%); }
+/* 多彩磁贴：红橙黄绿青蓝紫各归各位，仍然低饱和不刺眼；
+   渐变统一「左下暗 → 右上亮」，白字白 icon 通用 */
+[data-ui="tile"] .fu-tile[data-hue="1"] { --t-c1: hsl(4   62% 60%); --t-c2: hsl(4   55% 38%); }  /* 红 */
+[data-ui="tile"] .fu-tile[data-hue="2"] { --t-c1: hsl(28  70% 60%); --t-c2: hsl(22  65% 40%); }  /* 橙 */
+[data-ui="tile"] .fu-tile[data-hue="3"] { --t-c1: hsl(48  65% 58%); --t-c2: hsl(38  70% 40%); }  /* 黄 */
+[data-ui="tile"] .fu-tile[data-hue="4"] { --t-c1: hsl(145 52% 52%); --t-c2: hsl(150 55% 32%); }  /* 绿 */
+[data-ui="tile"] .fu-tile[data-hue="5"] { --t-c1: hsl(190 55% 55%); --t-c2: hsl(195 60% 35%); }  /* 青 */
+[data-ui="tile"] .fu-tile[data-hue="6"] { --t-c1: hsl(215 60% 60%); --t-c2: hsl(220 60% 38%); }  /* 蓝 */
+[data-ui="tile"] .fu-tile[data-hue="7"] { --t-c1: hsl(268 45% 60%); --t-c2: hsl(270 50% 38%); }  /* 紫 */
+[data-ui="tile"] .fu-tile[data-hue="8"] { --t-c1: hsl(330 55% 60%); --t-c2: hsl(335 55% 38%); }  /* 粉 */
 
 [data-ui="tile"] .fu-tile:hover { filter: saturate(1.08) brightness(1.05); }
 

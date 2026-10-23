@@ -73,42 +73,51 @@
 [data-ui="neu"] .fu-switch[aria-checked="true"] { background: var(--accent-soft); }
 [data-ui="neu"] .fu-switch[aria-checked="true"]::after { transform: translateX(18px); background: var(--accent); }
 
-/* ════ 子模式二：玻璃轻拟物 ════ */
+/* ════ 子模式二：玻璃轻拟物 ════
+   铁律：全员半透明 + 极高品质重磨砂（blur 拉满），
+   磨砂磨砂磨砂——摸上去就该是块顶级磨砂玻璃 */
 [data-ui="neu"][data-neu="glass"] {
-  --glass-bg: var(--surface) / 0.55;
   --neu-dark: rgba(0 0 0 / 0.10);
   --neu-light: rgba(255 255 255 / 0.35);
+  /* 全场统一重磨砂参数 */
+  --frost: blur(34px) saturate(1.9) brightness(1.05);
 }
 
 [data-ui="neu"][data-neu="glass"] .fu-card,
+[data-ui="neu"][data-neu="glass"] .fu-panel,
 [data-ui="neu"][data-neu="glass"] .fu-btn,
-[data-ui="neu"][data-neu="glass"] .fu-input {
-  background: hsl(var(--fu-h) 24% 96% / 0.55);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-  border: 1px solid rgba(255 255 255 / 0.35);            /* 内侧高光描边 = 玻璃棱边 */
+[data-ui="neu"][data-neu="glass"] .fu-input,
+[data-ui="neu"][data-neu="glass"] .fu-switch,
+[data-ui="neu"][data-neu="glass"] .fu-progress {
+  background: hsl(var(--fu-h) 30% 97% / 0.52);          /* 全员半透明，磨砂够厚也能读字 */
+  backdrop-filter: var(--frost);
+  -webkit-backdrop-filter: var(--frost);
+  border: 1px solid rgba(255 255 255 / 0.45);            /* 玻璃棱边 */
   box-shadow:
-    0 1px 0 rgba(255 255 255 / 0.45) inset,              /* 顶棱高光 */
-    0 8px 24px rgba(0 0 0 / 0.08),                        /* 外圈投影，不透过 */
+    0 1px 0 rgba(255 255 255 / 0.5) inset,               /* 顶棱高光 */
+    0 8px 28px rgba(0 0 0 / 0.08),                        /* 外圈投影，不透过 */
     var(--neu-out);
 }
 [data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-card,
-[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-btn {
-  background: hsl(var(--fu-h) 18% 20% / 0.68);
-  border-color: rgba(255 255 255 / 0.08);
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-panel,
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-btn,
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-input,
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-switch,
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-progress {
+  background: hsl(var(--fu-h) 18% 20% / 0.42);
+  border-color: rgba(255 255 255 / 0.10);
 }
 
 [data-ui="neu"][data-neu="glass"] .fu-card { border-radius: var(--r-lg); padding: var(--sp-4); }
 [data-ui="neu"][data-neu="glass"] .fu-panel {
-  background: hsl(var(--fu-h) 24% 92% / 0.4);
-  backdrop-filter: blur(20px) saturate(1.5);
+  background: hsl(var(--fu-h) 30% 92% / 0.30);
   border-radius: var(--r-lg); padding: var(--sp-4);
 }
 
 [data-ui="neu"][data-neu="glass"] .fu-btn { color: var(--text); border-radius: var(--r-sm); }
-[data-ui="neu"][data-neu="glass"] .fu-btn:hover  { background: hsl(var(--fu-h) 24% 98% / 0.65); }
-[data-ui="neu"][data-neu="glass"] .fu-btn:active { background: hsl(var(--fu-h) 24% 92% / 0.7); }
+[data-ui="neu"][data-neu="glass"] .fu-btn:hover  { background: hsl(var(--fu-h) 30% 98% / 0.5); }
+[data-ui="neu"][data-neu="glass"] .fu-btn:active { background: hsl(var(--fu-h) 30% 90% / 0.55); }
 [data-ui="neu"][data-neu="glass"] .fu-btn--accent {
-  background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.75);
-  color: var(--accent-ink); border-color: rgba(255 255 255 / 0.4);
+  background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.6);
+  color: var(--accent-ink); border-color: rgba(255 255 255 / 0.45);
 }

@@ -57,19 +57,19 @@
 /* 占位文字跟随模式令牌，否则暗色下浏览器默认的深灰几乎看不见 */
 ::placeholder { color: var(--text-muted); opacity: 1; }
 
-/* ── 亮色模式（默认）—— 基底 #f2f2f0 系，相邻差 3% ── */
+/* ── 亮色模式（默认）—— 基底更白，微差依旧 ── */
 [data-mode="light"] {
-  --bg:         #eeefec;
-  --bg-subtle:  #e9eae7;   /* +3% */
-  --surface:    #f2f2f0;
-  --surface-2:  #ececea;   /* -3% */
-  --surface-3:  #e5e5e3;   /* -5% */
-  --border:     #e0e0de;
-  --border-strong: #d4d4d2;
+  --bg:         #f0f1ee;
+  --bg-subtle:  #ecece9;   /* +3% */
+  --surface:    #f8f8f6;   /* 更白的卡片面 */
+  --surface-2:  #f2f2f0;   /* -3% */
+  --surface-3:  #ebebe9;   /* -5% */
+  --border:     #e4e4e2;
+  --border-strong: #d8d8d6;
   --text:       #26262a;
   --text-muted: #6d6d72;
   --text-faint: #a3a3a8;
-  --divider:    #e3e3e1;
+  --divider:    #e6e6e4;
   color-scheme: light;
 }
 
