@@ -9,7 +9,7 @@
 [data-ui="flat"] .fu-card,
 [data-ui="flat"] .fu-panel {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: none;              /* 不画框 —— 层级靠 surface 与 bg 的 3% 微差 */
   border-radius: var(--r-md);
   padding: var(--sp-4);
 }

@@ -14,6 +14,7 @@
     { id: "neu",    name: "Neu 轻拟物",  desc: "阴影营造凸起，柔和有厚度（非拟物塑料感）" },
     { id: "neu-g",  name: "Neu·Glass",   desc: "轻拟物的玻璃变体：全员半透明，磨砂凸起" },
     { id: "liquid", name: "Liquid 液态玻璃", desc: "WebGL 折射高光，最润也最吃性能" },
+    { id: "tile",   name: "Tile 磁贴",     desc: "WinUI3 血统：大块渐变磁贴 + 毛玻璃图标座，可拖可点" },
   ];
 
   function mode() {

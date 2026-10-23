@@ -23,10 +23,17 @@
     0 -1px 0 rgba(0 0 0 / 0.04) inset,
     0 10px 30px rgba(0 0 0 / 0.10);
 }
-[data-mode="dark"] [data-ui="liquid"] .fu-card,
-[data-mode="dark"] [data-ui="liquid"] .fu-panel {
-  background: hsl(var(--fu-h) 20% 20% / 0.45);
-  border-color: rgba(255 255 255 / 0.10);
+[data-mode="dark"][data-ui="liquid"] .fu-card,
+[data-mode="dark"][data-ui="liquid"] .fu-panel {
+  background: hsl(var(--fu-h) 20% 18% / 0.68);
+  border-color: rgba(255 255 255 / 0.12);
+}
+[data-mode="dark"][data-ui="liquid"] .fu-btn {
+  background: hsl(var(--fu-h) 20% 24% / 0.6);
+  border-color: rgba(255 255 255 / 0.14);
+}
+[data-mode="dark"][data-ui="liquid"] .fu-btn:hover {
+  background: hsl(var(--fu-h) 20% 30% / 0.7);
 }
 
 /* 液态可拖拽感：悬浮时轻微上浮 + 高光偏移 */

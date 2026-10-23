@@ -92,9 +92,9 @@
     0 8px 24px rgba(0 0 0 / 0.08),                        /* 外圈投影，不透过 */
     var(--neu-out);
 }
-[data-mode="dark"] [data-ui="neu"][data-neu="glass"] .fu-card,
-[data-mode="dark"] [data-ui="neu"][data-neu="glass"] .fu-btn {
-  background: hsl(var(--fu-h) 18% 22% / 0.5);
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-card,
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-btn {
+  background: hsl(var(--fu-h) 18% 20% / 0.68);
   border-color: rgba(255 255 255 / 0.08);
 }
 

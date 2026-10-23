@@ -1,0 +1,167 @@
+/*
+ * fangUI · Tile —— 磁贴（Windows 8 开始菜单 / WinUI3 血统）
+ * 大块同色相渐变卡片 + 连续曲率大圆角（squircle 手感，支持则渐进增强）
+ * 统一视觉：左下暗 → 右上亮，白字 + 大白 icon，字少精准
+ * 铁律：磁贴只玩同一种色相 —— 一切颜色从 --fu-h 推导深浅，绝不串色
+ *
+ * 这套规则只依赖令牌（--fu-h / --sp / --r / --t / 模式令牌），
+ * 桌面端（WinUI3 / Tauri / Electron）按同名令牌映射即可复刻，不只用于 Web。
+ */
+
+[data-ui="tile"] {
+  --tile-r: 24px;
+  --tile-g1: hsl(var(--fu-h) 42% 94%);
+  --tile-g2: hsl(var(--fu-h) 36% 87%);
+  --tile-line: hsl(var(--fu-h) 50% 100% / 0.5);
+}
+[data-ui="tile"][data-mode="dark"] {
+  --tile-g1: hsl(var(--fu-h) 20% 21%);
+  --tile-g2: hsl(var(--fu-h) 22% 16%);
+  --tile-line: rgba(255 255 255 / 0.08);
+}
+
+/* 苹果同款连续曲率：浏览器支持 corner-shape 时启用超椭圆 */
+@supports (corner-shape: superellipse(2)) {
+  [data-ui="tile"] .fu-card,
+  [data-ui="tile"] .fu-panel,
+  [data-ui="tile"] .fu-tile,
+  [data-ui="tile"] .fu-tile__ico {
+    corner-shape: superellipse(1.85);
+  }
+}
+
+/* ── 大卡片：轻柔同色相渐变 ── */
+[data-ui="tile"] .fu-card,
+[data-ui="tile"] .fu-panel {
+  background: linear-gradient(155deg, var(--tile-g1), var(--tile-g2));
+  border: 1px solid var(--tile-line);
+  border-radius: var(--tile-r);
+  padding: var(--sp-4);
+}
+[data-ui="tile"] .fu-card:hover { filter: brightness(1.015); }
+[data-ui="tile"] .fu-panel { background: linear-gradient(155deg, var(--tile-g2), var(--tile-g1)); }
+
+/* ── 按钮：毛玻璃药丸，按压回缩 ── */
+[data-ui="tile"] .fu-btn {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: hsl(0 0% 100% / 0.45);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  color: var(--text);
+  border: 1px solid hsl(0 0% 100% / 0.55);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease-spring), background var(--t-fast) var(--ease-out);
+}
+[data-ui="tile"] .fu-btn:hover  { background: hsl(0 0% 100% / 0.6); }
+[data-ui="tile"] .fu-btn:active { transform: scale(0.955); background: hsl(0 0% 100% / 0.72); }
+[data-ui="tile"] .fu-btn--accent {
+  background: linear-gradient(145deg, hsl(var(--fu-h) var(--fu-s) calc(var(--fu-l) + 6%)), var(--accent-hover));
+  color: var(--accent-ink); border-color: hsl(0 0% 100% / 0.4);
+}
+[data-ui="tile"][data-mode="dark"] .fu-btn {
+  background: hsl(var(--fu-h) 20% 30% / 0.5);
+  border-color: rgba(255 255 255 / 0.12);
+}
+[data-ui="tile"][data-mode="dark"] .fu-btn:hover  { background: hsl(var(--fu-h) 20% 36% / 0.6); }
+[data-ui="tile"][data-mode="dark"] .fu-btn:active { background: hsl(var(--fu-h) 20% 40% / 0.7); }
+
+/* ── 输入 / 开关 / 进度 ── */
+[data-ui="tile"] .fu-input {
+  width: 100%; padding: var(--sp-2) var(--sp-3);
+  background: hsl(0 0% 100% / 0.4);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  color: var(--text);
+  border: 1px solid hsl(0 0% 100% / 0.5);
+  border-radius: 12px; outline: none;
+}
+[data-ui="tile"] .fu-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+[data-ui="tile"][data-mode="dark"] .fu-input {
+  background: hsl(var(--fu-h) 20% 28% / 0.5);
+  border-color: rgba(255 255 255 / 0.12);
+}
+
+[data-ui="tile"] .fu-switch {
+  width: 44px; height: 24px; border-radius: 12px;
+  background: hsl(0 0% 100% / 0.4);
+  border: 1px solid hsl(0 0% 100% / 0.5);
+  position: relative; cursor: pointer;
+  transition: background var(--t-move) var(--ease-out);
+}
+[data-ui="tile"] .fu-switch::after {
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform var(--t-move) var(--ease-spring), background var(--t-fast);
+}
+[data-ui="tile"] .fu-switch[aria-checked="true"] {
+  background: linear-gradient(145deg, hsl(var(--fu-h) var(--fu-s) calc(var(--fu-l) + 6%)), var(--accent-hover));
+  border-color: transparent;
+}
+[data-ui="tile"] .fu-switch[aria-checked="true"]::after { transform: translateX(20px); background: var(--accent-ink); }
+
+[data-ui="tile"] .fu-progress { height: 6px; border-radius: 3px; background: hsl(0 0% 100% / 0.4); overflow: hidden; }
+[data-ui="tile"] .fu-progress > div {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), hsl(var(--fu-h) var(--fu-s) calc(var(--fu-l) + 8%)));
+  transition: width var(--t-move) var(--ease-out);
+}
+
+/* ══ 磁贴本体 ══
+   统一语言：左下暗 → 右上亮的同色相渐变，白字 + 大白 icon，
+   字少而精准，没有灰色 —— 干净简约 */
+[data-ui="tile"] .fu-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+@media (max-width: 420px) { [data-ui="tile"] .fu-tile--wide { grid-column: auto; } }
+
+[data-ui="tile"] .fu-tile {
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
+  gap: 8px; min-height: 128px; padding: 16px;
+  border-radius: var(--tile-r);
+  background: linear-gradient(to top right, var(--t-c2), var(--t-c1));  /* 左下暗，右上亮 */
+  color: #ffffff;
+  cursor: grab; user-select: none; -webkit-user-select: none;
+  touch-action: none;               /* 拖拽不被页面滚动抢走 */
+  transition: transform .25s var(--ease-spring), filter .18s var(--ease-out);
+}
+[data-ui="tile"] .fu-tile--wide { grid-column: span 2; }
+
+/* 同色相阶梯：由深到亮四档，鲜艳但不高饱和；渐变统一往右上提亮 */
+[data-ui="tile"] .fu-tile[data-hue="1"] { --t-c1: hsl(var(--fu-h) 72% 62%); --t-c2: hsl(var(--fu-h) 62% 40%); }
+[data-ui="tile"] .fu-tile[data-hue="2"] { --t-c1: hsl(var(--fu-h) 68% 56%); --t-c2: hsl(var(--fu-h) 60% 35%); }
+[data-ui="tile"] .fu-tile[data-hue="3"] { --t-c1: hsl(var(--fu-h) 64% 50%); --t-c2: hsl(var(--fu-h) 56% 31%); }
+[data-ui="tile"] .fu-tile[data-hue="4"] { --t-c1: hsl(var(--fu-h) 60% 45%); --t-c2: hsl(var(--fu-h) 52% 27%); }
+
+[data-ui="tile"] .fu-tile:hover { filter: saturate(1.08) brightness(1.05); }
+
+/* 按压：回缩一点，松手弹回 —— 反馈手感 */
+[data-ui="tile"] .fu-tile:active { transform: scale(0.955); cursor: grabbing; }
+
+/* 拖拽中：只留透明度与倾斜，位移全部由 JS 内联驱动 */
+[data-ui="tile"] .fu-tile.is-pressed  { cursor: grabbing; }
+[data-ui="tile"] .fu-tile.is-dragging {
+  z-index: 10; opacity: 0.92; cursor: grabbing;
+  transition: none;                  /* 跟手，不能有过渡延迟 */
+}
+[data-ui="tile"] .fu-tile.is-ghost   { opacity: 0.35; filter: grayscale(0.4); }
+[data-ui="tile"] .fu-tile:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
+
+/* ── 大白 icon：不要图标座，就是一块够大的纯白图形 ── */
+[data-ui="tile"] .fu-tile__ico {
+  width: auto; height: auto; padding: 0;
+  background: none; border: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+[data-ui="tile"] .fu-tile__ico svg {
+  width: 44px; height: 44px;
+  fill: none; stroke: #ffffff;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+[data-ui="tile"] .fu-tile__label {
+  font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+  color: #ffffff;
+}

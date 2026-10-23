@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>fangUI · 三风格实验室</title>
+<title>fangUI · 一套组件，五种皮肤</title>
 <link rel="stylesheet" href="../src/core/tokens.css">
 <link rel="stylesheet" href="../src/core/flat.css">
 <link rel="stylesheet" href="../src/core/neu.css">
 <link rel="stylesheet" href="../src/core/liquid.css">
+<link rel="stylesheet" href="../src/core/tile.css">
 <style>
   * { box-sizing: border-box; margin: 0; }
   body {
@@ -17,15 +18,25 @@
     transition: background-color var(--t-move) var(--ease-out), color var(--t-move) var(--ease-out);
   }
   body.has-bg { background-size: cover; }
-  header { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-6); }
-  h1 { font-size: 18px; margin-right: auto; }
+  header {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-6);
+    padding: 10px 14px; border-radius: var(--r-lg);
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  h1 { font-size: 18px; margin-right: auto; padding-left: 4px; }
   h1 small { display: block; color: var(--text-muted); font-weight: normal; font-size: 11px; letter-spacing: .04em; }
-  .grp { display: flex; gap: 6px; align-items: center; padding: 4px 6px; border-radius: var(--r-md); background: var(--surface-2); border: 1px solid var(--border); }
-  .grp .lbl { font-size: 11px; color: var(--text-muted); padding: 0 2px; }
-  .swatches { display: flex; gap: 5px; align-items: center; }
-  .sw { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; padding: 0; }
+  /* 分组不再画框 —— 靠层级微差区分，和正文一个语言 */
+  .grp { display: flex; gap: 6px; align-items: center; padding: 4px 8px; border-radius: var(--r-md); background: var(--surface-2); }
+  .grp .lbl { font-size: 11px; color: var(--text-muted); padding: 0 4px; }
+  /* 选中态：四种皮肤通用，一眼看出当前是哪一个 */
+  .grp .fu-btn.is-active {
+    background: var(--accent); color: var(--accent-ink);
+    border-color: transparent; box-shadow: 0 0 0 2px var(--accent-ring);
+  }
+  .sw { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border-strong); cursor: pointer; padding: 0; }
   .sw:hover { transform: scale(1.15); transition: transform var(--t-fast) var(--ease-spring); }
-  main { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--sp-4); position: relative; z-index: 1; }
+  main { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--sp-4); align-items: start; position: relative; z-index: 1; }
   .card h3 { font-size: 12px; color: var(--text-muted); letter-spacing: .06em; margin-bottom: var(--sp-3); font-weight: 600; }
   .row { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; margin-top: var(--sp-3); }
   .row > label { font-size: 12px; color: var(--text-muted); min-width: 88px; }
@@ -36,27 +47,8 @@
   #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 99; display: grid; gap: 8px; justify-items: center; }
   .toast { padding: 8px 18px; border-radius: 999px; background: var(--surface); color: var(--text); border: 1px solid var(--border-strong); font-size: 13px; box-shadow: 0 6px 20px rgba(0,0,0,.18); animation: toast-in .25s var(--ease-spring); }
   @keyframes toast-in { from { opacity: 0; transform: translateY(10px) scale(.94); } }
-  /* ── 玻璃实验室 ── */
-  .glass-demo {
-    padding: var(--sp-4); border-radius: var(--r-lg);
-    /* Neu·Glass：强遮罩——半透明底 + 深色内衬 + 顶棱高光 + 外圈投影，看起来是真玻璃凸出来 */
-    background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
-    background-color: hsl(var(--fu-h) 25% 30% / var(--glass-alpha, .5));
-    backdrop-filter: blur(16px) saturate(1.5);
-    -webkit-backdrop-filter: blur(16px) saturate(1.5);
-    border: 1px solid rgba(255,255,255,.42);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -1px 0 rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.22);
-    color: #fff;
-  }
-  [data-mode="dark"] .glass-demo { border-color: rgba(255,255,255,.14); }
-  .liquid-demo {
-    padding: var(--sp-4); border-radius: var(--r-lg); color: #fff;
-    border: 1px solid rgba(255,255,255,.45);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 12px 36px rgba(0,0,0,.2);
-  }
-  .lab-note { font-size: 12px; opacity: .85; margin-bottom: var(--sp-3); }
+  .lab-note { font-size: 12px; opacity: .85; margin: 6px 0 var(--sp-3); }
   .hidden { display: none !important; }
-  .caret { animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
   .fu-ai-ask__title { font-weight: 600; margin-bottom: 4px; }
   .fu-ai-ask__sub { font-size: 12px; color: var(--text-muted); margin-bottom: var(--sp-3); }
@@ -64,35 +56,113 @@
   .fu-ai-ask__opt { flex-direction: column; align-items: flex-start; text-align: left; width: 100%; }
   .fu-ai-ask__opt span { font-size: 12px; color: var(--text-muted); }
   .fu-compare { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); margin-top: var(--sp-2); }
-  .fu-compare__pane { cursor: pointer; padding: var(--sp-3); border-radius: var(--r-md); border: 1px dashed var(--border-strong); }
-  .fu-compare__pane:hover { border-color: var(--accent); }
+  .fu-compare__pane { cursor: pointer; padding: var(--sp-3); border-radius: var(--r-md); background: var(--surface-2); }
+  .fu-compare__pane:hover { outline: 2px solid var(--accent); }
   .fu-compare__label { font-size: 12px; color: var(--text-muted); margin-bottom: var(--sp-2); text-align: center; }
+
+  /* ── 图标库 ── */
+  .fu-icon { display: inline-grid; place-items: center; font-size: 20px; line-height: 1; }
+  .fu-icon svg { width: 1em; height: 1em; }
+  #icon-search {
+    flex: 1; min-width: 160px; padding: 8px 12px; font-size: 13px;
+    border: none; border-radius: var(--r-md); background: var(--surface-2); color: var(--text); outline: none;
+  }
+  #icon-search:focus { box-shadow: 0 0 0 2px var(--accent-ring); }
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 6px; margin-top: var(--sp-3); max-height: 320px; overflow-y: auto; padding: 2px; }
+  .icon-cell {
+    display: grid; place-items: center; gap: 3px; padding: 8px 2px 6px;
+    border: none; border-radius: var(--r-md); background: var(--surface-2); color: var(--text);
+    cursor: pointer; transition: background var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-spring);
+  }
+  .icon-cell:hover { background: var(--accent-soft); transform: translateY(-2px); }
+  .icon-cell:active { transform: scale(.94); }
+  .icon-cell .fu-icon { font-size: 22px; }
+  .icon-cell small { font-size: 9px; color: var(--text-muted); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .icon-preview { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-3); padding: var(--sp-3); border-radius: var(--r-md); background: var(--surface-2); }
+  .icon-preview .fu-icon { font-size: 40px; color: var(--accent); }
+  .icon-preview b { font-size: 14px; }
+  .icon-preview span { font-size: 11px; color: var(--text-muted); display: block; }
+
+  /* ── 色彩管理：主题色槽（≤3）+ 副色（无限）── */
+  .slot-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .slot {
+    width: 34px; height: 34px; border-radius: 12px; cursor: pointer; border: none; padding: 0;
+    position: relative; transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast);
+  }
+  .slot:hover { transform: scale(1.08); }
+  .slot.is-active { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent); }
+  .slot-add {
+    width: 34px; height: 34px; border-radius: 12px; border: 1px dashed var(--border-strong);
+    background: transparent; color: var(--text-muted); font-size: 18px; cursor: pointer;
+  }
+  .slot-add:disabled { opacity: .35; cursor: not-allowed; }
+  .slot-x {
+    position: absolute; top: -5px; right: -5px; width: 15px; height: 15px; border-radius: 50%;
+    border: none; background: var(--border-strong); color: var(--text); font-size: 9px; line-height: 1;
+    cursor: pointer; display: none; place-items: center; padding: 0;
+  }
+  .slot:hover .slot-x, .sub:hover .slot-x { display: grid; }
+  .sub { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: none; padding: 0; position: relative; transition: transform var(--t-fast) var(--ease-spring); }
+  .sub:hover { transform: scale(1.12); }
+  .sub.is-preview { box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--text-muted); }
+  /* 副色实时预览：整块预览区用内联 --fu-h 覆写，组件全部跟着变 */
+  #sub-preview { margin-top: var(--sp-3); padding: var(--sp-3); border-radius: var(--r-md); background: var(--surface-2); display: flex; gap: var(--sp-3); align-items: center; flex-wrap: wrap; }
+  #sub-preview .fu-btn--accent, #sub-preview .fu-switch[aria-checked="true"] { background: var(--accent); }
+  #sub-preview .fu-progress > div { background: var(--accent); }
+  #sub-preview .fu-btn--accent { color: var(--accent-ink); }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>fangUI 实验室<small>三种风格都是真的：按钮按得动、滑块拖得动、玻璃折得动</small></h1>
+  <h1>fangUI<small>一套组件，五种皮肤 —— 按钮切换，不是摆在一起</small></h1>
   <div class="grp"><span class="lbl">风格</span>
     <button class="fu-btn" data-set="flat">Flat</button>
     <button class="fu-btn" data-set="neu">Neu</button>
     <button class="fu-btn" data-set="neu-g">Neu·Glass</button>
     <button class="fu-btn" data-set="liquid">Liquid</button>
+    <button class="fu-btn" data-set="tile">Tile</button>
   </div>
   <div class="grp"><span class="lbl">模式</span>
-    <button class="fu-btn" data-mode="light">亮</button>
-    <button class="fu-btn" data-mode="dark">暗</button>
-    <button class="fu-btn" data-mode="natural">自然</button>
+    <button class="fu-btn" data-pick="light">亮</button>
+    <button class="fu-btn" data-pick="dark">暗</button>
+    <button class="fu-btn" data-pick="natural">自然</button>
   </div>
   <div class="grp"><span class="lbl">背景</span>
     <button class="fu-btn" id="btn-bg-upload">上传图片</button>
     <button class="fu-btn" id="btn-bg-clear">清除</button>
     <input type="file" id="bg-file" accept="image/*" class="hidden">
   </div>
-  <div class="grp swatches" id="swatches"></div>
 </header>
 
 <main>
+  <!-- 色彩：主题色最多 3 个槽位 + 副色无限，全部真实生效 -->
+  <section class="fu-card card">
+    <h3>色彩 · 主题色 ≤ 3，副色无限</h3>
+    <div class="slot-row" id="slot-row"></div>
+    <p class="lab-note">点槽位即换主色（按钮 / 开关 / 进度条全跟）；+ 加新主色，最多 3 个；悬浮可删。</p>
+    <div class="slot-row" id="sub-row" style="margin-top: var(--sp-3);"></div>
+    <p class="lab-note" style="margin-top: 4px;">副色随便加，点一个立刻在下面预览成主色效果。</p>
+    <div id="sub-preview">
+      <button class="fu-btn fu-btn--accent">副色按钮</button>
+      <div class="fu-switch" role="switch" aria-checked="true" tabindex="0"></div>
+      <div class="fu-progress" style="flex:1; min-width:90px"><div style="width:62%"></div></div>
+    </div>
+  </section>
+
+  <!-- 图标库：2657 张，搜索即所得，点击真用 -->
+  <section class="fu-card card" style="grid-column: 1 / -1;">
+    <h3>图标库 · <span id="icon-count">…</span> 张（NexusOS 26）</h3>
+    <div class="row" style="margin-top:0">
+      <input id="icon-search" placeholder="搜英文名或中文，比如 search / 邮件 / 设置">
+    </div>
+    <div class="icon-grid" id="icon-grid"></div>
+    <div class="icon-preview" id="icon-preview">
+      <i class="fu-icon" data-fu-icon="搜索"></i>
+      <div><b>点上面的图标试试</b><span>点击即放大预览，名字可复制</span></div>
+    </div>
+  </section>
+
   <!-- 基础组件：全部真实可用 -->
   <section class="fu-card card">
     <h3>基础组件（都按得动）</h3>
@@ -137,13 +207,13 @@
     <div id="ai-host"></div>
   </section>
 
-  <!-- Liquid 玻璃实验室：五个滑块 + 真折射 -->
-  <section class="fu-card card" id="liquid-lab">
-    <h3>液态玻璃实验室（liquid-glass 同款五滑块 + SVG 折射）</h3>
-    <div class="liquid-demo" id="liquid-card" style="margin-bottom: var(--sp-3);">
-      <b>这块玻璃真的在折射</b>
-      <p class="lab-note">拖动下面滑块，看背景雪山透过玻璃发生折射与模糊。参数与 liquid-glass-web 展示页完全同款。</p>
-      <button class="fu-btn" data-toast="液态玻璃按钮：折射中的玻璃也能点">玻璃里的按钮</button>
+  <!-- 玻璃参数：只有 Neu·Glass / Liquid 时才出现，内容和皮肤都跟着当前风格走 -->
+  <section class="fu-card card hidden" id="glass-lab">
+    <h3>玻璃参数 · <span id="glass-name">—</span></h3>
+    <div class="fu-card" id="glass-preview">
+      <b>这块玻璃在真的折射</b>
+      <p class="lab-note">拖动下面滑块，看背景透过当前风格的玻璃发生形变。</p>
+      <button class="fu-btn" data-toast="玻璃里的按钮也能点">玻璃里的按钮</button>
     </div>
     <div class="row"><label>折射率</label><input type="range" id="s-ref" min="0.2" max="2.5" step="0.05" value="1"><output id="v-ref">1.00</output></div>
     <div class="row"><label>折射圈厚度</label><input type="range" id="s-edge" min="0.4" max="3" step="0.05" value="1"><output id="v-edge">1.00</output></div>
@@ -152,15 +222,36 @@
     <div class="row"><label>背景模糊</label><input type="range" id="s-blur" min="0" max="6" step="0.25" value="0.25"><output id="v-blur">0.25px</output></div>
   </section>
 
-  <!-- Neu·Glass 实验室：一个半透明度滑块 + 强遮罩 + 折射 -->
-  <section class="fu-card card" id="glass-lab">
-    <h3>新拟物玻璃实验室（强遮罩 + 折射 + 半透明度）</h3>
-    <div class="glass-demo" id="glass-card" style="margin-bottom: var(--sp-3);">
-      <b>这块新拟物玻璃在凸起</b>
-      <p class="lab-note">强遮罩保住凸起感：深色内衬压住透底阴影，内侧高光描边制造棱边，外圈投影托起玻璃——再加一点真折射。</p>
-      <button class="fu-btn" data-toast="新拟物玻璃按钮：凸起且半透明">玻璃里的按钮</button>
+  <!-- 磁贴：只有 Tile 时才出现，全部可点、可拖、有反馈 -->
+  <section class="fu-card card hidden" id="tile-lab" style="grid-column: 1 / -1;">
+    <h3>磁贴 · Tile —— 按住拖动排序，点一下打开</h3>
+    <p class="lab-note">同色相渐变（左下暗、右上亮）+ 三重连续圆角，纯白大 icon 和白字，简约不灰。按住拖到别的磁贴上松手即可换位。</p>
+    <div class="fu-tile-grid" id="tile-grid">
+      <div class="fu-tile fu-tile--wide" data-hue="1" data-name="邮件" role="button" aria-label="邮件">
+        <div class="fu-tile__ico"><svg viewBox="0 0 24 24"><rect x="3.2" y="5.2" width="17.6" height="13.6" rx="2.4"/><path d="m4.5 7.5 7.5 5.2 7.5-5.2"/></svg></div>
+        <span class="fu-tile__label">邮件</span>
+      </div>
+      <div class="fu-tile" data-hue="2" data-name="照片" role="button" aria-label="照片">
+        <div class="fu-tile__ico"><svg viewBox="0 0 24 24"><rect x="3.2" y="4.8" width="17.6" height="14.4" rx="2.4"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 17.5 4.8-4.8 3 3 3.2-3.2 4 4"/></svg></div>
+        <span class="fu-tile__label">照片</span>
+      </div>
+      <div class="fu-tile" data-hue="3" data-name="音乐" role="button" aria-label="音乐">
+        <div class="fu-tile__ico"><svg viewBox="0 0 24 24"><path d="M9.5 17.5V6.8l9-1.8v10.5"/><circle cx="7.2" cy="17.5" r="2.3"/><circle cx="16.2" cy="15.5" r="2.3"/></svg></div>
+        <span class="fu-tile__label">音乐</span>
+      </div>
+      <div class="fu-tile" data-hue="1" data-name="天气" role="button" aria-label="天气">
+        <div class="fu-tile__ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6 18 18M18 6l-1.4 1.4M7.4 16.6 6 18"/></svg></div>
+        <span class="fu-tile__label">天气</span>
+      </div>
+      <div class="fu-tile" data-hue="2" data-name="日历" role="button" aria-label="日历">
+        <div class="fu-tile__ico"><svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14" rx="2.4"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></div>
+        <span class="fu-tile__label">日历</span>
+      </div>
+      <div class="fu-tile" data-hue="3" data-name="聊天" role="button" aria-label="聊天">
+        <div class="fu-tile__ico"><svg viewBox="0 0 24 24"><path d="M20 14.2a2.6 2.6 0 0 1-2.6 2.6H9.4L4.8 20V6.6A2.6 2.6 0 0 1 7.4 4h10A2.6 2.6 0 0 1 20 6.6Z"/></svg></div>
+        <span class="fu-tile__label">聊天</span>
+      </div>
     </div>
-    <div class="row"><label>半透明度</label><input type="range" id="s-alpha" min="0.2" max="0.85" step="0.05" value="0.5"><output id="v-alpha">0.50</output></div>
   </section>
 </main>
 
@@ -171,37 +262,75 @@
   import "../src/motion/fangui-motion.js";
   import "../src/ai/fangui-ai.js";
   import "../src/liquid/refract.js";
+  import "../src/icon.js";
 
-  const { motion, ai, accent, preset, setMode, refract, PRESETS } = window.FangUI;
+  const { motion, ai, accent, preset, setMode, refract, PRESETS, slots, subs, icons } = window.FangUI;
   const $ = (s) => document.querySelector(s);
 
-  /* ── toast：所有按钮都有真实反馈 ── */
+  /* ── toast ── */
   function toast(msg) {
     const t = document.createElement("div");
     t.className = "toast";
     t.textContent = msg;
     $("#toast").appendChild(t);
-    setTimeout(() => { t.style.opacity = "0"; t.style.transition = "opacity .3s"; setTimeout(() => t.remove(), 320); }, 1800);
+    setTimeout(() => { t.style.opacity = "0"; t.style.transition = "opacity .3s"; setTimeout(() => t.remove(), 320); }, 1600);
   }
   document.addEventListener("click", (e) => {
     const b = e.target.closest("[data-toast]");
     if (b) toast(b.dataset.toast);
   });
 
-  /* ── 风格 / 模式 ── */
-  let bgUpload = null; // 用户上传的背景优先于默认
-  const DEFAULT_BG = { neu: "bg/bg-1.jpg", "neu-g": "bg/bg-1.jpg", liquid: "bg/bg-1.jpg" }; // 两种玻璃 + 液态都用雪山
+  /* ── 背景 ── */
+  let bgUpload = null;
+  const DEFAULT_BG = { neu: "bg/bg-1.jpg", "neu-g": "bg/bg-1.jpg", liquid: "bg/bg-1.jpg" };
   function applyBg() {
     const ui = ai.mode();
     const url = bgUpload || DEFAULT_BG[ui] || null;
     document.body.classList.toggle("has-bg", !!url);
     document.body.style.backgroundImage = url ? `url(${url})` : "none";
-    // Flat 无背景图时就是那个「不纯的白」#f2f2f0（tokens 的 --bg）
   }
-  document.querySelectorAll("[data-set]").forEach((b) =>
-    b.addEventListener("click", () => { ai.setMode(b.dataset.set); applyBg(); syncLabs(); toast(`已切换到 ${b.textContent}`); }));
-  document.querySelectorAll("[data-mode]").forEach((b) =>
-    b.addEventListener("click", () => { setMode(b.dataset.mode); toast(`已切换到${ { light: "亮色", dark: "深色", natural: "自然" }[b.dataset.mode] }模式`); }));
+
+  /* ── 玻璃折射：一张预览卡，Neu·Glass 和 Liquid 共用，参数共用 ── */
+  const P = { ref: 1, edge: 1, rad: 0.6, tint: 0.08, blur: 0.25 };
+  let glass = null;
+
+  function syncUI() {
+    const ui = ai.mode();
+    const md = document.documentElement.getAttribute("data-mode") || "light";
+
+    document.querySelectorAll("[data-set].fu-btn").forEach((b) => {
+      const on = b.dataset.set === ui;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    document.querySelectorAll("[data-pick].fu-btn").forEach((b) => {
+      const on = b.dataset.pick === md;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+
+    const isGlass = ui === "liquid" || ui === "neu-g";
+    $("#glass-lab").classList.toggle("hidden", !isGlass);
+    $("#tile-lab").classList.toggle("hidden", ui !== "tile");
+    $("#glass-name").textContent = ui === "liquid" ? "Liquid 液态玻璃" : ui === "neu-g" ? "Neu·Glass 新拟物玻璃" : "—";
+    if (isGlass && !glass) glass = refract.makeGlass($("#glass-preview"), { ...P });
+  }
+
+  /* ── 风格 / 模式：点谁切谁，按钮立刻反映当前状态 ── */
+  document.querySelectorAll("[data-set].fu-btn").forEach((b) =>
+    b.addEventListener("click", () => {
+      ai.setMode(b.dataset.set);
+      applyBg();
+      syncUI();
+      toast(`已切换到 ${b.textContent}`);
+    }));
+
+  document.querySelectorAll("[data-pick].fu-btn").forEach((b) =>
+    b.addEventListener("click", () => {
+      setMode(b.dataset.pick);
+      syncUI();
+      toast(`已切换到${{ light: "亮色", dark: "深色", natural: "自然" }[b.dataset.pick]}模式`);
+    }));
 
   /* ── 背景上传 ── */
   $("#btn-bg-upload").addEventListener("click", () => $("#bg-file").click());
@@ -214,31 +343,167 @@
   });
   $("#btn-bg-clear").addEventListener("click", () => { bgUpload = null; applyBg(); toast("背景已清除"); });
 
-  /* ── 主题色 ── */
-  const sw = $("#swatches");
-  Object.keys(PRESETS).forEach((k) => {
-    const [h, s, l] = PRESETS[k];
-    const d = document.createElement("button");
-    d.className = "sw"; d.title = k;
-    d.style.background = `hsl(${h} ${s}% ${l}%)`;
-    d.addEventListener("click", () => { preset(k); toast(`主题色：${k}`); });
-    sw.appendChild(d);
-  });
-  const rnd = document.createElement("button");
-  rnd.className = "sw"; rnd.title = "随机主题色（无限多）";
-  rnd.style.background = "conic-gradient(red, yellow, lime, cyan, blue, magenta, red)";
-  rnd.addEventListener("click", () => {
-    const h = Math.floor(Math.random() * 360);
-    accent(h, 40 + Math.floor(Math.random() * 45), 40 + Math.floor(Math.random() * 25));
-    toast(`随机主题色 hsl(${h}, …)`);
-  });
-  sw.appendChild(rnd);
+  /* ── 色彩：主题色槽位（≤3）+ 副色（无限），全部真实生效 ── */
+  function hslCss(c) { return `hsl(${c[0]} ${c[1]}% ${c[2]}%)`; }
 
-  /* ── 基础组件全部可用 ── */
+  function renderSlots() {
+    const row = $("#slot-row");
+    row.innerHTML = "";
+    const list = slots.list();
+    const act = slots.active();
+    list.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.className = "slot" + (i === act ? " is-active" : "");
+      b.style.background = hslCss(c);
+      b.title = `主色 ${i + 1} · 点击启用`;
+      const x = document.createElement("span");
+      x.className = "slot-x"; x.textContent = "×";
+      x.addEventListener("click", (e) => { e.stopPropagation(); slots.remove(i); renderSlots(); toast(`已删掉主色 ${i + 1}`); });
+      b.appendChild(x);
+      b.addEventListener("click", () => { slots.use(i); renderSlots(); toast(`主色 ${i + 1} 已启用，全站跟着变了`); });
+      row.appendChild(b);
+    });
+    const add = document.createElement("button");
+    add.className = "slot-add"; add.textContent = "+"; add.title = "加一个主色（最多 3 个）";
+    add.disabled = list.length >= 3;
+    add.addEventListener("click", () => pickColor((hex) => {
+      if (!slots.add(hex)) { toast("主色最多 3 个，先删一个"); return; }
+      slots.use(slots.list().length - 1);
+      renderSlots(); toast("新主色已加并启用");
+    }));
+    row.appendChild(add);
+    // 主色不足 3 个时，把当前主色也入槽，保证槽位体系可用
+    if (list.length === 0) {
+      const cur = document.createElement("button");
+      cur.className = "slot is-active"; cur.title = "当前主色";
+      cur.style.background = `hsl(var(--fu-h) var(--fu-s) var(--fu-l))`;
+      row.insertBefore(cur, add);
+    }
+  }
+
+  let previewSub = null;
+  function renderSubs() {
+    const row = $("#sub-row");
+    row.innerHTML = "";
+    const list = subs.list();
+    list.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.className = "sub";
+      b.style.background = hslCss(c);
+      b.title = `副色 ${i + 1}`;
+      const x = document.createElement("span");
+      x.className = "slot-x"; x.textContent = "×";
+      x.addEventListener("click", (e) => { e.stopPropagation(); subs.remove(i); renderSubs(); toast(`已删掉副色 ${i + 1}`); });
+      b.appendChild(x);
+      b.addEventListener("click", () => {
+        previewSub = i;
+        applySubPreview(c);
+        renderSubs();
+        toast(`副色 ${i + 1} 预览中 —— 下面整块都变它的色`);
+      });
+      row.appendChild(b);
+    });
+    if (previewSub !== null && previewSub < list.length) {
+      row.children[previewSub].classList.add("is-preview");
+    }
+    const add = document.createElement("button");
+    add.className = "slot-add"; add.textContent = "+"; add.title = "加一个副色（无限个）";
+    add.addEventListener("click", () => pickColor((hex) => {
+      const n = subs.add(hex);
+      previewSub = n - 1;
+      applySubPreview(subs.list()[n - 1]);
+      renderSubs();
+      toast(`副色 +1，现在共 ${n} 个`);
+    }));
+    row.appendChild(add);
+  }
+
+  /* 把某个副色临时套到预览区：内联覆写 --fu-h/s/l，真实令牌推导 */
+  function applySubPreview(c) {
+    const p = $("#sub-preview");
+    if (!c) { p.style.removeProperty("--fu-h"); p.style.removeProperty("--fu-s"); p.style.removeProperty("--fu-l"); return; }
+    p.style.setProperty("--fu-h", c[0]);
+    p.style.setProperty("--fu-s", c[1] + "%");
+    p.style.setProperty("--fu-l", c[2] + "%");
+    p.style.setProperty("--accent", hslCss(c));
+    p.style.setProperty("--accent-ink", "#f2f2f0");
+    p.style.setProperty("--accent-hover", hslCss([c[0], c[1], Math.max(c[2] - 10, 20)]));
+  }
+
+  /* 原生取色器 */
+  function pickColor(cb) {
+    const inp = document.createElement("input");
+    inp.type = "color";
+    inp.value = "#4d9fdc";
+    inp.addEventListener("change", () => cb(inp.value));
+    inp.click();
+  }
+
+  /* ── 图标库：搜索即所得，点击真用 ── */
+  (function initIcons() {
+    const grid = $("#icon-grid");
+    const searchInp = $("#icon-search");
+    const preview = $("#icon-preview");
+    const PAGE = 96;
+    let shown = PAGE;
+
+    function clearPreview() {
+      preview.innerHTML = "";
+    }
+
+    function showPreview(item) {
+      clearPreview();
+      const ic = document.createElement("i");
+      ic.className = "fu-icon";
+      icons.icon(item.en, ic);
+      const txt = document.createElement("div");
+      txt.innerHTML = `<b>${item.zh}</b><span>${item.en} · 点击名字复制</span>`;
+      txt.querySelector("b").style.cursor = "pointer";
+      txt.querySelector("b").addEventListener("click", () => {
+        navigator.clipboard && navigator.clipboard.writeText(item.en);
+        toast(`已复制英文名：${item.en}`);
+      });
+      preview.appendChild(ic);
+      preview.appendChild(txt);
+    }
+
+    function render(reset) {
+      if (reset) { shown = PAGE; grid.innerHTML = ""; }
+      const q = searchInp.value;
+      const items = icons.search(q, shown);
+      grid.innerHTML = "";
+      items.forEach((it) => {
+        const cell = document.createElement("button");
+        cell.className = "icon-cell";
+        const ic = document.createElement("i");
+        ic.className = "fu-icon";
+        icons.icon(it.en, ic);
+        const lbl = document.createElement("small");
+        lbl.textContent = it.zh;
+        cell.appendChild(ic); cell.appendChild(lbl);
+        cell.addEventListener("click", () => { showPreview(it); toast(`图标：${it.zh}（${it.en}）`); });
+        grid.appendChild(cell);
+      });
+      // 加载更多
+      const total = icons.search(q).length;
+      if (total > shown) {
+        const more = document.createElement("button");
+        more.className = "fu-btn"; more.style.gridColumn = "1 / -1";
+        more.textContent = `还有 ${total - shown} 个，点这继续加载`;
+        more.addEventListener("click", () => { shown += PAGE; render(false); });
+        grid.appendChild(more);
+      }
+      $("#icon-count").textContent = icons.count();
+    }
+
+    searchInp.addEventListener("input", () => render(true));
+    icons.ready().then(() => render(true));
+  })();
+
+  /* ── 基础组件 ── */
   let clicks = 0;
   $("#b-plain").addEventListener("click", () => { $("#clicks").textContent = ++clicks; toast("普通按钮被点了 " + clicks + " 次"); });
   $("#b-accent").addEventListener("click", () => { motion.bounce($("#b-accent")); toast("强调按钮：弹跳了一下"); });
-  $("#inp").addEventListener("input", (e) => { /* 受控输入，真实可打字 */ });
   document.querySelectorAll(".fu-switch").forEach((s) => {
     const toggle = () => s.setAttribute("aria-checked", s.getAttribute("aria-checked") !== "true");
     s.addEventListener("click", toggle);
@@ -258,8 +523,8 @@
   /* ── AI 协作 ── */
   $("#btn-ask").addEventListener("click", () => {
     document.documentElement.removeAttribute("data-ui");
-    applyBg(); syncLabs();
-    ai.promptStyle($("#ai-host"), () => { applyBg(); syncLabs(); });
+    applyBg(); syncUI();
+    ai.promptStyle($("#ai-host"), () => { applyBg(); syncUI(); });
     toast("风格已清空，来选一个");
   });
   $("#btn-compare").addEventListener("click", () =>
@@ -270,21 +535,12 @@
       return c;
     }, { left: "flat", right: "neu-g" }));
 
-  /* ── 玻璃实验室：折射引擎 ── */
-  const P = { ref: 1, edge: 1, rad: 0.6, tint: 0.08, blur: 0.25 };
-  let liquidGlass = null, glassRefraction = null;
-  function syncLabs() {
-    const ui = ai.mode();
-    $("#liquid-lab").classList.toggle("hidden", ui !== "liquid");
-    $("#glass-lab").classList.toggle("hidden", ui !== "neu-g");
-    if (ui === "liquid" && !liquidGlass) liquidGlass = refract.makeGlass($("#liquid-card"), { ...P });
-    if (ui === "neu-g" && !glassRefraction) glassRefraction = refract.makeGlass($("#glass-card"), { ref: 0.6, edge: 1, rad: 0.6, tint: -1, blur: 4 });
-  }
+  /* ── 玻璃滑块 ── */
   const bind = (key, fmt) => {
     $("#s-" + key).addEventListener("input", (e) => {
       P[key] = parseFloat(e.target.value);
       $("#v-" + key).textContent = fmt(P[key]);
-      liquidGlass && liquidGlass.set(key, P[key]);
+      glass && glass.set(key, P[key]);
     });
   };
   bind("ref", (x) => x.toFixed(2));
@@ -292,14 +548,78 @@
   bind("rad", (x) => x.toFixed(2));
   bind("tint", (x) => x.toFixed(2));
   bind("blur", (x) => x.toFixed(2) + "px");
-  $("#s-alpha").addEventListener("input", (e) => {
-    const a = parseFloat(e.target.value);
-    $("#v-alpha").textContent = a.toFixed(2);
-    $("#glass-card").style.setProperty("--glass-alpha", a);
-  });
+
+  /* ── 磁贴：可点、可拖、有反馈 ── */
+  (function initTiles() {
+    const grid = $("#tile-grid");
+    if (!grid) return;
+    let drag = null;
+
+    grid.addEventListener("pointerdown", (e) => {
+      const t = e.target.closest(".fu-tile");
+      if (!t || drag) return;
+      e.preventDefault();
+      const r = t.getBoundingClientRect();
+      drag = { t, pid: e.pointerId, grabX: e.clientX - r.left, grabY: e.clientY - r.top,
+               baseL: r.left, baseT: r.top, w: r.width, h: r.height, moved: false };
+      t.classList.add("is-pressed");
+      try { t.setPointerCapture(e.pointerId); } catch (_) { /* 合成事件没有真实 pointerId，忽略 */ }
+    });
+
+    grid.addEventListener("pointermove", (e) => {
+      if (!drag || e.pointerId !== drag.pid) return;
+      const dx = e.clientX - (drag.baseL + drag.grabX);
+      const dy = e.clientY - (drag.baseT + drag.grabY);
+      if (!drag.moved && Math.hypot(dx, dy) > 7) {
+        drag.moved = true;
+        drag.t.classList.remove("is-pressed");
+        drag.t.classList.add("is-dragging");
+        drag.t.style.width = drag.w + "px";
+        drag.t.style.height = drag.h + "px";
+      }
+      if (!drag.moved) return;
+      drag.t.style.transform = `translate(${dx}px, ${dy}px) rotate(1.2deg)`;
+      drag.t.style.pointerEvents = "none";            // 让 elementFromPoint 穿透到下面的磁贴
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      drag.t.style.pointerEvents = "";
+      const over = el && el.closest ? el.closest(".fu-tile") : null;
+      if (over && over !== drag.t) {
+        const rr = over.getBoundingClientRect();
+        const after = (e.clientX > rr.left + rr.width / 2) || (e.clientY > rr.top + rr.height / 2);
+        grid.insertBefore(drag.t, after ? over.nextSibling : over);
+        drag.t.style.transform = "none";
+        const nr = drag.t.getBoundingClientRect();    // 换位后重算基准，避免瞬移
+        drag.baseL = nr.left; drag.baseT = nr.top;
+      }
+    });
+
+    function end(e) {
+      if (!drag || (e.pointerId !== undefined && e.pointerId !== drag.pid)) return;
+      const { t, moved } = drag;
+      drag = null;
+      t.classList.remove("is-pressed", "is-dragging"); // 先恢复过渡，再清位移 → 平滑弹回
+      t.style.transform = ""; t.style.width = ""; t.style.height = "";
+      if (moved) toast("已把「" + t.dataset.name + "」挪了个位置");
+      else { motion.bounce(t.querySelector(".fu-tile__ico")); toast("打开了「" + t.dataset.name + "」"); }
+    }
+    grid.addEventListener("pointerup", end);
+    grid.addEventListener("pointercancel", end);
+
+    // 键盘可达：Enter / 空格 = 打开
+    grid.querySelectorAll(".fu-tile").forEach((t) => {
+      t.tabIndex = 0;
+      t.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          motion.bounce(t.querySelector(".fu-tile__ico"));
+          toast("打开了「" + t.dataset.name + "」");
+        }
+      });
+    });
+  })();
 
   /* ── 开场 ── */
-  applyBg(); syncLabs();
+  applyBg(); syncUI(); renderSlots(); renderSubs();
   motion.typewriter(target, { ms: 28 });
   document.querySelectorAll("main > section").forEach((s, i) => setTimeout(() => motion.blurIn(s, { from: 10, ms: 140 }), 80 + i * 70));
 </script>
