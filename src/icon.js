@@ -20,9 +20,13 @@
 
   async function load() {
     if (manifest) return manifest;
-    // manifest 与 icon.js 同目录（都在 src/，icons/ 在工程根）——按 import.meta.url 推
+    // manifest 与 icon.js 同目录（都在 src/，icons/ 在工程根）。
+    // 经典脚本下没有 import.meta，改用当前脚本自身 URL 推导（file:// 与 http 都行）。
     let base = "";
-    try { base = new URL("../icons/", import.meta.url).href; }
+    try {
+      const here = (document.currentScript && document.currentScript.src) || location.href;
+      base = new URL("../icons/", here).href;
+    }
     catch (e) { base = "../icons/"; }
     const res = await fetch(base + "manifest.json");
     manifest = await res.json();

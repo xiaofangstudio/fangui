@@ -10,9 +10,11 @@
  *   ref      折射率     0.2 – 2.5（边缘把背景弯进来的强度）
  *   edge     折射圈厚度 0.4 – 3
  *   rad      圆角       0 – 1
- *   tint     白度       0 – 0.5（-1 = 不写背景，交给 CSS）
- *   blur     背景模糊   px
- */
+   *   tint     白度       0 – 0.5（-1 = 不写背景，交给 CSS）
+   *   blur     背景模糊   px
+   *   sat      饱和度     默认 1.0（>1 会放大背景图饱和度，慎用）
+   *   bright   亮度       默认 1.06（略提亮，抵消内圈暗晕）
+   */
 (function (global) {
   "use strict";
   const SVGNS = "http://www.w3.org/2000/svg";
@@ -29,7 +31,7 @@
   };
 
   function makeGlass(el, params) {
-    const p = Object.assign({ ref: 1, edge: 1, rad: 0.6, tint: 0.08, blur: 2, strength: 1 }, params);
+    const p = Object.assign({ ref: 1, edge: 1, rad: 0.6, tint: 0.08, blur: 2, strength: 1, sat: 1.0, bright: 1.06 }, params);
     const fid = "fg-" + ++uid;
 
     /* SVG 滤镜：与库完全同构 */
@@ -53,31 +55,39 @@
 
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
+    let raf = 0;
 
+    /* 位移图降采样：SDF 位移场是低频信号，全分辨率纯属浪费主线程。
+       ⚠️ 血泪教训：全分辨率时 header(1300×64) + 十几张卡片各自逐像素循环 + toDataURL，
+       会长时间阻塞主线程 → 页面卡死、按钮点不动。
+       降采样到长边 ≤ DISP_MAX 后由 feImage 拉伸回元素尺寸；位移值仍是元素像素尺度
+       （见下方 dx/dy 推导：u*W 即采样点在元素坐标系的位置），折射形状完全一致，肉眼无差别。 */
+    const DISP_MAX = 200;
     function update() {
       const W = Math.max(2, el.offsetWidth), H = Math.max(2, el.offsetHeight);
-      canvas.width = W; canvas.height = H;
+      const sc = Math.min(1, DISP_MAX / Math.max(W, H));
+      const CW = Math.max(2, Math.round(W * sc)), CH = Math.max(2, Math.round(H * sc));
+      canvas.width = CW; canvas.height = CH;
       filter.setAttribute("x", "0"); filter.setAttribute("y", "0");
       filter.setAttribute("width", String(W)); filter.setAttribute("height", String(H));
       feImage.setAttribute("width", String(W)); feImage.setAttribute("height", String(H));
 
-      /* 库原版 fragment：SDF → smoothStep 边缘折射带 → uv 位移。
-         唯一增强：折射带宽度按元素尺寸等比，但最大位移像素封顶，
-         避免大卡片把背景拉成特写。 */
-      const data = new Uint8ClampedArray(W * H * 4);
+      const data = new Uint8ClampedArray(CW * CH * 4);
       let maxScale = 0;
       const raw = [];
       const band = 0.15 / p.edge / p.strength;             /* 库: d - 0.15 */
-      const ampMax = Math.min(0.25 * Math.min(W, H), 44 * p.ref * p.strength);
+      /* UI 玻璃要克制：边缘轻弯即可。位移封顶调小——大位移会把背景彩边拉开显紫 */
+      const ampMax = Math.min(0.12 * Math.min(W, H), 26 * p.ref * p.strength);
       for (let i = 0; i < data.length; i += 4) {
-        const x = (i / 4) % W, y = Math.floor(i / 4 / W);
-        const ix = x / W - 0.5, iy = y / H - 0.5;
+        const x = (i / 4) % CW, y = Math.floor(i / 4 / CW);
+        const u = (x + 0.5) / CW, v = (y + 0.5) / CH;      /* 归一化采样点（像素中心）*/
+        const ix = u - 0.5, iy = v - 0.5;
         const d = roundedRectSDF(ix, iy, 0.3, 0.2, p.rad);
         const disp = smoothStep(0.8, 0, d - band);
         const s = smoothStep(0, 1, disp);
-        /* 库: texture(ix*s + 0.5, iy*s + 0.5) → dx = (ix*s+0.5)*W - x */
-        let dx = (ix * s + 0.5) * W - x;
-        let dy = (iy * s + 0.5) * H - y;
+        /* 位移保持「元素像素」尺度：u*W 是采样点在元素坐标系的位置 */
+        let dx = (ix * s + 0.5) * W - u * W;
+        let dy = (iy * s + 0.5) * H - v * H;
         const m = Math.max(Math.abs(dx), Math.abs(dy));
         if (m > ampMax) { dx *= ampMax / m; dy *= ampMax / m; }
         maxScale = Math.max(maxScale, Math.abs(dx), Math.abs(dy));
@@ -90,21 +100,33 @@
         data[i + 1] = (raw[idx++] / maxScale + 0.5) * 255;
         data[i + 2] = 0; data[i + 3] = 255;
       }
-      ctx.putImageData(new ImageData(data, W, H), 0, 0);
+      ctx.putImageData(new ImageData(data, CW, CH), 0, 0);
       feImage.setAttributeNS(XLINK, "href", canvas.toDataURL());
       feDisp.setAttribute("scale", String(maxScale));
 
-      /* 库原版链条：url() 位移在前，后面跟库的调色参数（blur 稍提保证 UI 可读） */
-      const chain = `url(#${fid}_filter) blur(${p.blur}px) contrast(1.2) brightness(1.05) saturate(1.1)`;
+      /* 中性调色链（默认 sat=1 不放大背景饱和度，bright 略>1 抵消玻璃内圈暗晕的压暗感）。
+         ⚠️ 血泪教训：这里千万别加 saturate>1 / contrast>1——
+         saturate 会把背景图的饱和度整片放大（用户一眼就看出「背景比原图艳」），
+         contrast>1 会压暗暗部并二次放大饱和度观感，冷色背景还会被推成紫。
+         玻璃的通透感靠 brightness 和 tint 做，不靠饱和度。 */
+      const sat    = p.sat    == null ? 1.0  : p.sat;
+      const bright = p.bright == null ? 1.06 : p.bright;
+      const chain = `url(#${fid}_filter) blur(${p.blur}px) brightness(${bright}) saturate(${sat})`;
       el.style.backdropFilter = chain;
       el.style.webkitBackdropFilter = chain;
       if (p.tint >= 0) el.style.background = `rgba(255,255,255,${p.tint})`;
     }
 
+    /* 用 rAF 合并重算，避免 ResizeObserver 在布局抖动时连发把主线程打死 */
+    function schedule() {
+      if (raf) return;
+      raf = requestAnimationFrame(() => { raf = 0; update(); });
+    }
+
     if (getComputedStyle(el).position === "static") el.style.position = "relative";
 
     update();
-    const ro = new ResizeObserver(update);
+    const ro = new ResizeObserver(schedule);
     ro.observe(el);
     return {
       update,

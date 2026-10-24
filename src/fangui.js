@@ -158,7 +158,12 @@
       subs._boot();
     } catch (e) { /* 首次访问静默 */ }
   }
-  if (document.readyState !== "loading") boot();
+  /* ── 启动顺序修正 ──
+     本文件（fangui.js）在 demo 里先于 fangui-ai.js 加载。
+     若此刻直接 boot()，global.FangUI.ai 还没挂上，localStorage 里存的用户风格会静默跳过不还原。
+     defer 脚本（含经典脚本）全部执行完之后才触发 DOMContentLoaded，
+     届时 ai 已就位，还原才生效。故统一挂到 DOMContentLoaded。 */
+  if (document.readyState === "complete") boot();
   else document.addEventListener("DOMContentLoaded", boot);
 
   global.FangUI = global.FangUI || {};

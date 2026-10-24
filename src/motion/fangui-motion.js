@@ -90,7 +90,8 @@
   /* 高质量模糊：backdrop 级（模糊背后内容，不动自身布局） */
   function blur(el, px) {
     if (!el) return;
-    el.style.backdropFilter = px > 0 ? `blur(${px}px) saturate(1.2)` : "";
+    /* saturate 保持 1.0：滚动顶栏别再给背景图加一层饱和度 */
+    el.style.backdropFilter = px > 0 ? `blur(${px}px) brightness(1.03) saturate(1.0)` : "";
     el.style.webkitBackdropFilter = el.style.backdropFilter;
   }
 

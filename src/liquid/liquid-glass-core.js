@@ -67,7 +67,8 @@
         border-radius: 150px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25), 0 -10px 25px inset rgba(0, 0, 0, 0.15);
         cursor: grab;
-        backdrop-filter: url(#${this.id}_filter) blur(0.25px) contrast(1.2) brightness(1.05) saturate(1.1);
+        /* 与 refract.js 统一的中性调色链：不放大背景饱和度，不压暗暗部 */
+        backdrop-filter: url(#${this.id}_filter) blur(0.25px) brightness(1.06) saturate(1.0);
         z-index: 9999;
         pointer-events: auto;
       `;

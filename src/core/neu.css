@@ -80,50 +80,246 @@
   /* 阴影也半透明：磨砂玻璃的凸起靠透出来的光影，不靠实色 */
   --neu-dark: rgba(0 0 0 / 0.06);
   --neu-light: rgba(255 255 255 / 0.18);
-  /* 全场统一重磨砂参数 */
-  --frost: blur(34px) saturate(1.9) brightness(1.05);
+
+  /* ═══ 一体成型的关键：两级磨砂必须「叠加后等价」 ═══
+     页面基材先磨一次（body::before），凸起件再磨一次——是**串联**的。
+     高斯模糊串联是平方相加：√(20²+14²)≈24.4px ≠ 20px → 卡片里比四周糊；
+     saturate 串联是相乘：1.4×1.7≈2.38 倍 → 卡片里比四周艳。
+     两处都对不上，肉眼就判定「这是另一块玻璃压在上面」= 悬浮、不相连。
+
+     所以凸起件的参数要按「叠加后回到基材」反推：
+       blur      √(20²+6²) ≈ 20.9px  ≈ 基材 20px   ✔ 同一材质
+       saturate  1.4 × 1.0 = 1.4     = 基材 1.4    ✔ 同一颜色
+       brightness 1.06 × 1.0 ≈ 1.06                 ✔ 同一明度
+     凸起/凹陷的差异从此**只由叠层 alpha 和 1px 棱边表达**，材质本身完全一致。 */
+  --frost-base:  blur(20px) saturate(1.4) brightness(1.06);   /* 基材（背景用）*/
+  --frost-raise: blur(6px)  saturate(1.0) brightness(1.00);   /* 凸起/凹陷件用 */
+  --frost: var(--frost-raise);                                /* 兼容旧引用 */
+
+  /* 磨砂纹理：fractalNoise 噪点，overlay 叠出玻璃表面的霜 */
+  --grain: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='180'%20height='180'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.8'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* 四棱：一整块玻璃凸起的边缘受光/背光（1px 级，绝不糊成一团）*/
+  --lip-top:    inset 0  1px 0 rgba(255 255 255 / 0.62);   /* 顶棱迎光 */
+  --lip-bottom: inset 0 -1px 0 rgba(0 0 0 / 0.10);         /* 底棱背光 */
+  --lip-left:   inset  1px 0 0 rgba(255 255 255 / 0.26);
+  --lip-right:  inset -1px 0 0 rgba(0 0 0 / 0.05);
+  /* 接触阴影：紧贴边缘、几乎零偏移——「长在基材上」，不是「浮在基材上」。
+     ⚠️ 之前的 0 14px 34px 把卡片抬高了 14px，那正是悬浮感的元凶。 */
+  --contact:
+    0 1px 2px rgba(0 0 0 / 0.07),
+    0 2px 5px rgba(0 0 0 / 0.05);
+  /* 新拟态双投影（紧贴版：26px 大模糊在半透明材质上会糊成一圈雾，且显得浮）*/
+  --neu-pair:
+    2px 3px 6px rgba(0 0 0 / 0.05),
+    -2px -2px 6px rgba(255 255 255 / 0.30);
 }
 
+/* ═══ 玻璃凸起件：一整块基材上凸出来的那一部分 ═══
+   三不原则（半透明新拟物的命门）：
+   ① 不刷漆：体积渐变极弱（0.16→0.03→0.035），之前 0.42→0→黑0.06 是在刷漆。
+   ② 不悬浮：外投影零偏移、极小模糊（--contact），之前 0 14px 34px 抬高了 14px。
+   ③ 不从玻璃下面透出阴影：删掉所有大扩散 inset（-10px 26px / -22px 44px），
+      只留 1px 级四棱。半透明材质上任何大范围 inset 都会变成
+      「玻璃内部糊着一团脏东西」，正是「从下面还能看到阴影」的观感来源。 */
 [data-ui="neu"][data-neu="glass"] .fu-card,
 [data-ui="neu"][data-neu="glass"] .fu-panel,
-[data-ui="neu"][data-neu="glass"] .fu-btn,
-[data-ui="neu"][data-neu="glass"] .fu-input,
-[data-ui="neu"][data-neu="glass"] .fu-switch,
-[data-ui="neu"][data-neu="glass"] .fu-progress {
-  background: hsl(var(--fu-h) 20% 100% / 0.30);          /* 主体半透明磨砂 */
-  backdrop-filter: var(--frost);
-  -webkit-backdrop-filter: var(--frost);
-  border: none;                                           /* 不画棱边，玻璃自己会透 */
+[data-ui="neu"][data-neu="glass"] .fu-btn {
+  background:
+    linear-gradient(160deg, rgba(255 255 255 / 0.16) 0%, rgba(255 255 255 / 0.03) 55%, rgba(0 0 0 / 0.035) 100%),
+    hsl(var(--fu-h) 22% 100% / 0.13);   /* 比基材略亮一点 = 凸出来的那一块 */
+  backdrop-filter: var(--frost-raise);
+  -webkit-backdrop-filter: var(--frost-raise);
+  border: none;                          /* 棱边交给 inset，不要实体描边 */
+  border-radius: var(--r-lg);
   box-shadow:
-    0 1px 0 rgba(255 255 255 / 0.28) inset,               /* 高光半透明 */
-    0 -8px 20px rgba(0 0 0 / 0.10) inset,                 /* 内圈暗晕半透明 */
-    0 8px 24px rgba(0 0 0 / 0.10),                        /* 外圈投影半透明 */
-    var(--neu-out);
+    var(--lip-top), var(--lip-bottom), var(--lip-left), var(--lip-right),
+    var(--contact), var(--neu-pair);
+  position: relative; overflow: hidden;
 }
-[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-card,
-[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-panel,
-[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-btn,
-[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-input,
-[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-switch,
-[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-progress {
-  background: hsl(var(--fu-h) 18% 16% / 0.32);
-  box-shadow:
-    0 1px 0 rgba(255 255 255 / 0.08) inset,
-    0 -8px 20px rgba(0 0 0 / 0.25) inset,
-    0 8px 24px rgba(0 0 0 / 0.28),
-    var(--neu-out);
+/* 磨砂纹理层：叠在玻璃表面，不挡文字（pointer-events:none、低透明）*/
+[data-ui="neu"][data-neu="glass"] .fu-card::after,
+[data-ui="neu"][data-neu="glass"] .fu-panel::after,
+[data-ui="neu"][data-neu="glass"] .fu-btn::after,
+[data-ui="neu"][data-neu="glass"] .fu-progress::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background-image: var(--grain); background-size: 180px 180px;
+  opacity: 0.4; mix-blend-mode: overlay; pointer-events: none;
 }
 
-[data-ui="neu"][data-neu="glass"] .fu-card { border-radius: var(--r-lg); padding: var(--sp-4); }
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-card,
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-panel,
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-btn {
+  background:
+    linear-gradient(160deg, rgba(255 255 255 / 0.07) 0%, rgba(255 255 255 / 0.01) 55%, rgba(0 0 0 / 0.10) 100%),
+    hsl(var(--fu-h) 18% 22% / 0.16);
+  box-shadow:
+    inset 0  1px 0 rgba(255 255 255 / 0.18),
+    inset 0 -1px 0 rgba(0 0 0 / 0.30),
+    inset  1px 0 0 rgba(255 255 255 / 0.07),
+    inset -1px 0 0 rgba(0 0 0 / 0.16),
+    0 1px 2px rgba(0 0 0 / 0.34),
+    0 2px 5px rgba(0 0 0 / 0.26),
+    2px 3px 6px rgba(0 0 0 / 0.26),
+    -2px -2px 6px rgba(255 255 255 / 0.05);
+}
+
+[data-ui="neu"][data-neu="glass"] .fu-card { padding: var(--sp-4); }
+/* 面板：同材质、凸起更浅——alpha 比 card 低一点，仍是「同一块玻璃」 */
 [data-ui="neu"][data-neu="glass"] .fu-panel {
-  background: hsl(var(--fu-h) 20% 100% / 0.18);
-  border-radius: var(--r-lg); padding: var(--sp-4);
+  background:
+    linear-gradient(160deg, rgba(255 255 255 / 0.11) 0%, rgba(255 255 255 / 0.02) 55%, rgba(0 0 0 / 0.03) 100%),
+    hsl(var(--fu-h) 22% 100% / 0.10);
+  padding: var(--sp-4);
+}
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-panel {
+  background:
+    linear-gradient(160deg, rgba(255 255 255 / 0.05) 0%, rgba(255 255 255 / 0.01) 55%, rgba(0 0 0 / 0.08) 100%),
+    hsl(var(--fu-h) 18% 22% / 0.13);
+}
+
+/* 进度条：轨道是凹槽，填充条才是凹槽里凸起来的那条玻璃 */
+[data-ui="neu"][data-neu="glass"] .fu-progress {
+  background: hsl(var(--fu-h) 22% 96% / 0.07);
+  border: none;
+  border-radius: var(--r-sm);
+  box-shadow:
+    inset 0  2px 5px rgba(0 0 0 / 0.10),
+    inset 0  1px 0 rgba(0 0 0 / 0.07),
+    inset 0 -1px 0 rgba(255 255 255 / 0.50),
+    inset  1px 0 0 rgba(0 0 0 / 0.04),
+    inset -1px 0 0 rgba(255 255 255 / 0.22);
+  backdrop-filter: var(--frost-raise);
+  -webkit-backdrop-filter: var(--frost-raise);
+  position: relative; overflow: hidden;
+}
+[data-ui="neu"][data-neu="glass"] .fu-progress > div {
+  height: 100%; border-radius: inherit;
+  box-shadow:
+    inset 0  1px 0 rgba(255 255 255 / 0.55),
+    inset 0 -1px 0 rgba(0 0 0 / 0.14),
+    inset -1px 0 0 rgba(0 0 0 / 0.08),
+    0 1px 2px rgba(0 0 0 / 0.12);
+}
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-progress {
+  background: hsl(var(--fu-h) 18% 12% / 0.22);
+  box-shadow:
+    inset 0  2px 6px rgba(0 0 0 / 0.34),
+    inset 0  1px 0 rgba(0 0 0 / 0.28),
+    inset 0 -1px 0 rgba(255 255 255 / 0.16),
+    inset  1px 0 0 rgba(0 0 0 / 0.14),
+    inset -1px 0 0 rgba(255 255 255 / 0.06);
+}
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-progress > div {
+  box-shadow:
+    inset 0  1px 0 rgba(255 255 255 / 0.22),
+    inset 0 -1px 0 rgba(0 0 0 / 0.40),
+    0 1px 2px rgba(0 0 0 / 0.38);
 }
 
 [data-ui="neu"][data-neu="glass"] .fu-btn { color: var(--text); border-radius: var(--r-sm); }
-[data-ui="neu"][data-neu="glass"] .fu-btn:hover  { background: hsl(var(--fu-h) 20% 100% / 0.40); }
-[data-ui="neu"][data-neu="glass"] .fu-btn:active { background: hsl(var(--fu-h) 20% 92% / 0.42); }
+[data-ui="neu"][data-neu="glass"] .fu-btn:hover  {
+  background:
+    linear-gradient(160deg, rgba(255 255 255 / 0.22) 0%, rgba(255 255 255 / 0.04) 55%, rgba(0 0 0 / 0.03) 100%),
+    hsl(var(--fu-h) 22% 100% / 0.18);
+}
+/* 按下 = 真的被压进玻璃里：棱反向 + 无外投影（凹进去的东西不投影）*/
+[data-ui="neu"][data-neu="glass"] .fu-btn:active {
+  background:
+    linear-gradient(160deg, rgba(0 0 0 / 0.05) 0%, rgba(255 255 255 / 0.02) 60%, rgba(255 255 255 / 0.10) 100%),
+    hsl(var(--fu-h) 22% 96% / 0.10);
+  box-shadow:
+    inset 0  2px 4px rgba(0 0 0 / 0.09),
+    inset 0  1px 0 rgba(0 0 0 / 0.07),
+    inset 0 -1px 0 rgba(255 255 255 / 0.45),
+    inset  1px 0 0 rgba(0 0 0 / 0.04),
+    inset -1px 0 0 rgba(255 255 255 / 0.20);
+}
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-btn:active {
+  box-shadow:
+    inset 0  2px 5px rgba(0 0 0 / 0.34),
+    inset 0  1px 0 rgba(0 0 0 / 0.30),
+    inset 0 -1px 0 rgba(255 255 255 / 0.16),
+    inset  1px 0 0 rgba(0 0 0 / 0.16),
+    inset -1px 0 0 rgba(255 255 255 / 0.06);
+}
 [data-ui="neu"][data-neu="glass"] .fu-btn--accent {
-  background: hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.55);
+  background:
+    linear-gradient(160deg, rgba(255 255 255 / 0.18) 0%, rgba(255 255 255 / 0) 60%),
+    hsl(var(--fu-h) var(--fu-s) var(--fu-l) / 0.6);
   color: var(--accent-ink);
+}
+
+/* ═══ 凹陷件：输入框 / 开关轨道 ═══
+   凹陷 = 把凸起的四棱整套反过来（顶暗底亮）+ 拿掉所有外投影
+   （凹进去的东西不会在基材上投影，留着就会露馅成「浮着的小块」）。
+   开口处只留 2px/5px 的环境遮蔽，再大就会变成「玻璃下面一团脏」。 */
+[data-ui="neu"][data-neu="glass"] .fu-input {
+  background:
+    linear-gradient(160deg, rgba(0 0 0 / 0.05) 0%, rgba(255 255 255 / 0.01) 60%, rgba(255 255 255 / 0.09) 100%),
+    hsl(var(--fu-h) 22% 100% / 0.08);   /* 比基材略暗 = 凹进去 */
+  border: none;
+  border-radius: var(--r-sm);
+  box-shadow:
+    inset 0  2px 5px rgba(0 0 0 / 0.10),
+    inset 0  1px 0 rgba(0 0 0 / 0.07),
+    inset 0 -1px 0 rgba(255 255 255 / 0.50),
+    inset  1px 0 0 rgba(0 0 0 / 0.04),
+    inset -1px 0 0 rgba(255 255 255 / 0.22);
+  backdrop-filter: var(--frost-raise);
+  -webkit-backdrop-filter: var(--frost-raise);
+}
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-input {
+  background:
+    linear-gradient(160deg, rgba(0 0 0 / 0.16) 0%, rgba(255 255 255 / 0.005) 60%, rgba(255 255 255 / 0.05) 100%),
+    hsl(var(--fu-h) 18% 14% / 0.22);
+  box-shadow:
+    inset 0  2px 6px rgba(0 0 0 / 0.34),
+    inset 0  1px 0 rgba(0 0 0 / 0.28),
+    inset 0 -1px 0 rgba(255 255 255 / 0.16),
+    inset  1px 0 0 rgba(0 0 0 / 0.14),
+    inset -1px 0 0 rgba(255 255 255 / 0.06);
+}
+/* 开关轨道 = 凹槽（同输入框）*/
+[data-ui="neu"][data-neu="glass"] .fu-switch {
+  background:
+    linear-gradient(160deg, rgba(0 0 0 / 0.05) 0%, rgba(255 255 255 / 0.01) 60%, rgba(255 255 255 / 0.09) 100%),
+    hsl(var(--fu-h) 22% 100% / 0.08);
+  border: none;
+  box-shadow:
+    inset 0  2px 5px rgba(0 0 0 / 0.10),
+    inset 0  1px 0 rgba(0 0 0 / 0.07),
+    inset 0 -1px 0 rgba(255 255 255 / 0.50),
+    inset  1px 0 0 rgba(0 0 0 / 0.04),
+    inset -1px 0 0 rgba(255 255 255 / 0.22);
+  backdrop-filter: var(--frost-raise);
+  -webkit-backdrop-filter: var(--frost-raise);
+}
+/* 滑块 = 凹槽里凸起的那一小块玻璃：四棱正向 + 极小接触阴影 */
+[data-ui="neu"][data-neu="glass"] .fu-switch::after {
+  box-shadow:
+    inset 0  1px 0 rgba(255 255 255 / 0.62),
+    inset 0 -1px 0 rgba(0 0 0 / 0.12),
+    inset  1px 0 0 rgba(255 255 255 / 0.28),
+    inset -1px 0 0 rgba(0 0 0 / 0.06),
+    0 1px 2px rgba(0 0 0 / 0.14),
+    0 1px 3px rgba(0 0 0 / 0.08);
+}
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-switch {
+  background:
+    linear-gradient(160deg, rgba(0 0 0 / 0.16) 0%, rgba(255 255 255 / 0.005) 60%, rgba(255 255 255 / 0.05) 100%),
+    hsl(var(--fu-h) 18% 14% / 0.22);
+  box-shadow:
+    inset 0  2px 6px rgba(0 0 0 / 0.34),
+    inset 0  1px 0 rgba(0 0 0 / 0.28),
+    inset 0 -1px 0 rgba(255 255 255 / 0.16),
+    inset  1px 0 0 rgba(0 0 0 / 0.14),
+    inset -1px 0 0 rgba(255 255 255 / 0.06);
+}
+[data-mode="dark"][data-ui="neu"][data-neu="glass"] .fu-switch::after {
+  box-shadow:
+    inset 0  1px 0 rgba(255 255 255 / 0.22),
+    inset 0 -1px 0 rgba(0 0 0 / 0.40),
+    0 1px 2px rgba(0 0 0 / 0.40),
+    0 1px 3px rgba(0 0 0 / 0.26);
 }

@@ -9,7 +9,7 @@
  */
 
 [data-ui="tile"] {
-  --tile-r: 24px;
+  --tile-r: 28px;
   --tile-g1: hsl(var(--fu-h) 42% 94%);
   --tile-g2: hsl(var(--fu-h) 36% 87%);
   --tile-line: hsl(var(--fu-h) 50% 100% / 0.5);
@@ -30,16 +30,30 @@
   }
 }
 
-/* ── 大卡片：轻柔同色相渐变 ── */
+/* ── 大卡片 = 大磁贴：切到磁贴样式时，全页卡片都变成高饱和磁贴 ── */
 [data-ui="tile"] .fu-card,
 [data-ui="tile"] .fu-panel {
-  background: linear-gradient(155deg, var(--tile-g1), var(--tile-g2));
-  border: 1px solid var(--tile-line);
+  position: relative; overflow: hidden;
+  background: linear-gradient(145deg,
+    var(--t-c1, hsl(var(--fu-h) 72% calc(var(--fu-l) + 12%))),
+    var(--t-c2, hsl(var(--fu-h) 74% calc(var(--fu-l) - 8%))));
+  border: none;
   border-radius: var(--tile-r);
-  padding: var(--sp-4);
+  padding: var(--sp-6);
+  box-shadow:
+    inset 0 1px 0 hsl(0 0% 100% / 0.42),               /* 顶棱受光 */
+    inset 0 -16px 32px hsl(0 0% 0% / 0.16),            /* 底部内沉，厚度 */
+    0 14px 30px hsl(0 0% 0% / 0.18),                   /* 接触投影 */
+    0 4px 8px hsl(0 0% 0% / 0.10);                     /* 近距阴影 */
 }
-[data-ui="tile"] .fu-card:hover { filter: brightness(1.015); }
-[data-ui="tile"] .fu-panel { background: linear-gradient(155deg, var(--tile-g2), var(--tile-g1)); }
+/* 真实光影：斜向高光 + 右上受光斑，罩在每块大磁贴上 */
+[data-ui="tile"] .fu-card::before,
+[data-ui="tile"] .fu-panel::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background:
+    linear-gradient(150deg, hsl(0 0% 100% / 0.24) 0%, hsl(0 0% 100% / 0.05) 34%, transparent 58%),
+    radial-gradient(130% 90% at 88% 6%, hsl(0 0% 100% / 0.16), transparent 56%);
+}
 
 /* ── 按钮：毛玻璃药丸，按压回缩 ── */
 [data-ui="tile"] .fu-btn {
@@ -109,66 +123,86 @@
 }
 
 /* ══ 磁贴本体 ══
-   统一语言：左下暗 → 右上亮的同色相渐变，白字 + 大白 icon，
-   字少而精准，没有灰色 —— 干净简约 */
+   大块 · 左侧信息 · 右侧大白 icon · 极高饱和 · 真实光影（左上受光、右下投影）。
+   拖拽关键：position:relative 让 z-index 生效——被拖的磁贴永远盖在别人上面。 */
 [data-ui="tile"] .fu-tile-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
 }
 @media (max-width: 420px) { [data-ui="tile"] .fu-tile--wide { grid-column: auto; } }
 
 [data-ui="tile"] .fu-tile {
-  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
-  gap: 8px; min-height: 128px; padding: 16px;
+  position: relative;                 /* 拖拽 z-index 生效，不再被别的磁贴盖住 */
+  display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+  gap: 14px; min-height: 176px; padding: 22px;
   border-radius: var(--tile-r);
-  background: linear-gradient(to top right, var(--t-c2), var(--t-c1));  /* 左下暗，右上亮 */
-  color: #ffffff;
+  background: linear-gradient(145deg, var(--t-c1), var(--t-c2));
+  color: #ffffff; overflow: hidden;
   cursor: grab; user-select: none; -webkit-user-select: none;
-  touch-action: none;               /* 拖拽不被页面滚动抢走 */
-  transition: transform .25s var(--ease-spring), filter .18s var(--ease-out);
+  touch-action: none;                 /* 拖拽不被页面滚动抢走 */
+  box-shadow:
+    inset 0 1px 0 hsl(0 0% 100% / 0.50),               /* 顶棱受光 */
+    inset 0 -16px 32px hsl(0 0% 0% / 0.20),            /* 底部内沉，厚度 */
+    inset 14px 0 30px hsl(0 0% 100% / 0.06),           /* 左侧受光晕 */
+    0 14px 28px hsl(0 0% 0% / 0.22),                   /* 接触投影 */
+    0 4px 8px hsl(0 0% 0% / 0.14);                     /* 近距阴影 */
+  transition: transform .25s var(--ease-spring), box-shadow .25s var(--ease-out), filter .18s var(--ease-out);
 }
 [data-ui="tile"] .fu-tile--wide { grid-column: span 2; }
 
-/* 多彩磁贴：小天才式低饱和糖果色——红橙黄绿青蓝紫粉各归各位，
-   饱和度压低到舒服的程度；渐变统一「左下暗 → 右上亮」，白字白 icon 通用 */
-[data-ui="tile"] .fu-tile[data-hue="1"] { --t-c1: hsl(4   42% 66%); --t-c2: hsl(4   38% 50%); }  /* 红 */
-[data-ui="tile"] .fu-tile[data-hue="2"] { --t-c1: hsl(28  52% 66%); --t-c2: hsl(22  46% 50%); }  /* 橙 */
-[data-ui="tile"] .fu-tile[data-hue="3"] { --t-c1: hsl(45  52% 60%); --t-c2: hsl(38  52% 46%); }  /* 黄 */
-[data-ui="tile"] .fu-tile[data-hue="4"] { --t-c1: hsl(145 36% 58%); --t-c2: hsl(150 38% 42%); }  /* 绿 */
-[data-ui="tile"] .fu-tile[data-hue="5"] { --t-c1: hsl(190 40% 60%); --t-c2: hsl(195 42% 44%); }  /* 青 */
-[data-ui="tile"] .fu-tile[data-hue="6"] { --t-c1: hsl(215 44% 64%); --t-c2: hsl(220 42% 48%); }  /* 蓝 */
-[data-ui="tile"] .fu-tile[data-hue="7"] { --t-c1: hsl(268 34% 64%); --t-c2: hsl(270 36% 48%); }  /* 紫 */
-[data-ui="tile"] .fu-tile[data-hue="8"] { --t-c1: hsl(330 38% 66%); --t-c2: hsl(335 40% 50%); }  /* 粉 */
-
-[data-ui="tile"] .fu-tile:hover { filter: saturate(1.08) brightness(1.05); }
-
-/* 按压：回缩一点，松手弹回 —— 反馈手感 */
-[data-ui="tile"] .fu-tile:active { transform: scale(0.955); cursor: grabbing; }
-
-/* 拖拽中：只留透明度与倾斜，位移全部由 JS 内联驱动 */
-[data-ui="tile"] .fu-tile.is-pressed  { cursor: grabbing; }
-[data-ui="tile"] .fu-tile.is-dragging {
-  z-index: 10; opacity: 0.92; cursor: grabbing;
-  transition: none;                  /* 跟手，不能有过渡延迟 */
+/* 真实光影：斜向高光 + 右上受光斑 */
+[data-ui="tile"] .fu-tile::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background:
+    linear-gradient(150deg, hsl(0 0% 100% / 0.30) 0%, hsl(0 0% 100% / 0.06) 34%, transparent 58%),
+    radial-gradient(130% 90% at 88% 8%, hsl(0 0% 100% / 0.20), transparent 56%);
 }
-[data-ui="tile"] .fu-tile.is-ghost   { opacity: 0.35; filter: grayscale(0.4); }
+
+/* 左侧信息 */
+[data-ui="tile"] .fu-tile__body { display: flex; flex-direction: column; gap: 6px; min-width: 0; position: relative; }
+[data-ui="tile"] .fu-tile__title { font-size: 19px; font-weight: 700; letter-spacing: 0.01em; color: #fff; text-shadow: 0 1px 2px hsl(0 0% 0% / 0.28); }
+[data-ui="tile"] .fu-tile__sub { font-size: 12.5px; font-weight: 500; color: hsl(0 0% 100% / 0.85); }
+
+/* 多彩磁贴：极高饱和——红橙黄绿青蓝紫粉各归各位，渐变统一左上亮 → 右下暗 */
+[data-ui="tile"] .fu-tile[data-hue="1"] { --t-c1: hsl(4   92% 64%); --t-c2: hsl(2   88% 48%); }  /* 红 */
+[data-ui="tile"] .fu-tile[data-hue="2"] { --t-c1: hsl(28  96% 62%); --t-c2: hsl(20  92% 48%); }  /* 橙 */
+[data-ui="tile"] .fu-tile[data-hue="3"] { --t-c1: hsl(45  96% 60%); --t-c2: hsl(38  94% 46%); }  /* 黄 */
+[data-ui="tile"] .fu-tile[data-hue="4"] { --t-c1: hsl(145 74% 54%); --t-c2: hsl(150 80% 38%); }  /* 绿 */
+[data-ui="tile"] .fu-tile[data-hue="5"] { --t-c1: hsl(190 88% 56%); --t-c2: hsl(196 90% 42%); }  /* 青 */
+[data-ui="tile"] .fu-tile[data-hue="6"] { --t-c1: hsl(216 94% 62%); --t-c2: hsl(224 92% 46%); }  /* 蓝 */
+[data-ui="tile"] .fu-tile[data-hue="7"] { --t-c1: hsl(268 84% 66%); --t-c2: hsl(272 84% 50%); }  /* 紫 */
+[data-ui="tile"] .fu-tile[data-hue="8"] { --t-c1: hsl(330 88% 66%); --t-c2: hsl(336 88% 50%); }  /* 粉 */
+
+[data-ui="tile"] .fu-tile:hover { filter: saturate(1.05) brightness(1.05); transform: translateY(-2px); }
+[data-ui="tile"] .fu-tile:active { transform: scale(0.97); cursor: grabbing; }
+
+[data-ui="tile"] .fu-tile.is-pressed { cursor: grabbing; }
+[data-ui="tile"] .fu-tile.is-dragging {
+  z-index: 10; cursor: grabbing;
+  transition: none;                  /* 跟手，不能有过渡延迟 */
+  filter: brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 hsl(0 0% 100% / 0.5),
+    inset 0 -16px 32px hsl(0 0% 0% / 0.22),
+    0 30px 48px hsl(0 0% 0% / 0.34),   /* 抬起，投影拉远 */
+    0 10px 16px hsl(0 0% 0% / 0.22);
+}
+[data-ui="tile"] .fu-tile.is-ghost { opacity: 0.35; filter: grayscale(0.4); }
 [data-ui="tile"] .fu-tile:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
 
-/* ── 大白 icon：固定尺寸的图标盒，所有磁贴的图标严丝合缝对齐 ── */
+/* 右侧 icon 盒：磨砂玻璃小方块 + 白描边 icon */
 [data-ui="tile"] .fu-tile__ico {
-  width: 48px; height: 48px;
+  width: 64px; height: 64px; flex: none; position: relative;
   display: grid; place-items: center;
-  background: none; border: none; padding: 0;
-  -webkit-backdrop-filter: none; backdrop-filter: none;
-  flex: none;
+  background: hsl(0 0% 100% / 0.16);
+  border: 1px solid hsl(0 0% 100% / 0.30);
+  border-radius: 20px;
+  box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.35), 0 4px 10px hsl(0 0% 0% / 0.14);
 }
 [data-ui="tile"] .fu-tile__ico svg {
-  width: 40px; height: 40px;
+  width: 34px; height: 34px;
   fill: none; stroke: #ffffff;
   stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
 }
-[data-ui="tile"] .fu-tile__label {
-  font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
-  color: #ffffff;
-}
+[data-ui="tile"] .fu-tile__label { display: none; }  /* 旧版底部标签，位置让给 __body */
