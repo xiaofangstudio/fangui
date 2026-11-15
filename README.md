@@ -72,7 +72,7 @@ const ok = new Button({ text: '确定', variant: 'accent', size: 'm', onClick: (
 - 外壳：Tauri 2
 - 语言服务：`src-tauri/float-lang`（Rust 实现，含语法高亮、补全、指针词、标准库、教程全套测试）
 
-**Windows 安装包（17.6MB）在 [Releases](https://github.com/xiaofangstudio/fangui/releases) 里**，下载 `Float Studio_0.1.0_x64-setup.exe` 直接装。
+**Windows 安装包（17.6MB）在 [Releases](https://github.com/xiaofangstudio/fangui/releases/tag/v0.1.0) 里**，下载 `Float.Studio_0.1.0_x64-setup.exe` 直接装。
 
 从源码跑：
 
