@@ -1,0 +1,300 @@
+use crate::base::{Rect, ResultWaiter};
+use crate::ext::ext_localstorage::localstorage;
+use crate::ext::ext_window::WINDOWS;
+use crate::js::js_engine::JsEngine;
+use crate::js::js_event_loop::{js_init_event_loop, JsEvent, JsEventLoopClosedError};
+use crate::js::loader::JsModuleLoader;
+use crate::mrc::Mrc;
+use crate::window::{
+    window_check_update, window_input, window_on_render_idle, window_send_key, window_update_inset,
+};
+use anyhow::Error;
+#[cfg(target_os = "android")]
+use jni::objects::JValue;
+#[cfg(target_os = "android")]
+use jni::sys::{jboolean, jlong};
+use log::debug;
+use measure_time::debug_time;
+use std::fmt::{Debug, Formatter};
+use std::sync::{Arc, Mutex};
+use winit::application::ApplicationHandler;
+use winit::event::{DeviceEvent, DeviceId, WindowEvent};
+use winit::event_loop::ActiveEventLoop;
+#[cfg(target_os = "android")]
+use winit::platform::android::activity::AndroidApp;
+#[cfg(target_os = "android")]
+use winit::platform::android::ActiveEventLoopExtAndroid;
+use winit::window::WindowId;
+use crate::event_loop::core::{run_app_event_loop_task, run_with_app_event_loop};
+use crate::event_loop::proxy::AppEventProxy;
+use crate::ui::CSS_MANAGER;
+use crate::ext::ext_worker::Worker;
+
+#[derive(Debug)]
+pub struct AppEventPayload {
+    pub event: AppEvent,
+    pub result_waiter: ResultWaiter<()>,
+}
+
+#[derive(Copy, Clone, Debug)]
+pub enum InsetType {
+    StatusBar,
+    Ime,
+    Navigation,
+}
+
+impl InsetType {
+    pub fn from_i32(ty: i32) -> Option<InsetType> {
+        match ty {
+            1 => Some(InsetType::StatusBar),
+            2 => Some(InsetType::Navigation),
+            8 => Some(InsetType::Ime),
+            _ => None,
+        }
+    }
+}
+
+pub enum AppEvent {
+    BindWindow(i32),
+    Callback(Box<dyn FnOnce() + Send + Sync>),
+    JsEvent(JsEvent),
+    ShowSoftInput(i32),
+    HideSoftInput(i32),
+    CommitInput(i32, String),
+    /// window_id,key,pressed
+    NamedKeyInput(i32, String, bool),
+    SetInset(i32, InsetType, Rect),
+    Update(i32),
+    RenderIdle(i32),
+}
+
+impl Debug for AppEvent {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        //TODO impl debug
+        f.write_str("AppEvent")?;
+        Ok(())
+    }
+}
+
+/// Deft app trait
+pub trait IApp {
+    /// Js engine initializing callback, you can add global functions or do some works to initialize the js engine.
+    fn init_js_engine(&mut self, js_engine: &mut JsEngine) {
+        let _ = js_engine;
+    }
+    /// Create js module loader
+    fn create_module_loader(&mut self) -> Box<dyn JsModuleLoader + Send + Sync + 'static>;
+}
+
+pub struct WinitApp {
+    pub js_engine: Mrc<JsEngine>,
+}
+
+#[derive(Clone)]
+pub struct App {
+    pub app_impl: Arc<Mutex<Box<dyn IApp + Send + Sync>>>,
+}
+
+impl App {
+    pub fn new<A: IApp + Send + Sync + 'static>(app: A) -> Self {
+        Self {
+            app_impl: Arc::new(Mutex::new(Box::new(app))),
+        }
+    }
+}
+
+impl WinitApp {
+    pub fn new(app: App, event_loop_proxy: AppEventProxy) -> Self {
+        // init css
+        let default_css = include_str!("../deft.css");
+        CSS_MANAGER.with_borrow_mut(|manager| {
+            if let Err(e) = manager.add(default_css) {
+                println!("Error adding CSS: {:?}", e);
+            }
+        });
+
+        JsEngine::init(app.clone());
+        let mut js_engine = JsEngine::get();
+        js_engine.register_module::<Worker>("deft:core:worker").unwrap();
+        js_engine.eval_module(include_str!("./js/deft.js"), "deft").unwrap();
+        let _ = js_init_event_loop(move |js_event| {
+            let _ = event_loop_proxy
+                .send_event(AppEvent::JsEvent(js_event))
+                .map_err(|_| JsEventLoopClosedError {});
+            Ok(())
+        });
+        {
+            let mut app = app.app_impl.lock().unwrap();
+            app.init_js_engine(&mut js_engine);
+        }
+        Self { js_engine }
+    }
+
+    fn execute_pending_jobs(&mut self) {
+        self.js_engine.execute_pending_jobs();
+    }
+}
+
+impl ApplicationHandler<AppEventPayload> for WinitApp {
+    fn resumed(&mut self, event_loop: &ActiveEventLoop) {
+        run_app_event_loop_task(event_loop, move || {
+            let uninitialized = WINDOWS.with(|m| m.borrow().is_empty());
+            if uninitialized {
+                debug_time!("js init time");
+                self.js_engine.execute_main();
+                self.execute_pending_jobs();
+            } else {
+                WINDOWS.with_borrow_mut(|m| {
+                    m.iter_mut().for_each(|(_, f)| {
+                        if let Ok(mut f) = f.upgrade() {
+                            f.resume();
+                        }
+                    })
+                })
+            }
+        });
+    }
+    fn user_event(&mut self, event_loop: &ActiveEventLoop, event: AppEventPayload) {
+        run_app_event_loop_task(event_loop, move || {
+            match event.event {
+                AppEvent::BindWindow(id) => {
+                    debug!("bindWindow {} Start", id);
+                    #[cfg(target_os = "android")]
+                    bind_deft_window(event_loop.android_app().clone(), id).unwrap();
+                    debug!("bindWindow {} Done", id);
+                }
+                AppEvent::Callback(callback) => {
+                    callback();
+                }
+                AppEvent::JsEvent(js_event) => match js_event {
+                    JsEvent::MacroTask(callback) => {
+                        callback();
+                    }
+                },
+                AppEvent::ShowSoftInput(window_id) => {
+                    debug!("show soft input");
+                    #[cfg(target_os = "android")]
+                    show_hide_keyboard(event_loop.android_app().clone(), window_id, true);
+                    #[cfg(ohos)]
+                    crate::platform::show_soft_keyboard(window_id);
+                    let _ = window_id;
+                }
+                AppEvent::HideSoftInput(window_id) => {
+                    debug!("hide soft input");
+                    #[cfg(target_os = "android")]
+                    show_hide_keyboard(event_loop.android_app().clone(), window_id, false);
+                    #[cfg(ohos)]
+                    crate::platform::hide_soft_keyboard(window_id);
+                    let _ = window_id;
+                }
+                AppEvent::CommitInput(window_id, content) => {
+                    window_input(window_id, content);
+                }
+                AppEvent::NamedKeyInput(window_id, key, pressed) => {
+                    window_send_key(window_id, &key, pressed);
+                }
+                AppEvent::SetInset(window_id, ty, rect) => {
+                    window_update_inset(window_id, ty, rect);
+                }
+                AppEvent::RenderIdle(window_id) => {
+                    window_on_render_idle(window_id);
+                }
+                AppEvent::Update(window_id) => {
+                    window_check_update(window_id);
+                }
+            }
+            event.result_waiter.finish(());
+            self.execute_pending_jobs();
+        });
+    }
+
+    fn window_event(
+        &mut self,
+        event_loop: &ActiveEventLoop,
+        window_id: WindowId,
+        event: WindowEvent,
+    ) {
+        // debug!("onWindowEvent: {:?}, {:?}", &window_id, event);
+        run_app_event_loop_task(event_loop, move || {
+            self.js_engine.handle_window_event(window_id, event);
+            self.execute_pending_jobs();
+        });
+    }
+
+    fn device_event(
+        &mut self,
+        event_loop: &ActiveEventLoop,
+        device_id: DeviceId,
+        event: DeviceEvent,
+    ) {
+        // debug!("onDeviceEvent: {:?}", event);
+        run_app_event_loop_task(event_loop, move || {
+            self.js_engine.handle_device_event(device_id, event);
+            self.execute_pending_jobs();
+        });
+    }
+
+    fn reopen(&mut self, event_loop: &ActiveEventLoop, has_visible: bool) {
+        run_app_event_loop_task(event_loop, move || {
+            self.js_engine.handle_reopen(has_visible);
+        })
+    }
+
+}
+
+pub fn exit_app(_code: i32) -> Result<(), Error> {
+    //TODO use code from parameter
+    localstorage::cleanup().unwrap();
+    run_with_app_event_loop(|el| {
+        el.exit();
+    });
+    Ok(())
+}
+
+#[cfg(target_os = "android")]
+pub fn bind_deft_window(app: AndroidApp, window_id: i32) -> Result<(), jni::errors::Error> {
+    use jni::objects::JObject;
+    use jni::JavaVM;
+    let vm = unsafe { JavaVM::from_raw(app.vm_as_ptr() as _)? };
+    let activity = unsafe { JObject::from_raw(app.activity_as_ptr() as _) };
+    let mut env = vm.attach_current_thread()?;
+    let window_id = window_id as jlong;
+    env.call_method(
+        &activity,
+        "bindDeftWindow",
+        "(J)V",
+        &[JValue::Long(window_id)],
+    )?
+    .v()?;
+    Ok(())
+}
+
+#[cfg(target_os = "android")]
+fn show_hide_keyboard_fallible(
+    app: AndroidApp,
+    window_id: i32,
+    show: bool,
+) -> Result<(), jni::errors::Error> {
+    use jni::objects::JObject;
+    use jni::JavaVM;
+    let vm = unsafe { JavaVM::from_raw(app.vm_as_ptr() as _)? };
+    let activity = unsafe { JObject::from_raw(app.activity_as_ptr() as _) };
+    let mut env = vm.attach_current_thread()?;
+    let window_id = window_id as jlong;
+    let show = show as jboolean;
+    env.call_method(
+        &activity,
+        "showInput",
+        "(JZ)V",
+        &[JValue::Long(window_id), JValue::Bool(show)],
+    )?
+    .v()?;
+    Ok(())
+}
+
+#[cfg(target_os = "android")]
+fn show_hide_keyboard(app: AndroidApp, window_id: i32, show: bool) {
+    if let Err(e) = show_hide_keyboard_fallible(app, window_id, show) {
+        log::error!("Showing or hiding the soft keyboard failed: {e:?}");
+    };
+}

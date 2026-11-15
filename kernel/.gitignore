@@ -1,0 +1,11 @@
+.idea
+target
+.gradle
+*.so
+*.log
+local
+dist/
+examples/debug-js
+Cargo.lock
+tsconfig.dts.json
+.DS_Store

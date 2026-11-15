@@ -1,0 +1,16 @@
+[package]
+name = "deft-macros"
+version = "1.0.0"
+edition = "2021"
+license = "MIT"
+description = "Deft macros"
+repository = "https://github.com/deft-ui/deft/"
+
+[lib]
+proc-macro = true
+path = "src/lib.rs"
+
+[dependencies]
+quote = "1.0.37"
+syn = { version = "2.0.85",features = ["full"] }
+#deft-core = { path = "../deft-core" }

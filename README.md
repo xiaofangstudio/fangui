@@ -1,163 +1,117 @@
-# 🧩 fangUI
+# FangUI
 
-> 小方工作室出品 ｜ Fangwork 生态统一界面层 ｜ MIT
+> 小方工作室 · Fangwork 生态统一 UI 框架 · MIT
 
-**一套令牌，三种风格，无限主题色。**
+**一个内核，一套令牌，一层组件。** 不跑 webview，用 Rust 直接调 QuickJS + Yoga + Skia 画界面。
 
-Fangwork 全家桶（FangBox、Reelix、Strata、Chit…）的界面都从这套令牌长出来。桌面应用用 Tauri 内嵌 webview 渲染，网页也能直接用——反正最后都是 CSS + JS。
-
----
-
-## 🚨 先看这一条
-
-| 你可能想问 | 答案 |
-| --- | --- |
-| 三个 UI 是哪三个？ | **Flat 扁平 / Neu 轻拟物 / Liquid 液态玻璃**，根元素一个 `data-ui` 属性随时切 |
-| 轻拟物和拟物是一回事吗？ | **不是。** 只做「柔」，不做塑料感；轻拟物还分实底和玻璃两个子模式 |
-| 主题色能有多少个？ | **无限。** 只存 HSL 三个原值，所有强调色实时推导，改色一行 JS |
-| 亮色暗色怎么切？ | `data-mode` 一改就切：**亮 / 暗 / 自然**（暖调纸感护眼） |
-| 颜色会不会扎眼？ | 不会。铁律：**不用 #FFFFFF 和 #000000**，界面差异化只走 3% / 5% 明度微差 |
-| 是网页框架吗？ | 不是，是**给应用内嵌用的界面层**；应用恰好用 web 技术渲染而已 |
-| 自带 AI 吗？ | 带的是**AI 协作交互**：没选风格时主动提问、两种风格并排对比——不接大模型 |
+这个仓库装了三样东西：框架本体、它依赖的内核、用这套技术栈做的第一个软件。
 
 ---
 
-## ✨ 三个风格
+## 目录
 
-### 1️⃣ Flat 扁平
-
-FangBox 同款。没有阴影没有渐变，层级全靠 3% / 5% 明度微差加一条 1px 线。安静、耐看、长时间盯着不累。
-
-### 2️⃣ Neu 轻拟物（Neumorphism）
-
-是轻拟物，**不是拟物**——不做木纹皮革塑料，只做「柔」的凸起。
-
-| 子模式 | 说明 |
-| --- | --- |
-| `data-neu="solid"` 普通轻拟物 | 双阴影营造凸起：亮影在左上、暗影在右下；按钮按下整个凹陷进去 |
-| `data-neu="glass"` 玻璃轻拟物 | 全员半透明，像磨砂玻璃在凸起 |
-
-**玻璃的难点（着重说）**：半透明会透露出底下的阴影，一透就脏。fangUI 的解法——阴影一律走**外圈 drop-shadow**（不画在元素底下），凸起感改由**内侧 1px 高光描边**承担。玻璃亮、投影轻、棱边利，三个各管各的。
-
-### 3️⃣ Liquid 液态玻璃
-
-直接整合小方工作室的 [liquid-glass-web](https://github.com/xiaofangstudio/liquid-glass-web) 引擎：WebGL 折射 + SDF 圆角 + 高光流动，CSS 侧做面板结构和可读性兜底。
-
-移动端走**白名单**：只有带 `data-liquid` 属性的元素开液态玻璃，其余回退磨砂——性能铁律。
-
----
-
-## 🎁 通用件（三风格共享）
-
-### 动效（fangui-motion.js）
-
-| API | 效果 |
-| --- | --- |
-| `FangUI.motion.blurIn(el)` | **进场去模糊**：blur(14px) → 清晰，140ms，快到肉眼基本看不出来——但少了就差那么点感觉 |
-| `FangUI.motion.typewriter(el)` | 打字机逐字浮现，自带闪烁光标 |
-| `FangUI.motion.bounce(el)` | 弹跳入场（Web Animations API） |
-| `FangUI.motion.distribute(box)` | UI 排布均匀：子项等分主轴间距 |
-| `FangUI.motion.blur(el, px)` | 高质量模糊：backdrop 级，模糊背后内容，不动布局 |
-| `FangUI.BEZIER` | 贝塞尔缓动预设表：out / inOut / spring / bouncy / smooth / snap |
-
-### AI 协作（fangui-ai.js）
-
-| API | 说明 |
-| --- | --- |
-| `FangUI.ai.promptStyle(host)` | 用户只上传了东西、没选风格？**主动提问**，弹点选选项卡，四个风格各配一句人话介绍——不猜、不默认 |
-| `FangUI.ai.compare(host, opts)` | **风格对比**：同一组组件左右并排渲染两种风格，点哪边用哪边 |
-| `FangUI.ai.mode() / setMode()` | 读 / 写当前风格，自动记住 |
-
-### 玻璃折射（refract.js）
-
-`FangUI.refract.makeGlass(el, params)` 让任意元素获得**真实折射**（SVG 位移图 + feDisplacementMap，liquid-glass-web 展示页同款算法）：
-
-| 参数 | 含义 | 范围 |
+| 目录 | 是什么 | 体积 |
 | --- | --- | --- |
-| `ref` | 折射率 | 0.2 – 2.5 |
-| `edge` | 折射圈厚度 | 0.4 – 3 |
-| `rad` | 圆角 | 0 – 1 |
-| `tint` | 白度 | 0 – 0.5 |
-| `blur` | 背景模糊 | 0 – 6px |
+| `fangui/` | **框架本体**：设计令牌 + 组件层，`fangui@0.1.0` | 4 个文件 |
+| `kernel/` | **Deft 内核**源码（上游 deft-ui 1.0.0，MIT）：QuickJS 跑逻辑、Yoga 排版、Skia 绘制 | 278 个文件 |
+| `FloatStudio/` | **配套软件** Float Studio 0.1.0：Copper UI 一体化开发环境（前端 `.cui` + 后端 `.co`） | 259 个文件 |
+| `ICONS.md` | 图标库规划：122 个图标（104 通用 + 18 产品），kubai-icons 引擎 | 文档 |
 
-- **Liquid** 用全套五滑块；**Neu·Glass** 只要折射（ref 固定低档）+ 一个**半透明度**滑块
-- Neu·Glass 的凸起感靠**强遮罩**：深色内衬压住透底阴影 + 内侧高光描边 + 外圈投影——半透明也不会脏
+---
 
-### 背景上传
+## 框架长什么样
 
-`demo/index.html` 支持上传任意图片当背景；Flat 默认那个「不纯的白」（#f2f2f0），Neu·Glass 和 Liquid 默认雪山图——玻璃效不效，一眼就能看出来。
+### 它不是网页框架
 
-### 主题色与模式（fangui.js）
+FangUI 不寄生在浏览器里。上层是 JavaScript（QuickJS），排版交给 Yoga，像素交给 Skia，中间没有 DOM、没有 CSS 引擎、没有 webview。所以同一个组件在 Windows / Linux / macOS / 鸿蒙 / 安卓 / iOS / WASM 上是一套渲染结果。
+
+### 设计令牌：改一个值，全局跟着变
+
+风格基调是现代 Fluent（WinUI 3 式）——扁平打底，轻描边分层，阴影只留给浮层。
 
 ```js
-FangUI.accent(200, 72, 55);      // HSL 三值，无限主题色
-FangUI.accent("#6fc0ff");        // 任意颜色自动转 HSL
-FangUI.preset("sakura");         // 预设：ocean sakura forest sunset violet mono
-FangUI.setMode("dark");          // light / dark / natural
+import { token, setTheme } from 'fangui'
+
+setTheme('dark')          // light / dark
+token('color.accent')     // '#0054A6' 这类具体值
 ```
 
-全部自动记忆，下次打开还是你的配色。
+令牌分三组：
+
+- **颜色**：品牌强调色 + 文本三级 + 背景/层/控件状态 + 描边 + 语义色（success / warning / danger）+ 双层焦点环
+- **圆角**：`xs 2 / s 4 / m 8 / l 12 / full 999`
+- **间距与字号**：`4 8 12 16 24 36` 的八点栅格，字号 `12 / 14 / 20 / 28`
+
+亮暗两套完整定义在 [`fangui/src/theme/tokens.js`](fangui/src/theme/tokens.js)，没有 `#FFFFFF` 和 `#000000` 的硬碰硬，层级只走极小幅度明度差。
+
+### 组件层：目前一个 Button，把规范先钉死
+
+```js
+import { Button } from 'fangui'
+
+const ok = new Button({ text: '确定', variant: 'accent', size: 'm', onClick: () => save() })
+```
+
+| 变体 | 用途 |
+| --- | --- |
+| `accent` | 实心强调色，一屏只能有一个 |
+| `standard` | 浅控件底 + 细描边，默认款 |
+| `subtle` | 透明底，hover 才出底 |
+| `outline` | 透明底 + 强描边 |
+| `danger` | 危险操作 |
+
+尺寸 `s / m / l` 对应 Fluent 的 24 / 32 / 36 三档控件高度。组件全部从令牌取值，不写死颜色。
 
 ---
 
-## 🆕 本轮更新
+## 配套软件：Float Studio
 
-- 🧊 **折射引擎防卡死**：位移图按长边 ≤200 降采样再由滤镜拉伸回原尺寸——顶栏 + 十几张卡片同时折射也不再阻塞主线程；位移封顶调小，大卡片不再把背景彩边拉出紫边
-- 🌫️ **Neu·Glass 材质统一**：页面背景与凸起件共用一套冻霜参数（`--frost-base` / `--frost-raise`）+ 颗粒噪点纹理，背景和卡片是同一块玻璃，不再「各浮各的」
-- 🌙 **Liquid 暗色不再猛压**：暗色氛围靠叠层 alpha 造，背景图不再被 brightness 压暗拉饱和
-- 🟥 **磁贴全页彩块化**：非磁贴卡片在 Tile 风格下全部变成高饱和彩色大磁贴，卡片头「左侧信息 + 右侧白线图标」
-- 🔧 **启动时序修正**：风格还原改到 DOMContentLoaded 之后，localStorage 里存的用户风格不再静默丢失；图标库兼容经典脚本加载
+`FloatStudio/` 是这套技术栈孵出来的第一个完整软件——**Copper UI 一体化开发环境**：左边写 `.cui` 界面，右边写 `.co` 逻辑，一个窗口里跑起来。
 
----
+- 前端：React 18 + Monaco 编辑器 + xterm 终端
+- 外壳：Tauri 2
+- 语言服务：`src-tauri/float-lang`（Rust 实现，含语法高亮、补全、指针词、标准库、教程全套测试）
 
-## 🚀 用起来
+**Windows 安装包（17.6MB）在 [Releases](https://github.com/xiaofangstudio/fangui/releases) 里**，下载 `Float Studio_0.1.0_x64-setup.exe` 直接装。
 
-```html
-<link rel="stylesheet" href="src/core/tokens.css">
-<link rel="stylesheet" href="src/core/flat.css">
-<link rel="stylesheet" href="src/core/neu.css">
-<link rel="stylesheet" href="src/core/liquid.css">
+从源码跑：
 
-<script src="src/fangui.js"></script>
-<script src="src/motion/fangui-motion.js"></script>
-<script src="src/ai/fangui-ai.js"></script>
-```
-
-```html
-<html data-ui="flat" data-mode="light">
-  <button class="fu-btn fu-btn--accent">就能用了</button>
-</html>
-```
-
-本地看效果：直接开 `demo/index.html`（ES module 需要起个静态服务，`npx serve` 即可）。
-
-**组件类名约定**：`fu-card` `fu-panel` `fu-btn` `fu-input` `fu-switch` `fu-progress`——三个风格消费同一套类名，换风格零改 HTML。
-
----
-
-## 🗂️ 目录结构
-
-```
-fangui/
-├── src/
-│   ├── core/
-│   │   ├── tokens.css       核心令牌：HSL 主题色 + 三模式 + 3%/5% 尺度
-│   │   ├── flat.css         Flat 扁平
-│   │   ├── neu.css          Neu 轻拟物（实底 + 玻璃两个子模式）
-│   │   └── liquid.css       Liquid 液态玻璃
-│   ├── liquid/
-│   │   └── liquid-glass-core.js   液态玻璃引擎（来自 liquid-glass-web）
-│   ├── motion/
-│   │   └── fangui-motion.js 打字机 / 去模糊 / 弹跳 / 均匀排布 / 贝塞尔
-│   ├── ai/
-│   │   └── fangui-ai.js     主动提问 / 风格对比
-│   └── fangui.js            主题色 API + 模式切换 + 引擎接线 + 自动记忆
-└── demo/
-    └── index.html           三风格 × 三模式 × 主题色盘现场演示
+```bash
+cd FloatStudio
+npm install
+npm run dev          # 浏览器里跑前端
+npm run tauri dev    # 桌面窗口（需要 Rust 工具链）
+npm run test:all     # 语言 / 索引 / 压力测试
 ```
 
 ---
 
-## 📜 许可
+## 从源码构建框架
 
-MIT · 小方工作室出品。全中文界面，Fangwork 生态统一界面层，慢慢来，比较快。
+`fangui/` 是纯 ESM 包，没有构建步骤，直接被 Deft 应用引用：
+
+```js
+import { Button } from 'fangui'
+```
+
+内核在 `kernel/`，需要 Rust + Node.js + Clang 14+：
+
+```bash
+cd kernel
+cargo build                       # 编译内核
+cargo run --example hello         # 跑最小示例
+```
+
+Linux 还要装 `libssl-dev`、`libclang-dev`、`xorg-dev` 等一批开发包，详见 `kernel/README.md`。
+
+---
+
+## 图标
+
+`ICONS.md` 是图标库的施工图：104 个通用图标 + 18 个 Fangwork 产品图标，全部走 kubai-icons 的「后片 / 内容 / 前片」三层构造，主色推导、外描边、悬停形变。第一版还没落地成 SVG 文件。
+
+---
+
+## 许可
+
+MIT。`kernel/` 是上游 [deft-ui/deft](https://github.com/deft-ui/deft) 的 MIT 源码，版权归其作者；`fangui/` 与 `FloatStudio/` 版权归小方工作室。

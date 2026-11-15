@@ -1,0 +1,13 @@
+button {
+    --border-color: #F00;
+    height: 100%;
+    overflow: hidden;
+    font-size: 13px;
+    border: 1px var(--border-color);
+}
+
+container {
+    color: #ce1f1f;
+    border: none !important;
+    padding: 0 !important;
+}

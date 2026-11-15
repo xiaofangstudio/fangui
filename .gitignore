@@ -1,1 +1,20 @@
-﻿.workbuddy/
+# 依赖与构建产物
+node_modules/
+dist/
+target/
+*.pdb
+*.rlib
+
+# 测试中间产物
+**/tests/.*.mjs
+
+# 本地临时目录（不属于仓库）
+.screenshots/
+.trae-html-share-packages/
+NexusOS26-*/
+NexusOS26-产品图标/
+
+# 系统文件
+Thumbs.db
+desktop.ini
+.DS_Store

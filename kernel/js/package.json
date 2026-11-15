@@ -1,0 +1,11 @@
+{
+  "name": "deft-sys",
+  "version": "1.0.1",
+  "description": "Deft typings",
+  "typings": "deft.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kason Yang",
+  "license": "MIT"
+}
