@@ -1,0 +1,1370 @@
+/* Kubai Icons · 96 枚
+/* 资产由 Kubai Icons 引擎导出（rest / hover 两态）；动画是 CUI 的 icon + motion，页面里不写过渡规则。
+
+window icons
+    theme light
+
+    main wall
+        layout column
+        gap 22
+        padding 30 34 40
+        width fill
+        background canvas
+
+        heading
+            text "Kubai Icons"
+            page
+
+        text
+            text "96 枚 · 31×29 画布 · 460ms 缓动。icon 挂 rest / hover 两张图，motion hover 时悬停交叉到动作终态；换 always 常驻呼吸，换 still 完全静止。"
+            caption
+            color soft
+
+        grid g
+            columns repeat(12, 1fr)
+            gap 14
+            width fill
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "文件夹"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "文档"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "新建文件"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "便签"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "剪贴板"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "复制"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "搜索"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "筛选"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "书签"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "标签"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "星标"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "主页"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "返回"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "右箭头"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "左箭头"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "上箭头"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "下箭头"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "展开"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "收起"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "右尖角"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "更多"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "外链"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "快捷方式"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "分屏"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "标签组"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "画中画"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "链接"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "分享"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "同步"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "刷新"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "上传"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "下载"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "邮件"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "聊天"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "通知"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "用户"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "手机"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "日历"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "时钟"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "定位"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "地球"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "天气"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "照片"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "相机"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "视频"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "播放"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "暂停"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "音乐"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "音量"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "麦克风"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "耳机"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "书本"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "灯泡"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "加号"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "减号"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "关闭"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "对勾"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "复选框"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "单选"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "信息"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "警告"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "错误"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "帮助"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "锁"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "钥匙"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "盾牌"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "设置"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "外观"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "电池"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "Wi-Fi"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "喜欢"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "购物车"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "礼物"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "包裹"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "钱包"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "银行卡"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "图表"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "编辑"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "旗帜"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "眼睛"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "删除"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "回收站"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "打印"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "闹钟"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "笔记本"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "扫码"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "退出"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "计算器"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "指南针"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "最小化"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "最大化"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "还原"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "风车"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "火箭"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "印章"
+                    width 44
+                    height 44
+
+            box fr
+                width 74
+                height 74
+                radius l
+                background wash
+                layout row
+                justify center
+                align center
+
+                icon
+                    name "气球"
+                    width 44
+                    height 44

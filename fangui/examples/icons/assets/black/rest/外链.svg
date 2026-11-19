@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-hlitfi-loS-i21" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7C7D81"></stop><stop offset="1" stop-color="#636469"></stop></linearGradient><linearGradient id="ki-hlitfi-upS-i21" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C1C2C3"></stop><stop offset="1" stop-color="#9B9B9F"></stop></linearGradient>
+  <filter id="ki-hlitfi-sh-i21" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.443 0 0 0 0 0.451 0 0 0 0 0.463 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-hlitfi-hi-i21" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter></defs><path d="M12.4 4.2H8.4C5.9 4.2 4.2 5.9 4.2 8.4V20.6C4.2 23.1 5.9 24.8 8.4 24.8H20.6C23.1 24.8 24.8 23.1 24.8 20.6V14.6" fill="none" stroke-width="2.2" stroke-linecap="round" stroke="#24202B"></path>
+      <g transform="translate(0 0)">
+        <path d="M13.2 17.8L23.4 7.6" fill="none" stroke-width="2.2" stroke-linecap="round" stroke="#24202B"></path>
+        <path d="M20.624 4.824Q20.2 4.4 20.8 4.4L26 4.4Q26.6 4.4 26.6 5L26.6 10.2Q26.6 10.8 26.176 10.376Z" fill="#24202B"></path>
+      </g></svg>

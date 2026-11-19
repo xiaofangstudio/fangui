@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-k8yfvg-loS-i46" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B698F9"></stop><stop offset="1" stop-color="#A985F8"></stop></linearGradient><linearGradient id="ki-k8yfvg-upS-i46" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDCFFC"></stop><stop offset="1" stop-color="#C8B1FB"></stop></linearGradient>
+  <filter id="ki-k8yfvg-sh-i46" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.69 0 0 0 0 0.569 0 0 0 0 0.976 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-k8yfvg-hi-i46" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter></defs><path d="M9.3 6.1Q9.3 4.5 10.9 4.5L12.3 4.5Q13.9 4.5 13.9 6.1L13.9 18.9Q13.9 20.5 12.3 20.5L10.9 20.5Q9.3 20.5 9.3 18.9Z" transform="translate(0 0)" fill="#6E3DC3"></path><path d="M17.1 6.1Q17.1 4.5 18.7 4.5L20.1 4.5Q21.7 4.5 21.7 6.1L21.7 18.9Q21.7 20.5 20.1 20.5L18.7 20.5Q17.1 20.5 17.1 18.9Z" transform="translate(0 0)" fill="#6E3DC3"></path></svg>

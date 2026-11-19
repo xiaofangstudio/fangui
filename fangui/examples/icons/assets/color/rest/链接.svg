@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-tfijol-loS-i26" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B698F9"></stop><stop offset="1" stop-color="#A985F8"></stop></linearGradient><linearGradient id="ki-tfijol-upS-i26" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDCFFC"></stop><stop offset="1" stop-color="#C8B1FB"></stop></linearGradient>
+  <filter id="ki-tfijol-sh-i26" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.69 0 0 0 0 0.569 0 0 0 0 0.976 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-tfijol-hi-i26" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter><mask id="ki-tfijol-ol-i26-0" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="evenodd" d="M-7.8 0Q-7.8 -4.8 -3 -4.8L3 -4.8Q7.8 -4.8 7.8 0L7.8 0Q7.8 4.8 3 4.8L-3 4.8Q-7.8 4.8 -7.8 0ZM-5 0Q-5 -2 -3 -2L3 -2Q5 -2 5 0L5 0Q5 2 3 2L-3 2Q-5 2 -5 0Z"></path></mask><mask id="ki-tfijol-ol-i26-1" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="evenodd" d="M-7.8 0Q-7.8 -4.8 -3 -4.8L3 -4.8Q7.8 -4.8 7.8 0L7.8 0Q7.8 4.8 3 4.8L-3 4.8Q-7.8 4.8 -7.8 0ZM-5 0Q-5 -2 -3 -2L3 -2Q5 -2 5 0L5 0Q5 2 3 2L-3 2Q-5 2 -5 0Z"></path></mask></defs>
+      <g transform="rotate(-45 15.5 12.5)">
+        <g transform="translate(11.3 12.5)"><g filter="url(#ki-tfijol-sh-i26)"><g filter="url(#ki-tfijol-hi-i26)"><path d="M-7.8 0Q-7.8 -4.8 -3 -4.8L3 -4.8Q7.8 -4.8 7.8 0L7.8 0Q7.8 4.8 3 4.8L-3 4.8Q-7.8 4.8 -7.8 0ZM-5 0Q-5 -2 -3 -2L3 -2Q5 -2 5 0L5 0Q5 2 3 2L-3 2Q-5 2 -5 0Z" fill-rule="evenodd" fill="url(#ki-tfijol-loS-i26)"></path></g></g><path d="M-7.8 0Q-7.8 -4.8 -3 -4.8L3 -4.8Q7.8 -4.8 7.8 0L7.8 0Q7.8 4.8 3 4.8L-3 4.8Q-7.8 4.8 -7.8 0ZM-5 0Q-5 -2 -3 -2L3 -2Q5 -2 5 0L5 0Q5 2 3 2L-3 2Q-5 2 -5 0Z" fill-rule="evenodd" mask="url(#ki-tfijol-ol-i26-0)" stroke="#8B5CF6" fill="none" stroke-width="2"></path></g>
+        <g transform="translate(19.7 12.5)"><g filter="url(#ki-tfijol-sh-i26)"><g filter="url(#ki-tfijol-hi-i26)"><path d="M-7.8 0Q-7.8 -4.8 -3 -4.8L3 -4.8Q7.8 -4.8 7.8 0L7.8 0Q7.8 4.8 3 4.8L-3 4.8Q-7.8 4.8 -7.8 0ZM-5 0Q-5 -2 -3 -2L3 -2Q5 -2 5 0L5 0Q5 2 3 2L-3 2Q-5 2 -5 0Z" fill-rule="evenodd" fill="url(#ki-tfijol-upS-i26)"></path></g></g><path d="M-7.8 0Q-7.8 -4.8 -3 -4.8L3 -4.8Q7.8 -4.8 7.8 0L7.8 0Q7.8 4.8 3 4.8L-3 4.8Q-7.8 4.8 -7.8 0ZM-5 0Q-5 -2 -3 -2L3 -2Q5 -2 5 0L5 0Q5 2 3 2L-3 2Q-5 2 -5 0Z" fill-rule="evenodd" mask="url(#ki-tfijol-ol-i26-1)" stroke="#8B5CF6" fill="none" stroke-width="2"></path></g>
+      </g></svg>

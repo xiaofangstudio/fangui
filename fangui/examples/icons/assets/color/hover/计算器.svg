@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-rkxoevh2g-loS-i87" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8869A"></stop><stop offset="1" stop-color="#F76F87"></stop></linearGradient><linearGradient id="ki-rkxoevh2g-upS-i87" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCC6CF"></stop><stop offset="1" stop-color="#FAA3B2"></stop></linearGradient><linearGradient id="ki-rkxoevh2g-pure-i87-2F6FE0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C12A4A"></stop><stop offset="1" stop-color="#C12A4A"></stop></linearGradient>
+  <filter id="ki-rkxoevh2g-sh-i87" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.973 0 0 0 0 0.49 0 0 0 0 0.569 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-rkxoevh2g-hi-i87" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter><mask id="ki-rkxoevh2g-ol-i87-0" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M6.3 3.2Q6.3 1 8.5 1L22.5 1Q24.7 1 24.7 3.2L24.7 21.8Q24.7 24 22.5 24L8.5 24Q6.3 24 6.3 21.8Z"></path></mask></defs>
+      <g filter="url(#ki-rkxoevh2g-sh-i87)"><g filter="url(#ki-rkxoevh2g-hi-i87)"><path d="M6.3 3.2Q6.3 1 8.5 1L22.5 1Q24.7 1 24.7 3.2L24.7 21.8Q24.7 24 22.5 24L8.5 24Q6.3 24 6.3 21.8Z" fill="url(#ki-rkxoevh2g-loS-i87)"></path></g></g>
+      <path d="M6.3 3.2Q6.3 1 8.5 1L22.5 1Q24.7 1 24.7 3.2L24.7 21.8Q24.7 24 22.5 24L8.5 24Q6.3 24 6.3 21.8Z" mask="url(#ki-rkxoevh2g-ol-i87-0)" stroke="#F43F5E" fill="none" stroke-width="2"></path>
+      <path d="M8.3 4.2Q8.3 3 9.5 3L21.5 3Q22.7 3 22.7 4.2L22.7 6.4Q22.7 7.6 21.5 7.6L9.5 7.6Q8.3 7.6 8.3 6.4Z" fill="#fff"></path>
+      <path d="M11.3 5.3H20.9" stroke="#C12A4A" fill="none" stroke-width="1.6" stroke-linecap="round"></path>
+      <path d="M8.3 10.8Q8.3 9.6 9.5 9.6L13.3 9.6Q14.5 9.6 14.5 10.8L14.5 13.6Q14.5 14.8 13.3 14.8L9.5 14.8Q8.3 14.8 8.3 13.6ZM16.5 10.8Q16.5 9.6 17.7 9.6L21.5 9.6Q22.7 9.6 22.7 10.8L22.7 13.6Q22.7 14.8 21.5 14.8L17.7 14.8Q16.5 14.8 16.5 13.6ZM8.3 18Q8.3 16.8 9.5 16.8L13.3 16.8Q14.5 16.8 14.5 18L14.5 20.8Q14.5 22 13.3 22L9.5 22Q8.3 22 8.3 20.8Z" fill="#fff"></path>
+      <path d="M10.1 12.2H12.7M11.4 10.9V13.5M18.3 12.2H20.9M10.4 18.4L12.4 20.4M12.4 18.4L10.4 20.4" stroke="#C12A4A" fill="none" stroke-width="1.6" stroke-linecap="round"></path>
+      <g transform="translate(19.6 19.4) scale(0.9) translate(-19.6 -19.4)"><path d="M16.5 18Q16.5 16.8 17.7 16.8L21.5 16.8Q22.7 16.8 22.7 18L22.7 20.8Q22.7 22 21.5 22L17.7 22Q16.5 22 16.5 20.8Z" fill="#fff"></path><path d="M16.5 18Q16.5 16.8 17.7 16.8L21.5 16.8Q22.7 16.8 22.7 18L22.7 20.8Q22.7 22 21.5 22L17.7 22Q16.5 22 16.5 20.8Z" fill="url(#ki-rkxoevh2g-pure-i87-2F6FE0)" opacity="1"></path>
+        <path d="M18.3 18.1H20.9M18.3 20.7H20.9" opacity="0" stroke="#C12A4A" fill="none" stroke-width="1.6" stroke-linecap="round"></path><path d="M18.3 18.1H20.9M18.3 20.7H20.9" stroke="#fff" opacity="1" fill="none" stroke-width="1.6" stroke-linecap="round"></path></g></svg>

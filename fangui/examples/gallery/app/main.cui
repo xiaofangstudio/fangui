@@ -1,0 +1,484 @@
+/* 陈列馆 —— FangUI · CUI 全元件一览，一个 .cui 文件。
+/*
+/* 51 个元件、暗色主题、动效预设、表单、表格、弹层都在这里。
+/* 没有一行 JS / CSS：结构、样式、交互全是下面的规则。
+
+window show
+    layout column
+    height fill
+    background canvas
+
+    /* ── 顶栏：品牌 + 主题开关 ── */
+    header top
+        layout row
+        align center
+        gap 10
+        padding 10 18
+        background card
+        border 1 line
+
+        icon brand
+            text "grid"
+            size 18
+            color accent
+
+        heading title
+            text "CUI 陈列馆"
+            size 16
+
+        label sub
+            text "51 个元件 · 没有一行 JS / CSS"
+            size 11
+            color faint
+
+        spacer spring
+
+        button theme-btn
+            layout row
+            align center
+            gap 6
+            text "夜间"
+            background wash
+            color soft
+            radius 7
+            padding 6 12
+            size 12
+            transition background
+
+            icon theme-icon
+                text "moon"
+                size 13
+
+    /* ── 标签导航 ── */
+    nav tabs
+        layout row
+        gap 2
+        padding 0 12
+        background card
+        border 1 hairline
+
+        tab tab-home active
+            text "总览"
+            size 13
+            padding 9 14
+
+        tab tab-form
+            text "表单"
+            size 13
+            padding 9 14
+
+        tab tab-data
+            text "数据"
+            size 13
+            padding 9 14
+
+    main body
+        layout column
+        gap 16
+        padding 18
+        overflow auto
+
+        /* ── 第一页：反馈与状态 ── */
+        view home
+            layout column
+            gap 12
+
+            alert tip-info info
+                layout row
+                align center
+                icon info-ic
+                    text "info"
+                    size 15
+                text info-text
+                    text "点右上「夜间」看全站换肤；弹层和切页都带默认动效"
+
+            alert tip-ok ok
+                layout row
+                align center
+                icon ok-ic
+                    text "success"
+                    size 15
+                text ok-text
+                    text "编译通过：0 诊断 · 产物断网可跑"
+
+            alert tip-warn warn
+                layout row
+                align center
+                icon warn-ic
+                    text "warning"
+                    size 15
+                text warn-text
+                    text "提示横幅四种语义色：info / ok / warn / err"
+
+            alert tip-err err
+                layout row
+                align center
+                icon err-ic
+                    text "error"
+                    size 15
+                text err-text
+                    text "颜色全部用 color-mix 从令牌现场调，暗色也成立"
+
+            grid demos
+                columns repeat(3, 1fr)
+                gap 12
+
+                card spin-card
+                    layout row
+                    align center
+                    gap 10
+                    padding 18
+
+                    spinner spin
+
+                    text spin-text
+                        text "加载中…"
+
+                card badge-card
+                    layout column
+                    gap 8
+                    padding 18
+
+                    heading badge-title
+                        text "徽标与头像"
+
+                    row badge-row
+                        layout row
+                        align center
+                        gap 8
+                        badge b1
+                            text "3"
+                        badge b2
+                            text "新"
+                            background wash
+                            color soft
+                        avatar a1
+                            text "方"
+                            background tint
+                            color accent
+                        avatar a2
+                            text "UI"
+
+                card anim-card
+                    layout column
+                    gap 8
+                    padding 18
+
+                    heading anim-title
+                        text "动效预设"
+
+                    text anim-desc
+                        text "animation pop 400ms"
+                        size 12
+                        color faint
+
+                    button anim-btn
+                        text "点我弹一下"
+                        background tint
+                        color accent
+                        radius 7
+                        padding 7 12
+                        size 13
+                        transition background
+
+            empty no-data
+                layout column
+                icon empty-ic
+                    text "folder"
+                text empty-text
+                    text "这里是空状态：图标虚线框 + 一句话"
+
+        /* ── 第二页：表单全家 ── */
+        view form
+            layout column
+            gap 12
+
+            card form-card
+                layout column
+                gap 12
+                padding 16
+                max-width 520
+
+                heading form-title
+                    text "全部输入元件"
+
+                field name-field
+                    label name-label
+                        text "文本框"
+                        size 12
+                        color faint
+                    input name-input
+                        hint "写点什么…"
+                        width fill
+                        background card
+                        border 1 edge
+                        radius 6
+                        padding 7 10
+                        size 13
+
+                field pick-field
+                    layout row
+                    align center
+                    gap 10
+                    label pick-label
+                        text "下拉"
+                        size 12
+                        color faint
+                    dropdown pick
+                        width fill
+                        option pick-a
+                            text "卡片"
+                            value "卡片"
+                            selected
+                        option pick-b
+                            text "列表"
+                            value "列表"
+
+                field agree-field
+                    layout row
+                    align center
+                    gap 10
+                    background wash
+                    radius 8
+                    padding 10 12
+                    label agree-label
+                        text "开关（默认开）"
+                        size 13
+                        color soft
+                    spacer spring
+                    switch agree
+                        checked
+
+                field mood-field
+                    layout row
+                    align center
+                    gap 10
+                    label mood-label
+                        text "滑杆"
+                        size 12
+                        color faint
+                    slider mood
+                        width fill
+                        value "60"
+
+                field bar-field
+                    layout column
+                    gap 6
+                    label bar-label
+                        text "进度"
+                        size 12
+                        color faint
+                    progress bar
+                        value 60
+                        width fill
+
+                field cb-field
+                    layout row
+                    align center
+                    gap 14
+                    label cb-label
+                        text "多选"
+                        size 12
+                        color faint
+                    checkbox cb1
+                        name cb1
+                    label cb1-label
+                        text "样式"
+                        size 12
+                        color soft
+                    checkbox cb2
+                        name cb2
+                    label cb2-label
+                        text "组件"
+                        size 12
+                        color soft
+
+                row form-actions
+                    layout row
+                    gap 8
+                    button submit-btn
+                        text "提交"
+                        background accent
+                        color card
+                        radius 7
+                        padding 7 16
+                        size 13
+                    button reset-btn
+                        text "重置"
+                        background wash
+                        color soft
+                        radius 7
+                        padding 7 16
+                        size 13
+
+        /* ── 第三页：数据展示 ── */
+        view data
+            layout column
+            gap 12
+
+            card table-card
+                layout column
+                gap 10
+                padding 14
+
+                heading table-title
+                    text "表格：table 里写 row / cell / heading，自动变 tr / td / th"
+
+                table grid-table
+                    width fill
+
+                    row head
+                        heading col-name
+                            text "元件"
+                        heading col-kind
+                            text "分类"
+                        heading col-state
+                            text "状态"
+
+                    row line-a
+                        cell a-name
+                            text "card"
+                        cell a-kind
+                            text "骨架"
+                        cell a-state
+                            badge a-badge
+                                text "稳定"
+
+                    row line-b
+                        cell b-name
+                            text "dropdown"
+                        cell b-kind
+                            text "表单"
+                        cell b-state
+                            badge b-badge
+                                text "稳定"
+
+                    row line-c
+                        cell c-name
+                            text "alert"
+                        cell c-kind
+                            text "反馈"
+                        cell c-state
+                            badge c-badge
+                                text "新"
+                                background wash
+                                color soft
+
+            card menu-card
+                layout column
+                gap 10
+                padding 14
+
+                heading menu-title
+                    text "弹层：点按钮出菜单（菜单自带 pop 动效）"
+
+                button open-menu
+                    position relative
+                    text "打开菜单"
+                    background wash
+                    color soft
+                    radius 7
+                    padding 7 14
+                    size 13
+
+                    menu quick
+                        position absolute
+                        top calc(100% + 6)
+                        left 0
+                        min-width 160
+
+                        menuitem m1
+                            layout row
+                            align center
+                            icon m1-ic
+                                text "edit"
+                                size 14
+                            text m1-text
+                                text "重命名"
+
+                        menuitem m2
+                            layout row
+                            align center
+                            icon m2-ic
+                                text "trash"
+                                size 14
+                            text m2-text
+                                text "删除"
+
+    /* ── 弹窗演示 ── */
+    overlay hello
+        modal hello-sheet
+            layout column
+            gap 10
+            width 360
+            background card
+            radius 12
+            padding 18
+
+            heading hello-title
+                text "弹窗自带 slide-up 动效"
+                size 15
+
+            text hello-desc
+                text "overlay 加 open 类显示，去掉就藏。切页、弹层、菜单都有默认动效，想改就覆盖。"
+                size 12
+                color faint
+
+            row hello-actions
+                layout row
+                justify end
+                gap 8
+                button hello-close
+                    text "好"
+                    background accent
+                    color card
+                    radius 7
+                    padding 6 16
+                    size 13
+
+/* ── 交互 ── */
+
+tab tab-home when click
+    act remove active on tab
+    act add active
+    act go #home
+
+tab tab-form when click
+    act remove active on tab
+    act add active
+    act go #form
+
+tab tab-data when click
+    act remove active on tab
+    act add active
+    act go #data
+
+/* 夜间 / 日间：给 window 挂 night 类，令牌整体换，再点一下就回来 */
+button theme-btn when click
+    act toggle night on window
+    act say "主题已切换"
+
+button anim-btn when click
+    act toggle pop-run
+    act say "pop 动效"
+
+button anim-btn +pop-run
+    animation pop 400ms
+
+button open-menu when click
+    act toggle open on menu
+
+menuitem m1 when click
+    act say "重命名"
+
+menuitem m2 when click
+    act say "删除"
+
+button submit-btn when click
+    act say "已提交（演示）"
+
+button reset-btn when click
+    act say "已重置（演示）"
+
+button hello-close when click
+    act remove open on overlay

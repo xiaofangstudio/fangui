@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-jvxjzy-loS-i45" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#63D1E4"></stop><stop offset="1" stop-color="#46C8DF"></stop></linearGradient><linearGradient id="ki-jvxjzy-upS-i45" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B5E9F2"></stop><stop offset="1" stop-color="#88DCEB"></stop></linearGradient>
+  <filter id="ki-jvxjzy-sh-i45" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.337 0 0 0 0 0.808 0 0 0 0 0.886 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-jvxjzy-hi-i45" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter><mask id="ki-jvxjzy-ol-i45-0" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M4 12.5A11.5 11.5 0 1 0 27 12.5A11.5 11.5 0 1 0 4 12.5Z"></path></mask></defs><g filter="url(#ki-jvxjzy-sh-i45)"><g filter="url(#ki-jvxjzy-hi-i45)"><path d="M4 12.5A11.5 11.5 0 1 0 27 12.5A11.5 11.5 0 1 0 4 12.5Z" fill="url(#ki-jvxjzy-loS-i45)"></path></g></g>
+      <path d="M4 12.5A11.5 11.5 0 1 0 27 12.5A11.5 11.5 0 1 0 4 12.5Z" mask="url(#ki-jvxjzy-ol-i45-0)" stroke="#06B6D4" fill="none" stroke-width="2"></path>
+      <path fill="#fff" d="M12.2 8Q12.2 7.2 12.895 7.597L15.705 9.203Q16.4 9.6 16.4 10.4L16.4 14.6Q16.4 15.4 15.705 15.797L12.895 17.403Q12.2 17.8 12.2 17Z"></path><path fill="#fff" d="M16 10.2Q16 9.4 16.694 9.798L20.706 12.102Q21.4 12.5 21.4 12.5L21.4 12.5Q21.4 12.5 20.706 12.898L16.694 15.202Q16 15.6 16 14.8Z"></path></svg>

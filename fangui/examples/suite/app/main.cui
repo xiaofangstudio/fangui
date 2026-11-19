@@ -1,0 +1,259 @@
+/* 一套完整软件的最小骨架：多页 + 表格 + 表单 + 浮层 + 媒体 + 图标。
+   全部内容只用 CUI；逻辑位留给 Copper（app/main.co 里的 act call）。 */
+window suite
+    theme light
+    layout column
+    background canvas
+
+    /* ── 页头 ── */
+    header top
+        layout row
+        align center
+        gap 10
+        padding 12 20
+        border 1 hairline
+        background card
+
+        icon brand-icon
+            name "文件夹"
+            base "../icons/assets"
+            motion always
+            width 22
+            height 22
+
+        heading brand
+            text "FangUI Suite"
+            size 15
+        text sub
+            text "CUI + Copper · 一套骨架能长成任何软件"
+            size 11
+            color faint
+
+        spacer spring
+
+        tabs nav
+            layout row
+            gap 4
+
+            tab nav-home
+                text "总览"
+            tab nav-media
+                text "素材"
+            tab nav-settings
+                text "设置"
+
+    /* ── 主体 ── */
+    main body
+        layout column
+        gap 16
+        padding 18 20 28
+        overflow auto
+
+        /* 第一页：总览 */
+        view overview
+            layout column
+            gap 14
+
+            grid stats
+                columns 3
+                gap 12
+
+                card stat-a
+                    layout column
+                    gap 4
+                    padding 14
+                    heading
+                        text "本周提交"
+                    text
+                        text "128"
+                        size 24
+                        weight bold
+                card stat-b
+                    layout column
+                    gap 4
+                    padding 14
+                    heading
+                        text "待处理"
+                    text
+                        text "6"
+                        size 24
+                        weight bold
+                card stat-c
+                    layout column
+                    gap 6
+                    padding 14
+                    heading
+                        text "构建进度"
+                    progress bar
+                        value 72
+
+            card table-card
+                layout column
+                gap 10
+                padding 16
+                toolbar table-top
+                    layout row
+                    align center
+                    gap 8
+                    heading
+                        text "最近改动"
+                    spacer spring
+                    button open-dlg
+                        text "新建"
+                table grid
+                    row head
+                        cell
+                            text "文件"
+                        cell
+                            text "负责人"
+                        cell
+                            text "状态"
+                        cell
+                            text "大小"
+                    row r1
+                        cell
+                            text "app/main.cui"
+                        cell
+                            text "小方"
+                        cell
+                            badge ok
+                                text "完成"
+                        cell
+                            text "8 KB"
+                    row r2
+                        cell
+                            text "app/main.co"
+                        cell
+                            text "方方"
+                        cell
+                            badge warn
+                                text "调整中"
+                        cell
+                            text "3 KB"
+
+        /* 第二页：素材（图标 / 内嵌网页） */
+        view media
+            layout column
+            gap 14
+
+            card icon-card
+                layout column
+                gap 10
+                padding 16
+                heading
+                    text "图标（Kubai 两态）"
+                row icons
+                    gap 18
+                    icon i1
+                        name "文件夹"
+                        base "../icons/assets"
+                        width 34
+                        height 34
+                    icon i2
+                        name "音乐"
+                        base "../icons/assets"
+                        motion always
+                        width 34
+                        height 34
+                    icon i3
+                        name "设置"
+                        base "../icons/assets"
+                        motion still
+                        width 34
+                        height 34
+
+            card embed-card
+                layout column
+                gap 10
+                padding 16
+                heading
+                    text "内嵌网页（frame + doc）"
+                frame f1
+                    doc "<h3>这一段在 .cui 里</h3><p>iframe 直接吃内联 HTML，不需要外部文件。</p>"
+                    height 150
+
+        /* 第三页：设置（表单） */
+        view settings
+            layout column
+            gap 14
+
+            card form-card
+                layout column
+                gap 12
+                padding 16
+                heading
+                    text "偏好"
+                form pref
+                    layout column
+                    gap 12
+                    field
+                        layout column
+                        gap 4
+                        label
+                            text "显示名"
+                        input namein
+                            hint "比如 小方"
+                    field
+                        layout column
+                        gap 4
+                        label
+                            text "主题"
+                        dropdown themed
+                            option
+                                text "浅色"
+                            option
+                                text "深色"
+                    field
+                        layout row
+                        align center
+                        gap 8
+                        label
+                            text "开机自启"
+                        switch autostart
+                    button save-btn
+                        accent
+                        text "保存"
+
+    /* ── 浮层与轻提示 ── */
+    overlay dlg
+        modal dlg-box
+            layout column
+            gap 12
+            heading
+                text "新建条目"
+            text
+                text "这里可以放任何表单，浮层只是又一个容器。"
+                color faint
+            toolbar dlg-actions
+                layout row
+                justify end
+                gap 8
+                button dlg-cancel
+                    text "取消"
+                button dlg-ok
+                    accent
+                    text "创建"
+
+    toast ts
+        icon ts-ic
+            text "success"
+        text ts-text
+            text "已保存"
+
+/* ── 交互：导航、浮层、轻提示 ── */
+tab nav-home when click
+    act go overview
+tab nav-media when click
+    act go media
+tab nav-settings when click
+    act go settings
+
+button open-dlg when click
+    act open on overlay dlg
+button dlg-cancel when click
+    act close
+button dlg-ok when click
+    act close
+button save-btn when click
+    act open on toast ts
+

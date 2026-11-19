@@ -1,0 +1,19 @@
+[package]
+name = "float-launcher"
+version = "0.1.0"
+edition = "2021"
+description = "Copper 编译产物的启动器：本地服务 + WebView2 窗口，零第三方语言"
+
+[dependencies]
+wry = "0.57"
+tao = "0.37"
+float-lang = { path = "../float-lang" }
+
+[[bin]]
+name = "float-launcher"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = "s"
+lto = true
+strip = true

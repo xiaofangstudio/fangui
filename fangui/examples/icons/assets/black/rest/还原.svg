@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-sewgin-loS-i91" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7C7D81"></stop><stop offset="1" stop-color="#636469"></stop></linearGradient><linearGradient id="ki-sewgin-upS-i91" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C1C2C3"></stop><stop offset="1" stop-color="#9B9B9F"></stop></linearGradient>
+  <filter id="ki-sewgin-sh-i91" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.443 0 0 0 0 0.451 0 0 0 0 0.463 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-sewgin-hi-i91" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter><mask id="ki-sewgin-ol-i91-0" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M0 2.2Q0 0 2.2 0L14.8 0Q17 0 17 2.2L17 11.6Q17 13.8 14.8 13.8L2.2 13.8Q0 13.8 0 11.6Z"></path></mask><mask id="ki-sewgin-ol-i91-1" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M0 2.2Q0 0 2.2 0L14.8 0Q17 0 17 2.2L17 11.6Q17 13.8 14.8 13.8L2.2 13.8Q0 13.8 0 11.6Z"></path></mask></defs><g transform="translate(9 2.4)"><g filter="url(#ki-sewgin-sh-i91)"><g filter="url(#ki-sewgin-hi-i91)"><path d="M0 2.2Q0 0 2.2 0L14.8 0Q17 0 17 2.2L17 11.6Q17 13.8 14.8 13.8L2.2 13.8Q0 13.8 0 11.6Z" fill="url(#ki-sewgin-loS-i91)"></path></g></g><path d="M0 2.2Q0 0 2.2 0L14.8 0Q17 0 17 2.2L17 11.6Q17 13.8 14.8 13.8L2.2 13.8Q0 13.8 0 11.6Z" mask="url(#ki-sewgin-ol-i91-0)" stroke="#2E3036" fill="none" stroke-width="2"></path></g>
+        <g filter="url(#ki-sewgin-sh-i91)"><g filter="url(#ki-sewgin-hi-i91)"><path d="M0 2.2Q0 0 2.2 0L14.8 0Q17 0 17 2.2L17 11.6Q17 13.8 14.8 13.8L2.2 13.8Q0 13.8 0 11.6Z" fill="url(#ki-sewgin-upS-i91)"></path></g></g>
+        <path d="M0 2.2Q0 0 2.2 0L14.8 0Q17 0 17 2.2L17 11.6Q17 13.8 14.8 13.8L2.2 13.8Q0 13.8 0 11.6Z" mask="url(#ki-sewgin-ol-i91-1)" stroke="#2E3036" fill="none" stroke-width="2"></path>
+        <path d="M6.8 12.6Q6.8 11.4 8 11.4L18.6 11.4Q19.8 11.4 19.8 12.6L19.8 17.6Q19.8 18.8 18.6 18.8L8 18.8Q6.8 18.8 6.8 17.6Z" fill="#fff"></path></svg>

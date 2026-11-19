@@ -1,0 +1,613 @@
+/* FangUI 组件陈列 · 一个 .cui 文件
+/*
+/* 这里只写"元件 + 框架给的类名"，一个颜色值都不写：
+/* 底色、描边、字号、圆角、动效全部来自令牌，点右上角「夜间」整套跟着换。
+/*
+/* 同类元件在同一层要多个，就给 #id 或额外的类区分（身份 = 元件 + 类 + #id）。
+
+window app
+    layout column
+    height fill
+    background canvas
+
+    /* ── 顶栏 ── */
+    header top
+        layout row
+        align center
+        gap 12
+        padding 10 18
+        background card
+        border 1 hairline
+
+        icon brand
+            text "grid"
+            size 18
+            color accent
+
+        column brand-text
+            gap 0
+            heading brand-name
+                text "FangUI"
+                size 16
+            text brand-sub
+                text "一套令牌 · 一层组件 · 一个内核"
+                caption
+
+        spacer spring
+
+        text accent-label
+            text "强调色"
+            caption
+            middle
+
+        button sw-green
+            s
+            text "绿"
+        button sw-blue
+            s
+            text "蓝"
+        button sw-violet
+            s
+            text "紫"
+        button sw-amber
+            s
+            text "琥珀"
+        button sw-rose
+            s
+            text "玫红"
+
+        button theme-btn icon s
+            icon
+                text "moon"
+
+    /* ── 主区 ── */
+    main body
+        layout column
+        gap 18
+        padding 20
+        overflow auto
+
+        /* 头图 */
+        card hero raised
+            layout column
+            gap 10
+            padding 22
+
+            heading hero-title
+                text "FangUI 组件层"
+                page
+
+            text hero-lead
+                text "每个控件都有四种态、三档尺寸、六种变体。变体是类名，颜色从令牌取，换主题不用改一行界面。"
+                lead
+                color soft
+
+            toolbar hero-actions
+                button hero-primary
+                    accent
+                    text "开始"
+                button hero-ghost
+                    outline
+                    text "文档"
+                button hero-subtle
+                    subtle
+                    text "次要"
+
+        /* ── 按钮 ── */
+        section s-buttons
+            layout column
+            gap 10
+            heading sec-1
+                text "按钮"
+
+            card btn-card
+                layout column
+                gap 12
+                text btn-v1
+                    text "变体：accent / standard / subtle / outline / danger / link / icon"
+                    caption
+                toolbar btn-row-1
+                    button b-accent
+                        accent
+                        text "保存"
+                    button b-standard
+                        text "标准"
+                    button b-subtle
+                        subtle
+                        text "次要"
+                    button b-outline
+                        outline
+                        text "轮廓"
+                    button b-danger
+                        danger
+                        text "删除"
+                    button b-link link
+                        text "了解更多"
+                    button b-icon icon outline
+                        icon
+                            text "plus"
+
+                text btn-v2
+                    text "尺寸：s / m / l（24 / 32 / 40）"
+                    caption
+                toolbar btn-row-2
+                    button b-s
+                        s
+                        text "小"
+                    button b-m
+                        text "中"
+                    button b-l
+                        l
+                        text "大"
+                    button b-s-icon icon s
+                        icon
+                            text "settings"
+
+                text btn-v3
+                    text "状态：disabled / loading / icon-only"
+                    caption
+                toolbar btn-row-3
+                    button b-disabled
+                        disabled
+                        text "已禁用"
+                    button b-loading
+                        spinner
+                            s
+                        text "处理中"
+                    button b-theme icon s
+                        icon
+                            text "moon"
+
+        /* ── 输入 ── */
+        section s-inputs
+            layout column
+            gap 10
+            heading sec-2
+                text "输入与选择"
+
+            grid in-grid
+                columns 2
+                gap 12
+                card in-card
+                    layout column
+                    gap 12
+                    field f-name
+                        label
+                            text "项目名"
+                            req
+                        input i-name
+                            hint "比如 FangUI"
+                            fill
+                    field f-pass
+                        label
+                            text "口令"
+                        input i-pass
+                            hint "至少 8 位"
+                            type password
+                            fill
+                    field f-note
+                        label
+                            text "备注"
+                        textarea i-note
+                            hint "写点什么…"
+                            rows 3
+                    field f-kind
+                        label
+                            text "类型"
+                        dropdown i-kind
+                            fill
+                            option o1
+                                text "设计"
+                                value "design"
+                                selected
+                            option o2
+                                text "开发"
+                                value "code"
+
+                card pick-card
+                    layout column
+                    gap 12
+                    text pick-title
+                        text "勾选 / 单选 / 开关 / 滑杆"
+                        caption
+
+                    field fl-1
+                        inline
+                        label l-remember
+                            text "记住我"
+                        checkbox c-remember
+                            name remember
+                            checked
+                    field fl-2
+                        inline
+                        label l-sync
+                            text "同步到云端"
+                        switch sw-sync
+                            name sync
+
+                    toolbar radios
+                        radio r-1
+                            name size
+                            value s
+                        label rl-1
+                            text "小"
+                        radio r-2
+                            name size
+                            value m
+                            checked
+                        label rl-2
+                            text "中"
+                        radio r-3
+                            name size
+                            value l
+                        label rl-3
+                            text "大"
+
+                    field fl-3
+                        label
+                            text "音量"
+                        slider sl-volume
+                            min 0
+                            max 100
+                            value 60
+                            fill
+
+                    column bars
+                        gap 6
+                        text bar-label
+                            text "安装进度 60%"
+                            caption
+                        progress pr-main
+                            value 60
+                            fill
+
+        /* ── 数据 ── */
+        section s-data
+            layout column
+            gap 10
+            heading sec-3
+                text "数据展示"
+
+            card tb-card
+                layout column
+                gap 10
+                toolbar tb-head
+                    between
+                    heading tb-title
+                        text "表格 · 徽标 · 标签"
+                        sub
+                    toolbar tb-right
+                        tabs tb-tabs
+                            pill
+                            tab tt-1
+                                active
+                                text "全部"
+                            tab tt-2
+                                text "进行中"
+                            tab tt-3
+                                text "已完成"
+
+                table tb-main
+                    zebra
+                    row tr-head
+                        heading th-name
+                            text "元件"
+                        heading th-owner
+                            text "负责人"
+                        heading th-state
+                            text "状态"
+                        heading th-size
+                            text "尺寸"
+                    row tr-1
+                        cell c-1
+                            text "button"
+                        cell c-2
+                            text "小方"
+                        cell c-3
+                            badge bd-ok
+                                ok
+                                text "稳定"
+                        cell c-4
+                            tag tg-1
+                                text "32px"
+                    row tr-2
+                        cell c-5
+                            text "input"
+                        cell c-6
+                            text "方方"
+                        cell c-7
+                            badge bd-warn
+                                warn
+                                text "调整中"
+                        cell c-8
+                            tag tg-2
+                                text "32px"
+                    row tr-3
+                        cell c-9
+                            text "drawer"
+                        cell c-10
+                            text "方琪"
+                        cell c-11
+                            badge bd-new
+                                text "新"
+                        cell c-12
+                            tag tg-3
+                                accent
+                                text "40px"
+
+            grid misc-grid
+                columns 3
+                gap 12
+
+                card av-card
+                    layout column
+                    gap 10
+                    text av-title
+                        text "头像"
+                        caption
+                    toolbar av-row
+                        avatar av-1
+                            ring
+                            text "方"
+                        avatar av-2
+                            s
+                            text "UI"
+                        avatar av-3
+                            l
+                            background tint
+                            color accent
+                            text "F"
+
+                card ic-card
+                    layout column
+                    gap 10
+                    text ic-title
+                        text "图标 / 加载"
+                        caption
+                    toolbar ic-row
+                        icon ic-1
+                            text "home"
+                        icon ic-2
+                            text "search"
+                        icon ic-3
+                            text "settings"
+                        icon ic-4
+                            text "bell"
+                        divider ic-div
+                            vertical
+                        spinner ic-spin
+                        spinner ic-spin-l
+                            l
+
+                card sk-card
+                    layout column
+                    gap 8
+                    text sk-title
+                        text "骨架屏"
+                        caption
+                    skeleton sk-1 title
+                    skeleton sk-2 text
+                    skeleton sk-3 text
+                    skeleton sk-4
+                        circle
+
+        /* ── 反馈 ── */
+        section s-feedback
+            layout column
+            gap 10
+            heading sec-4
+                text "反馈"
+
+            alert al-info
+                icon ai-1
+                    text "info"
+                text at-1
+                    text "信息：颜色全部用 color-mix 从语义色现场调，暗色也成立。"
+            alert al-ok
+                ok
+                icon ai-2
+                    text "success"
+                text at-2
+                    text "成功：写入磁盘 12 个文件。"
+            alert al-warn
+                warn
+                icon ai-3
+                    text "warning"
+                text at-3
+                    text "警告：这个元件还没写文档。"
+            alert al-err
+                err
+                icon ai-4
+                    text "error"
+                text at-4
+                    text "错误：第 12 行缺少闭合引号。"
+
+            empty em-1
+                icon
+                    text "folder"
+                heading
+                    text "还没有文件"
+                text
+                    text "点右上「新建」开始"
+
+        /* ── 浮层 ── */
+        section s-overlay
+            layout column
+            gap 10
+            heading sec-5
+                text "浮层与交互"
+            card ov-card
+                layout column
+                gap 10
+                text ov-tip
+                    text "点开看效果：遮罩点空白关、Esc 关、Tab 在对话框里循环、轻提示 4 秒自己走。"
+                    caption
+                toolbar ov-row
+                    button ov-modal
+                        accent
+                        text "打开对话框"
+                    button ov-drawer
+                        outline
+                        text "打开抽屉"
+                    button ov-menu
+                        position relative
+                        text "打开菜单"
+                        menu om
+                            menuitem om-1
+                                text "重命名"
+                            menuitem om-2
+                                text "复制链接"
+                            divider
+                            menuitem om-3
+                                danger
+                                text "删除"
+                    button ov-pop
+                        outline
+                        text "浮层说明"
+                        popover op
+                            text op-title
+                                text "popover 能装任意内容"
+                                strong
+                            text op-body
+                                text "菜单只放菜单项；要放表单、图表、说明，用 popover。"
+                                caption
+                    button ov-toast
+                        subtle
+                        text "轻提示"
+                    button ov-copy
+                        outline
+                        text "复制一句"
+
+        /* ── 代码 ── */
+        section s-code
+            layout column
+            gap 10
+            heading sec-6
+                text "写起来就这样"
+            code cd-main
+                text cd-1
+                    text "button primary accent"
+                text cd-2
+                    text "    text \"保存\""
+                text cd-3
+                    text ""
+                text cd-4
+                    text "button primary when click"
+                text cd-5
+                    text "    act say \"已保存\""
+                text cd-6
+                    text ""
+                text cd-7
+                    text "card raised"
+                text cd-8
+                    text "    heading"
+                text cd-9
+                    text "        text \"本周新增\""
+
+    /* ── 浮层本体 ── */
+    overlay ov-confirm
+        modal md-confirm
+            layout column
+            gap 12
+            heading md-title
+                text "删除这个文件？"
+            text md-body
+                text "删除后不可恢复。这一步不可撤销，但可以先导出备份。"
+                color faint
+            toolbar md-actions
+                layout row
+                justify end
+                gap 8
+                spacer md-spring
+                button md-cancel
+                    text "取消"
+                button md-ok
+                    danger
+                    text "删除"
+
+    drawer dr-info
+        layout column
+        gap 12
+        heading dr-title
+            text "详情抽屉"
+        text dr-body
+            text "从右边滑入，点外面或按 Esc 关闭；Tab 会留在抽屉里。"
+            color faint
+        toolbar dr-actions
+            button dr-close
+                accent
+                text "知道了"
+
+    toast ts-saved
+        icon ts-ic
+            text "success"
+        text ts-text
+            text "已保存"
+
+/* ── 交互 ── */
+
+button sw-green when click
+    act accent green
+button sw-blue when click
+    act accent blue
+button sw-violet when click
+    act accent violet
+button sw-amber when click
+    act accent amber
+button sw-rose when click
+    act accent rose
+
+button theme-btn when click
+    act toggle night on window
+
+button hero-primary when click
+    act say "开始"
+button hero-ghost when click
+    act say "打开文档"
+
+button b-accent when click
+    act say "保存"
+button b-danger when click
+    act say "已删除（演示）"
+
+button ov-modal when click
+    act open on overlay ov-confirm
+button md-cancel when click
+    act close
+button md-ok when click
+    act close
+    act say "已删除"
+
+button ov-drawer when click
+    act open on drawer dr-info
+button dr-close when click
+    act close
+
+button ov-menu when click
+    act open
+menuitem om-1 when click
+    act close
+    act say "重命名"
+menuitem om-2 when click
+    act close
+    act say "已复制链接"
+menuitem om-3 when click
+    act close
+    act say "已删除"
+
+button ov-pop when click
+    act open
+button ov-toast when click
+    act open on toast ts-saved
+button ov-copy when click
+    act copy "FangUI · 一套令牌，一层组件"
+
+tab tt-1 when click
+    act remove active on tab
+    act add active
+tab tt-2 when click
+    act remove active on tab
+    act add active
+tab tt-3 when click
+    act remove active on tab
+    act add active

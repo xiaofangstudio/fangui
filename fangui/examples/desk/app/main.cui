@@ -1,0 +1,533 @@
+/* 任务台 —— 一个完整的应用，只用一个 .cui 文件。
+/*
+/* 顶部栏 + 标签导航 + 三页（任务 / 报表 / 设置）+ 新建弹窗 + 表格 + 表单。
+/* 没有 JS、没有 CSS、没有组件库：结构、样式、交互全在下面这些规则里。
+
+window app
+    layout column
+    height fill
+    background canvas
+
+    /* ── 顶栏 ── */
+    header top
+        layout row
+        align center
+        gap 10
+        padding 10 18
+        background card
+        border 1 line
+
+        icon brand
+            text "grid"
+            size 18
+            color accent
+
+        heading title
+            text "任务台"
+            size 16
+
+        spacer spring
+
+        input search
+            name search
+            hint "搜索任务…"
+            width 190
+            background wash
+            border 1 hairline
+            radius 6
+            padding 6 10
+            size 12
+
+        badge count
+            text "3"
+
+        avatar me
+            text "方"
+            background tint
+            color accent
+
+    /* ── 标签导航：点谁就切到哪一页 ── */
+    nav tabs
+        layout row
+        gap 2
+        padding 0 12
+        background card
+        border 1 hairline
+
+        tab tab-tasks active
+            text "任务"
+            size 13
+            padding 9 14
+
+        tab tab-report
+            text "报表"
+            size 13
+            padding 9 14
+
+        tab tab-settings
+            text "设置"
+            size 13
+            padding 9 14
+
+    main body
+        layout column
+        gap 14
+        padding 18
+        overflow auto
+
+        /* ── 第一页：任务列表 ── */
+        view tasks
+            layout column
+            gap 12
+
+            toolbar tools
+                layout row
+                align center
+                gap 8
+
+                heading board
+                    text "本周任务"
+
+                spacer spring
+
+                button new
+                    layout row
+                    align center
+                    gap 6
+                    position relative
+                    text "新建任务"
+                    background accent
+                    color card
+                    radius 7
+                    padding 7 14
+                    size 13
+                    weight medium
+                    transition background
+
+                    icon new-icon
+                        text "plus"
+                        size 14
+
+                    tip new-tip
+                        text "创建一条新任务"
+                        position absolute
+                        top calc(100% + 6)
+                        left 0
+
+            card list
+                layout column
+                padding 0
+                overflow hidden
+
+                item task-one
+                    layout row
+                    align center
+                    gap 12
+                    padding 12 16
+                    border 1 hairline
+                    background card
+
+                    checkbox done-one
+                        name done-one
+                        checked
+
+                    field body
+                        layout column
+                        gap 2
+
+                        text task-name
+                            text "把 CUI 的元件补齐"
+                            size 13
+                            color ink
+
+                        label meta
+                            text "今天 · 高优先级"
+                            size 11
+                            color faint
+
+                    spacer spring
+
+                    badge tag
+                        text "高"
+
+                    button more
+                        text "…"
+                        background wash
+                        color soft
+                        radius 6
+                        padding 4 10
+                        size 13
+
+                item task-two
+                    layout row
+                    align center
+                    gap 12
+                    padding 12 16
+                    border 1 hairline
+
+                    checkbox done-two
+                        name done-two
+
+                    field body
+                        layout column
+                        gap 2
+
+                        text task-name
+                            text "写完示例应用"
+                            size 13
+                            color ink
+
+                        label meta
+                            text "明天 · 中优先级"
+                            size 11
+                            color faint
+
+                    spacer spring
+
+                    badge tag
+                        text "中"
+
+                    button more
+                        text "…"
+                        background wash
+                        color soft
+                        radius 6
+                        padding 4 10
+                        size 13
+
+                item task-three
+                    layout row
+                    align center
+                    gap 12
+                    padding 12 16
+
+                    checkbox done-three
+                        name done-three
+                        checked
+
+                    field body
+                        layout column
+                        gap 2
+
+                        text task-name
+                            text "验证 AOT 安装包"
+                            size 13
+                            color faint
+
+                        label meta
+                            text "已完成"
+                            size 11
+                            color ghost
+
+                    spacer spring
+
+                    badge tag
+                        text "低"
+
+                    button more
+                        text "…"
+                        background wash
+                        color soft
+                        radius 6
+                        padding 4 10
+                        size 13
+
+        /* ── 第二页：报表 ── */
+        view report
+            layout column
+            gap 14
+
+            grid stats
+                columns repeat(3, 1fr)
+                gap 12
+
+                card stat-done
+                    layout column
+                    gap 4
+                    background card
+                    border 1 hairline
+                    radius 10
+                    padding 14
+
+                    text stat-label
+                        text "本周完成"
+                        size 12
+                        color faint
+
+                    heading stat-value
+                        text "12"
+                        size 22
+
+                card stat-doing
+                    layout column
+                    gap 4
+                    background card
+                    border 1 hairline
+                    radius 10
+                    padding 14
+
+                    text stat-label
+                        text "进行中"
+                        size 12
+                        color faint
+
+                    heading stat-value
+                        text "5"
+                        size 22
+
+                card stat-late
+                    layout column
+                    gap 4
+                    background card
+                    border 1 hairline
+                    radius 10
+                    padding 14
+
+                    text stat-label
+                        text "已逾期"
+                        size 12
+                        color faint
+
+                    heading stat-value
+                        text "1"
+                        size 22
+                        color accent
+
+            card panel
+                layout column
+                gap 10
+                padding 14
+
+                heading recent
+                    text "最近完成"
+
+                table history
+                    width fill
+
+                    row head
+                        heading col-what
+                            text "任务"
+                        heading col-who
+                            text "负责人"
+                        heading col-state
+                            text "状态"
+
+                    row line-a
+                        cell a-what
+                            text "整理需求"
+                        cell a-who
+                            text "小方"
+                        cell a-state
+                            badge a-badge
+                                text "完成"
+
+                    row line-b
+                        cell b-what
+                            text "补齐 CUI 元件"
+                        cell b-who
+                            text "小方"
+                        cell b-state
+                            badge b-badge
+                                text "完成"
+
+                    row line-c
+                        cell c-what
+                            text "写示例应用"
+                        cell c-who
+                            text "小方"
+                        cell c-state
+                            badge c-badge
+                                text "进行中"
+                                background wash
+                                color soft
+
+        /* ── 第三页：设置 ── */
+        view settings
+            layout column
+            gap 12
+
+            card panel
+                layout column
+                gap 12
+                padding 16
+
+                heading prefer
+                    text "偏好设置"
+
+                form prefs
+                    layout column
+                    gap 10
+
+                    field name-field
+                        label name-label
+                            text "显示名称"
+                            size 12
+                            color faint
+                        input name-input
+                            name display
+                            value "小方"
+                            width fill
+                            background card
+                            border 1 edge
+                            radius 6
+                            padding 7 10
+                            size 13
+
+                    field role-field
+                        label role-label
+                            text "默认角色"
+                            size 12
+                            color faint
+                        dropdown role
+                            name role
+                            width fill
+                            value "开发"
+                            option role-dev
+                                text "开发"
+                                value "开发"
+                                selected
+                            option role-design
+                                text "设计"
+                                value "设计"
+
+                    field dnd-field
+                        layout row
+                        align center
+                        gap 10
+                        background wash
+                        radius 8
+                        padding 10 12
+                        label dnd-label
+                            text "完成后自动归档"
+                            size 13
+                            color soft
+                        spacer spring
+                        switch dnd
+                            name dnd
+                            checked
+
+                    row actions
+                        layout row
+                        gap 8
+                        button save
+                            text "保存"
+                            background accent
+                            color card
+                            radius 7
+                            padding 7 16
+                            size 13
+                        button reset
+                            text "重置"
+                            background wash
+                            color soft
+                            radius 7
+                            padding 7 16
+                            size 13
+
+    /* ── 页脚 ── */
+    footer foot
+        layout row
+        align center
+        gap 6
+        padding 8 18
+        background card
+        border 1 hairline
+
+        icon foot-icon
+            text "info"
+            size 13
+            color ghost
+
+        text foot-text
+            text "CUI 示例：整个界面没有一行 JS / CSS"
+            size 11
+            color faint
+
+    /* ── 新建任务弹窗：overlay 默认藏着，加 open 才出现 ── */
+    overlay dialog
+        modal sheet
+            layout column
+            gap 10
+            width 400
+            background card
+            radius 12
+            padding 18
+
+            heading dialog-title
+                text "新建任务"
+                size 15
+
+            field dialog-name
+                layout column
+                gap 4
+                label dialog-label
+                    text "任务名称"
+                    size 12
+                    color faint
+                input dialog-input
+                    name title
+                    hint "要做什么？"
+                    width fill
+                    background card
+                    border 1 edge
+                    radius 6
+                    padding 7 10
+                    size 13
+
+            row dialog-actions
+                layout row
+                justify end
+                gap 8
+
+                button cancel
+                    text "取消"
+                    background wash
+                    color soft
+                    radius 7
+                    padding 6 14
+                    size 13
+
+                button confirm
+                    text "创建"
+                    background accent
+                    color card
+                    radius 7
+                    padding 6 14
+                    size 13
+
+/* ── 交互：一条事件规则只描述「谁、什么时候、做什么」 ── */
+
+tab tab-tasks when click
+    act remove active on tab
+    act add active
+    act go #tasks
+
+tab tab-report when click
+    act remove active on tab
+    act add active
+    act go #report
+
+tab tab-settings when click
+    act remove active on tab
+    act add active
+    act go #settings
+
+button new when click
+    act add open on overlay
+
+button cancel when click
+    act remove open on overlay
+
+button confirm when click
+    act remove open on overlay
+    act say "任务已创建"
+
+button save when click
+    act say "设置已保存"
+    act go #tasks
+
+input search when enter
+    act say "搜索：回车了"
+
+checkbox done-one when click
+    act toggle done on task-one

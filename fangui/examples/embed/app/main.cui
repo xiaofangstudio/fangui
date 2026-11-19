@@ -1,0 +1,64 @@
+/* Kubai 图标在 CUI 里的三档动画，以及 frame 内嵌网页。
+   资产在 examples/icons/assets，这里用相对路径指过去。 */
+window app
+    padding 40
+    gap 20
+    background canvas
+
+    heading title
+        text "图标动画：开关在 CUI 里"
+    text lead
+        text "同一枚图标三档：hover 悬停才动 / always 常驻呼吸 / still 完全静止。按钮改的是整排。"
+
+    row acts
+        gap 8
+        button b1
+            text "全部 hover"
+        button b2
+            text "全部 always"
+        button b3
+            text "全部 still"
+
+    button b1 when click
+        act motion hover on row icons
+    button b2 when click
+        act motion always on row icons
+    button b3 when click
+        act motion still on row icons
+
+    card s1
+        padding 20
+        gap 14
+        heading
+            text "三档并排"
+        row icons
+            gap 26
+            icon i1
+                name "文件夹"
+                base "../icons/assets"
+                motion hover
+                width 40
+                height 40
+            icon i2
+                name "音乐"
+                base "../icons/assets"
+                motion always
+                width 40
+                height 40
+            icon i3
+                name "设置"
+                base "../icons/assets"
+                motion still
+                width 40
+                height 40
+
+    card s2
+        padding 20
+        gap 12
+        heading
+            text "内嵌网页（frame + doc）"
+        frame f1
+            doc "<h1>这一段 HTML 写在 .cui 里</h1><p>没有外部文件，直接内联进 iframe。</p>"
+            height 150
+
+

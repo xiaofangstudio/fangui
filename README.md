@@ -2,9 +2,9 @@
 
 > 小方工作室 · Fangwork 生态统一 UI 框架 · MIT
 
-**一个内核，一套令牌，一层组件。** 不跑 webview，用 Rust 直接调 QuickJS + Yoga + Skia 画界面。
+**一套令牌，一层组件，一个编译器。** `.cui` 写成界面，编译成标准 CSS + 标准 DOM，任何浏览器 / WebView / Tauri 窗口都能跑，不绑定 React，也没有私有渲染器。
 
-这个仓库装了三样东西：框架本体、它依赖的内核、用这套技术栈做的第一个软件。
+这个仓库装了两样东西：框架本体、它依赖的内核源码。
 
 ---
 
@@ -12,44 +12,59 @@
 
 | 目录 | 是什么 | 体积 |
 | --- | --- | --- |
-| `fangui/` | **框架本体**：设计令牌 + 组件层，`fangui@0.1.0` | 4 个文件 |
-| `kernel/` | **Deft 内核**源码（上游 deft-ui 1.0.0，MIT）：QuickJS 跑逻辑、Yoga 排版、Skia 绘制 | 278 个文件 |
-| `FloatStudio/` | **配套软件** Float Studio 0.1.0：Copper UI 一体化开发环境（前端 `.cui` + 后端 `.co`） | 259 个文件 |
+| `FangUI/` | **开发框架本体**（`@fangui/core`）：设计令牌 + 组件层 + Copper UI 编译器 + 运行时 + AOT 工具链 + Rust 内核 / 启动器 | 独立仓库级目录 |
+| `kernel/` | **Deft 内核**源码（上游 deft-ui 1.0.0，MIT）：QuickJS 跑逻辑、Yoga 排版、Skia 绘制。当前 FangUI 的界面路线是编译到 CSS/DOM，这份内核保留作底层参考 | 278 个文件 |
 | `ICONS.md` | 图标库规划：122 个图标（104 通用 + 18 产品），kubai-icons 引擎 | 文档 |
+
+`FangUI/` 不认 Tauri、不认编辑器，靠 `setFangHost` / `setAotHost` 注入宿主能力。配套软件 Float Studio 已独立成仓：[xiaofangstudio/Float-Studio](https://github.com/xiaofangstudio/Float-Studio)。目录、自测与构建见 [FangUI/README.md](FangUI/README.md)，上手写法见 [FangUI/docs/guide.md](FangUI/docs/guide.md)。
 
 ---
 
 ## 框架长什么样
 
-### 它不是网页框架
+### 编译成网页，但不是"网页框架"
 
-FangUI 不寄生在浏览器里。上层是 JavaScript（QuickJS），排版交给 Yoga，像素交给 Skia，中间没有 DOM、没有 CSS 引擎、没有 webview。所以同一个组件在 Windows / Linux / macOS / 鸿蒙 / 安卓 / iOS / WASM 上是一套渲染结果。
+```
+app/main.cui  →  parse  →  compile（拍平 CSS + 行为表）  →  tree（真实 DOM）  →  runtime（点击 / 键盘 / 浮层 / 主题）
+```
+
+- 样式是**标准 CSS**，选择器只有 `[data-t="button"].accent` 这一种形状，没有 scope、没有原子类、没有运行时注入的 `<style>`
+- 结构是**标准 DOM**：`button` 就是 `<button>`，`input` 就是 `<input>`，表格就是 `<table>`，键盘、焦点、无障碍走浏览器原生能力
+- 交互是一张**行为表**，由一个十几 KB（压缩后约 15 KB）的运行时执行；不写 JS 也能做出菜单、抽屉、对话框、页签、toast
+
+所以同一个 `.cui` 在浏览器预览、Float Studio 里、打包后的桌面窗口里长得一模一样——因为它本来就是同一份 CSS 和同一份 DOM。
 
 ### 设计令牌：改一个值，全局跟着变
 
-风格基调是现代 Fluent（WinUI 3 式）——扁平打底，轻描边分层，阴影只留给浮层。
+令牌唯一真相源是 [`FangUI/src/theme/tokens.ts`](FangUI/src/theme/tokens.ts)，`npm run build:docs` 会把它导成表格。
 
-```js
-import { token, setTheme } from 'fangui'
-
-setTheme('dark')          // light / dark
-token('color.accent')     // '#0054A6' 这类具体值
+```cui
+card hero
+    background card
+    color ink
 ```
 
-令牌分三组：
+```css
+[data-t="card"].hero { background: var(--card); color: var(--ink); }
+```
 
-- **颜色**：品牌强调色 + 文本三级 + 背景/层/控件状态 + 描边 + 语义色（success / warning / danger）+ 双层焦点环
-- **圆角**：`xs 2 / s 4 / m 8 / l 12 / full 999`
-- **间距与字号**：`4 8 12 16 24 36` 的八点栅格，字号 `12 / 14 / 20 / 28`
+令牌分四组：
 
-亮暗两套完整定义在 [`fangui/src/theme/tokens.js`](fangui/src/theme/tokens.js)，没有 `#FFFFFF` 和 `#000000` 的硬碰硬，层级只走极小幅度明度差。
+- **颜色**：底五级（canvas / surface / card / wash / sunken）+ 文本四级 + 描边三级 + 强调色（accent / primary / tint / tone）+ 语义色（ok / err / warn / info）+ 控件态 + 浮层阴影 + 骨架屏
+- **主题**：亮 / 暗两套完整定义，另有 `green`（默认）/ `blue` / `violet` / `amber` / `rose` 五套强调色，亮暗各一份，全部手写定值
+- **尺度**：间距 4 / 8 / 12 / 16 / 24 / 36；圆角 2 / 4 / 8 / 12 / 16 / 999；字号 12 / 13 / 14 / 20 / 28；控件高 24 / 32 / 40
+- **动效与层级**：三档时长、三套缓动、七层 z-index；`prefers-reduced-motion` 自动降级
 
-### 组件层：目前一个 Button，把规范先钉死
+亮暗、强调色切换是纯 CSS 变量：`data-theme="dark"` / `.night` / `data-accent="violet"`，运行时就一行 `act accent violet`。
 
-```js
-import { Button } from 'fangui'
+### 组件层：41 个元件，变体是类名
 
-const ok = new Button({ text: '确定', variant: 'accent', size: 'm', onClick: () => save() })
+```cui
+button save accent
+    text "保存"
+
+button save danger when click
+    act say "已删除"
 ```
 
 | 变体 | 用途 |
@@ -59,42 +74,56 @@ const ok = new Button({ text: '确定', variant: 'accent', size: 'm', onClick: (
 | `subtle` | 透明底，hover 才出底 |
 | `outline` | 透明底 + 强描边 |
 | `danger` | 危险操作 |
+| `link` | 当链接用 |
+| `icon` | 只剩图标，正方形 |
 
-尺寸 `s / m / l` 对应 Fluent 的 24 / 32 / 36 三档控件高度。组件全部从令牌取值，不写死颜色。
+尺寸 `s / m / l` = 24 / 32 / 40；状态 `disabled` / `loading` / `active`。组件样式里**没有一个字面色值**，颜色全部从令牌取，所以换主题不用改一行界面。
+
+元件覆盖：按钮 / 输入（input、textarea、dropdown、checkbox、radio、switch、slider、progress）/ 容器（window、card、grid、section、toolbar、list、form…）/ 数据展示（table、badge、tag、avatar、icon、skeleton、code）/ 反馈（alert、empty、toast、spinner）/ 浮层（menu、popover、modal、drawer、overlay、tabs）。
+
+清单：`FangUI/docs/components.md`（41 个元件 + 变体 + 属性 + 示例，生成）、`FangUI/docs/tokens.md`（令牌表，生成）。
+
+### 组件陈列馆
+
+`FangUI/examples/kitchen/preview.html` 是单文件、离线可开的陈列馆：亮色 + 暗色 + 五种强调色，浮层、页签、toast、键盘循环都能当场点。
+
+```
+FangUI/examples/kitchen/shot/light.png
+FangUI/examples/kitchen/shot/dark.png
+```
 
 ---
 
 ## 配套软件：Float Studio
 
-`FloatStudio/` 是这套技术栈孵出来的第一个完整软件——**Copper UI 一体化开发环境**：左边写 `.cui` 界面，右边写 `.co` 逻辑，一个窗口里跑起来。
+Float Studio 是这套技术栈孵出来的第一个完整软件——**Copper UI 一体化开发环境**：左边写 `.cui` 界面，右边写 `.co` 逻辑，一个窗口里跑起来。它已经从本仓拆出去，独立维护：
 
-- 前端：React 18 + Monaco 编辑器 + xterm 终端
-- 外壳：Tauri 2
-- 语言服务：`src-tauri/float-lang`（Rust 实现，含语法高亮、补全、指针词、标准库、教程全套测试）
-
-**Windows 安装包（17.6MB）在 [Releases](https://github.com/xiaofangstudio/fangui/releases/tag/v0.1.0) 里**，下载 `Float.Studio_0.1.0_x64-setup.exe` 直接装。
-
-从源码跑：
-
-```bash
-cd FloatStudio
-npm install
-npm run dev          # 浏览器里跑前端
-npm run tauri dev    # 桌面窗口（需要 Rust 工具链）
-npm run test:all     # 语言 / 索引 / 压力测试
-```
+- 仓库：<https://github.com/xiaofangstudio/Float-Studio>
+- 安装包与发行说明：该仓的 Releases
+- 对本框架的依赖方式：`import '@fangui/core'`，宿主能力靠 `setFangHost` / `setAotHost` 注入
 
 ---
 
 ## 从源码构建框架
 
-`fangui/` 是纯 ESM 包，没有构建步骤，直接被 Deft 应用引用：
+`FangUI/` 是纯 ESM 的 TypeScript 包，使用方按需 `import`；要 CSS 产物或文档才需要构建：
 
-```js
-import { Button } from 'fangui'
+```bash
+cd FangUI
+npm install
+npm run build          # dist/fangui.css + 生成文档 + 陈列馆预览
+npm run check          # typecheck + 自测 + 构建
 ```
 
-内核在 `kernel/`，需要 Rust + Node.js + Clang 14+：
+产物：
+
+| 路径 | 是什么 |
+| --- | --- |
+| `dist/fangui.css` / `dist/fangui.min.css` | 完整样式，可直接 `<link>`，手写 `data-t` 也能用 |
+| `docs/components.md` / `docs/tokens.md` | 组件与令牌文档（生成） |
+| `examples/kitchen/preview.html` | 组件陈列馆，单文件 |
+
+内核源码在 `kernel/`，需要 Rust + Node.js + Clang 14+：
 
 ```bash
 cd kernel
@@ -114,4 +143,4 @@ Linux 还要装 `libssl-dev`、`libclang-dev`、`xorg-dev` 等一批开发包，
 
 ## 许可
 
-MIT。`kernel/` 是上游 [deft-ui/deft](https://github.com/deft-ui/deft) 的 MIT 源码，版权归其作者；`fangui/` 与 `FloatStudio/` 版权归小方工作室。
+MIT。`kernel/` 是上游 [deft-ui/deft](https://github.com/deft-ui/deft) 的 MIT 源码，版权归其作者；`FangUI/` 版权归小方工作室。

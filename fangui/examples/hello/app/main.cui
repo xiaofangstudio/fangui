@@ -1,0 +1,17 @@
+window
+    layout column
+    padding 24
+    gap 12
+    background surface
+
+    text title
+        text "你好，FangUI"
+        size 24
+        weight bold
+        color ink
+
+    button primary
+        text "点我"
+
+    button primary when click
+        act call hello

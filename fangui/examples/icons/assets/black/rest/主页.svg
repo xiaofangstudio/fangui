@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-fgbu45-loS-i11" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7C7D81"></stop><stop offset="1" stop-color="#636469"></stop></linearGradient><linearGradient id="ki-fgbu45-upS-i11" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C1C2C3"></stop><stop offset="1" stop-color="#9B9B9F"></stop></linearGradient><linearGradient id="ki-fgbu45-pure-i11-2F6FE0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24202B"></stop><stop offset="1" stop-color="#24202B"></stop></linearGradient>
+  <filter id="ki-fgbu45-sh-i11" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.443 0 0 0 0 0.451 0 0 0 0 0.463 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-fgbu45-hi-i11" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter><mask id="ki-fgbu45-ol-i11-0" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M7.4 12.8Q7.4 10.6 9.6 10.6L21.4 10.6Q23.6 10.6 23.6 12.8L23.6 20.8Q23.6 23 21.4 23L9.6 23Q7.4 23 7.4 20.8Z"></path></mask><mask id="ki-fgbu45-ol-i11-1" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M5 12.6Q3.6 12.6 4.663 11.689L13.83 3.832Q15.5 2.4 17.17 3.832L26.337 11.689Q27.4 12.6 26 12.6Z"></path></mask></defs>
+      <g filter="url(#ki-fgbu45-sh-i11)"><g filter="url(#ki-fgbu45-hi-i11)"><path d="M7.4 12.8Q7.4 10.6 9.6 10.6L21.4 10.6Q23.6 10.6 23.6 12.8L23.6 20.8Q23.6 23 21.4 23L9.6 23Q7.4 23 7.4 20.8Z" fill="url(#ki-fgbu45-loS-i11)"></path></g></g>
+      <path d="M7.4 12.8Q7.4 10.6 9.6 10.6L21.4 10.6Q23.6 10.6 23.6 12.8L23.6 20.8Q23.6 23 21.4 23L9.6 23Q7.4 23 7.4 20.8Z" mask="url(#ki-fgbu45-ol-i11-0)" stroke="#2E3036" fill="none" stroke-width="2"></path>
+      <path d="M13.2 16.8Q13.2 15.6 14.4 15.6L16.6 15.6Q17.8 15.6 17.8 16.8L17.8 23Q17.8 23 17.8 23L13.2 23Q13.2 23 13.2 23Z" fill="url(#ki-fgbu45-pure-i11-2F6FE0)"></path>
+      <g transform="translate(13.2 0) scale(1 1) translate(-13.2 0)"><path d="M13.2 16.8Q13.2 15.6 14.4 15.6L16.6 15.6Q17.8 15.6 17.8 16.8L17.8 23Q17.8 23 17.8 23L13.2 23Q13.2 23 13.2 23Z" fill="#fff"></path></g>
+      <g filter="url(#ki-fgbu45-hi-i11)"><path d="M5 12.6Q3.6 12.6 4.663 11.689L13.83 3.832Q15.5 2.4 17.17 3.832L26.337 11.689Q27.4 12.6 26 12.6Z" fill="url(#ki-fgbu45-upS-i11)"></path></g>
+      <path d="M5 12.6Q3.6 12.6 4.663 11.689L13.83 3.832Q15.5 2.4 17.17 3.832L26.337 11.689Q27.4 12.6 26 12.6Z" mask="url(#ki-fgbu45-ol-i11-1)" stroke="#2E3036" fill="none" stroke-width="2"></path></svg>

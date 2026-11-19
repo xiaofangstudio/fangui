@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-kjroe6-loS-i9" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7C7D81"></stop><stop offset="1" stop-color="#636469"></stop></linearGradient><linearGradient id="ki-kjroe6-upS-i9" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C1C2C3"></stop><stop offset="1" stop-color="#9B9B9F"></stop></linearGradient>
+  <filter id="ki-kjroe6-sh-i9" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.443 0 0 0 0 0.451 0 0 0 0 0.463 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-kjroe6-hi-i9" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter><mask id="ki-kjroe6-ol-i9-0" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M5.473 13.687Q4.4 12.5 5.473 11.313L9.927 6.387Q11 5.2 12.6 5.2L23.8 5.2Q26 5.2 26 7.4L26 17.6Q26 19.8 23.8 19.8L12.6 19.8Q11 19.8 9.927 18.613Z"></path></mask></defs><g filter="url(#ki-kjroe6-sh-i9)"><g filter="url(#ki-kjroe6-hi-i9)"><g transform="rotate(-34 15.5 12.5)"><path d="M5.473 13.687Q4.4 12.5 5.473 11.313L9.927 6.387Q11 5.2 12.6 5.2L23.8 5.2Q26 5.2 26 7.4L26 17.6Q26 19.8 23.8 19.8L12.6 19.8Q11 19.8 9.927 18.613Z" fill="url(#ki-kjroe6-loS-i9)"></path><circle cx="11.6" cy="12.5" r="2.2" fill="#fff"></circle></g></g></g>
+        <g transform="rotate(-34 15.5 12.5)"><path d="M5.473 13.687Q4.4 12.5 5.473 11.313L9.927 6.387Q11 5.2 12.6 5.2L23.8 5.2Q26 5.2 26 7.4L26 17.6Q26 19.8 23.8 19.8L12.6 19.8Q11 19.8 9.927 18.613Z" mask="url(#ki-kjroe6-ol-i9-0)" stroke="#2E3036" fill="none" stroke-width="2"></path></g></svg>

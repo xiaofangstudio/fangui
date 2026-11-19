@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-tfl-loS-i63" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBA76D"></stop><stop offset="1" stop-color="#FB9652"></stop></linearGradient><linearGradient id="ki-tfl-upS-i63" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDD6BA"></stop><stop offset="1" stop-color="#FCBC90"></stop></linearGradient>
+  <filter id="ki-tfl-sh-i63" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.984 0 0 0 0 0.627 0 0 0 0 0.38 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-tfl-hi-i63" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter><mask id="ki-tfl-ol-i63-0" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M5.6 13.2Q5.6 11 7.8 11L23.2 11Q25.4 11 25.4 13.2L25.4 21.4Q25.4 23.6 23.2 23.6L7.8 23.6Q5.6 23.6 5.6 21.4Z"></path></mask></defs>
+      <g filter="url(#ki-tfl-sh-i63)" transform="translate(0 0) rotate(0 20.5 12)">
+        <path d="M10.5 12V7.6A5 5 0 0 1 20.5 7.6V12" fill="none" stroke-width="3.2" stroke-linecap="round" stroke="#FB9954"></path>
+        <path d="M10.5 12V7.6A5 5 0 0 1 20.5 7.6V12" fill="none" stroke-width="1" stroke-linecap="round" stroke="#fff" stroke-opacity=".45"></path>
+      </g>
+      <g filter="url(#ki-tfl-sh-i63)"><g filter="url(#ki-tfl-hi-i63)"><path d="M5.6 13.2Q5.6 11 7.8 11L23.2 11Q25.4 11 25.4 13.2L25.4 21.4Q25.4 23.6 23.2 23.6L7.8 23.6Q5.6 23.6 5.6 21.4Z" fill="url(#ki-tfl-upS-i63)"></path></g></g>
+      <path d="M5.6 13.2Q5.6 11 7.8 11L23.2 11Q25.4 11 25.4 13.2L25.4 21.4Q25.4 23.6 23.2 23.6L7.8 23.6Q5.6 23.6 5.6 21.4Z" mask="url(#ki-tfl-ol-i63-0)" stroke="#F97316" fill="none" stroke-width="2"></path>
+      <g transform="rotate(0 15.5 16.2)" fill="#C54D11"><circle cx="15.5" cy="16.2" r="2.5"></circle><path d="M14.6 17.5Q14.6 16.6 15.5 16.6L15.5 16.6Q16.4 16.6 16.4 17.5L16.4 20.3Q16.4 21.2 15.5 21.2L15.5 21.2Q14.6 21.2 14.6 20.3Z"></path></g></svg>

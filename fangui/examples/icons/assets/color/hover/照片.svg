@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-mefmkn-loS-i42" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F38CBF"></stop><stop offset="1" stop-color="#F176B3"></stop></linearGradient><linearGradient id="ki-mefmkn-upS-i42" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F9C9E1"></stop><stop offset="1" stop-color="#F6A7CE"></stop></linearGradient><linearGradient id="ki-mefmkn-lo-i42-920" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F38CBF"></stop><stop offset="0.92" stop-color="#F179B4"></stop><stop offset="0.92" stop-color="#D6418B"></stop><stop offset="1" stop-color="#F491C1"></stop></linearGradient><linearGradient id="ki-mefmkn-pure-i42-5393FF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EC4899"></stop><stop offset="1" stop-color="#EC4899"></stop></linearGradient>
+  <filter id="ki-mefmkn-sh-i42" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.949 0 0 0 0 0.514 0 0 0 0 0.729 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-mefmkn-hi-i42" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter><mask id="ki-mefmkn-ol-i42-0" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M6 5.5Q6 3.3 8.2 3.3L22.8 3.3Q25 3.3 25 5.5L25 16.1Q25 18.3 22.8 18.3L8.2 18.3Q6 18.3 6 16.1Z"></path></mask><mask id="ki-mefmkn-ol-i42-1" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M4 7.8Q4 5.6 6.2 5.6L24.8 5.6Q27 5.6 27 7.8L27 19.5Q27 21.7 24.8 21.7L6.2 21.7Q4 21.7 4 19.5Z"></path></mask></defs>
+      <g transform="translate(-1.4 -1.2) rotate(-9 15.5 21.7)"><g filter="url(#ki-mefmkn-sh-i42)"><g filter="url(#ki-mefmkn-hi-i42)"><path d="M6 5.5Q6 3.3 8.2 3.3L22.8 3.3Q25 3.3 25 5.5L25 16.1Q25 18.3 22.8 18.3L8.2 18.3Q6 18.3 6 16.1Z" fill="url(#ki-mefmkn-lo-i42-920)"></path></g></g><path d="M6 5.5Q6 3.3 8.2 3.3L22.8 3.3Q25 3.3 25 5.5L25 16.1Q25 18.3 22.8 18.3L8.2 18.3Q6 18.3 6 16.1Z" mask="url(#ki-mefmkn-ol-i42-0)" stroke="#EC4899" fill="none" stroke-width="2"></path></g>
+      <g transform="translate(0.6 0.2) rotate(4 15.5 21.7)">
+        <clipPath id="ki-mefmkn-sky-i42"><path d="M4 7.8Q4 5.6 6.2 5.6L24.8 5.6Q27 5.6 27 7.8L27 19.5Q27 21.7 24.8 21.7L6.2 21.7Q4 21.7 4 19.5Z"></path></clipPath>
+        <g filter="url(#ki-mefmkn-sh-i42)"><g filter="url(#ki-mefmkn-hi-i42)"><path d="M4 7.8Q4 5.6 6.2 5.6L24.8 5.6Q27 5.6 27 7.8L27 19.5Q27 21.7 24.8 21.7L6.2 21.7Q4 21.7 4 19.5Z" fill="url(#ki-mefmkn-upS-i42)"></path></g></g>
+        <g clip-path="url(#ki-mefmkn-sky-i42)">
+          <circle cx="20.4" cy="9.8" r="2.5" fill="#fff"></circle>
+          <path d="M-1 23Q-1 23 -1 23L-1 20.2Q-1 20.2 -1 20.2L9.202 11.933Q10.6 10.8 12.001 11.93L23 20.8Q23 20.8 23 20.8L23 23Q23 23 23 23Z" fill="url(#ki-mefmkn-loS-i42)"></path>
+          <path d="M8 23Q8 23 8 23L8 21.4Q8 21.4 8 21.4L18.322 14.227Q19.8 13.2 21.328 14.152L32 20.8Q32 20.8 32 20.8L32 23Q32 23 32 23Z" fill="url(#ki-mefmkn-pure-i42-5393FF)"></path>
+        </g>
+        <path d="M4 7.8Q4 5.6 6.2 5.6L24.8 5.6Q27 5.6 27 7.8L27 19.5Q27 21.7 24.8 21.7L6.2 21.7Q4 21.7 4 19.5Z" mask="url(#ki-mefmkn-ol-i42-1)" stroke="#EC4899" fill="none" stroke-width="2"></path>
+      </g></svg>

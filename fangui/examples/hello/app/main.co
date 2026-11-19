@@ -1,0 +1,4 @@
+/* 最小示例：界面上的按钮 act call hello 会走到这里。
+ * page.* 由页面桥提供，直接操作 .cui 编出来的 DOM。 */
+fn hello(sel)
+    page.say("你好，来自 Copper")

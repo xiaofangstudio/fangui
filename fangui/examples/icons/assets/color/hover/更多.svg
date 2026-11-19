@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-kc4hlm-loS-i20" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93BBFF"></stop><stop offset="1" stop-color="#7FAEFF"></stop></linearGradient><linearGradient id="ki-kc4hlm-upS-i20" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CCDFFF"></stop><stop offset="1" stop-color="#ADCBFF"></stop></linearGradient>
+  <filter id="ki-kc4hlm-sh-i20" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.541 0 0 0 0 0.714 0 0 0 0 1 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-kc4hlm-hi-i20" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter></defs><circle cx="7.6" cy="12.5" r="2.1" fill="#4262CA"></circle>
+      <circle cx="15.5" cy="12.5" r="2.1" fill="#4262CA"></circle>
+      <circle cx="23.4" cy="12.5" r="2.1" fill="#4262CA"></circle></svg>

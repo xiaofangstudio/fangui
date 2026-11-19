@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 -5.5 36 36" width="96" height="96" fill="none"><defs><linearGradient id="ki-tg9rn3-loS-i61" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9D9FF6"></stop><stop offset="1" stop-color="#8B8CF5"></stop></linearGradient><linearGradient id="ki-tg9rn3-upS-i61" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D1D2FB"></stop><stop offset="1" stop-color="#B5B5F8"></stop></linearGradient>
+  <filter id="ki-tg9rn3-sh-i61" x="-40%" y="-40%" width="180%" height="190%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="2"></feGaussianBlur><feOffset dy="2" result="o"></feOffset>
+    <feColorMatrix in="o" type="matrix" values="0 0 0 0 0.584 0 0 0 0 0.596 0 0 0 0 0.961 0 0 0 0.21 0"></feColorMatrix>
+    <feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+  </filter>
+  <filter id="ki-tg9rn3-hi-i61" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="a"></feColorMatrix>
+    <feOffset in="a" dy="0.7"></feOffset><feGaussianBlur stdDeviation="0.35"></feGaussianBlur>
+    <feComposite in2="a" operator="arithmetic" k2="-1" k3="1"></feComposite>
+    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0"></feColorMatrix>
+    <feBlend in2="SourceGraphic" mode="overlay"></feBlend>
+  </filter><mask id="ki-tg9rn3-ol-i61-0" maskUnits="userSpaceOnUse" x="-40" y="-40" width="111" height="109"><rect x="-40" y="-40" width="111" height="109" fill="#fff"></rect><path fill="#000" fill-rule="nonzero" d="M4 12.5A11.5 11.5 0 1 0 27 12.5A11.5 11.5 0 1 0 4 12.5Z"></path></mask></defs><g transform="translate(0 0)">
+        <g filter="url(#ki-tg9rn3-sh-i61)"><g filter="url(#ki-tg9rn3-hi-i61)"><path d="M4 12.5A11.5 11.5 0 1 0 27 12.5A11.5 11.5 0 1 0 4 12.5Z" fill="url(#ki-tg9rn3-loS-i61)"></path></g></g>
+        <path d="M4 12.5A11.5 11.5 0 1 0 27 12.5A11.5 11.5 0 1 0 4 12.5Z" mask="url(#ki-tg9rn3-ol-i61-0)" stroke="#6366F1" fill="none" stroke-width="2"></path>
+        <path d="M11.3 8.3L19.7 16.7M19.7 8.3L11.3 16.7" fill="none" stroke-width="2.2" stroke-linecap="round" stroke="#fff"></path>
+      </g></svg>

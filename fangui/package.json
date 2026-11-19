@@ -1,8 +1,34 @@
 {
-  "name": "fangui",
+  "name": "@fangui/core",
   "version": "0.1.0",
-  "description": "Fangwork UI framework, built on the Deft kernel",
+  "private": true,
   "type": "module",
-  "main": "src/index.js",
-  "license": "MIT"
+  "description": "FangUI —— Copper 语言 + Copper UI + 令牌与组件层，独立可用的 UI 框架",
+  "exports": {
+    ".": "./src/index.ts",
+    "./host": "./src/host.ts",
+    "./theme/*": "./src/theme/*.ts",
+    "./styles": "./src/styles/index.ts",
+    "./lang/*": "./src/lang/*.ts",
+    "./cui/*": "./src/cui/*.ts",
+    "./core/aot": "./src/core/aot.ts",
+    "./core/cui-engine": "./src/core/cui-engine.ts",
+    "./fangui.css": "./dist/fangui.css",
+    "./fangui.min.css": "./dist/fangui.min.css"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "engine": "esbuild src/core/cui-engine.ts --bundle --minify --format=iife --platform=browser --outfile=src/core/cui-engine.iife.js",
+    "test": "esbuild tests/smoke.ts --bundle --platform=node --format=esm --outfile=tests/.smoke.mjs && node tests/.smoke.mjs",
+    "build": "npm run build:css && npm run build:docs && npm run build:showcase",
+    "build:css": "esbuild scripts/build-css.ts --bundle --platform=node --format=esm --outfile=.build/build-css.mjs && node .build/build-css.mjs",
+    "build:docs": "esbuild scripts/build-docs.ts --bundle --platform=node --format=esm --outfile=.build/build-docs.mjs && node .build/build-docs.mjs",
+    "build:showcase": "esbuild scripts/build-showcase.ts --bundle --platform=node --format=esm --outfile=.build/build-showcase.mjs --external:esbuild && node .build/build-showcase.mjs",
+        "check": "npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.5",
+    "typescript": "^5.4.5"
+  }
 }
+
