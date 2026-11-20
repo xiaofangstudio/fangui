@@ -400,10 +400,11 @@ export const COMPONENT_CSS = `
    两张状态图同位置叠放，静止态在上、动作终态在下，改的是上层的 opacity。
    motion 就是开关：hover 悬停才动、always 一直呼吸、still 不动。 */
 [data-t="icon"][data-motion] {
-  position: relative; display: inline-block; flex: none;
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
   width: var(--icon-size, var(--icon-m, 20px));
   height: var(--icon-size, var(--icon-m, 20px));
-  vertical-align: -0.18em;
+  /* 图标是"盒子里的画"，不参与文字基线；vertical-align: middle 让它在行内和文字同心中线 */
+  vertical-align: middle; line-height: 0;
 }
 [data-t="icon"][data-motion]::before, [data-t="icon"][data-motion]::after {
   content: ""; position: absolute; inset: 0;
@@ -459,7 +460,7 @@ export const COMPONENT_CSS = `
 [data-t="spinner"].l { width: 28px; height: 28px; border-width: 3px; }
 
 /* ══════════════════ 提示气泡 ══════════════════ */
-[data-t="tip"] {
+[data-t="tooltip"] {
   display: none; position: absolute; left: 50%; top: calc(50% - 30px);
   transform: translate(-50%, -100%); z-index: var(--z-tooltip);
   padding: 5px 9px; border-radius: var(--radius-s);
@@ -467,8 +468,8 @@ export const COMPONENT_CSS = `
   font-size: var(--font-xs); line-height: 1.5; white-space: nowrap;
   pointer-events: none; box-shadow: var(--shadow-1);
 }
-[data-t="tip"].below { top: calc(50% + 22px); transform: translate(-50%, 0); }
-*:hover > [data-t="tip"], *:focus-within > [data-t="tip"] { display: block; animation: fade-in var(--dur-fast) var(--ease); }
+[data-t="tooltip"].below { top: calc(50% + 22px); transform: translate(-50%, 0); }
+*:hover > [data-t="tooltip"], *:focus-within > [data-t="tooltip"] { display: block; animation: fade-in var(--dur-fast) var(--ease); }
 
 /* ══════════════════ 卡片式数据展示 ══════════════════ */
 [data-t="table"] {

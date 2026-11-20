@@ -50,6 +50,14 @@ const TAG_OF: Record<string, string> = {
   column: 'div',
   text: 'div',
   code: 'pre',
+  strong: 'strong',
+  italic: 'em',
+  mark: 'mark',
+  key: 'kbd',
+  quote: 'blockquote',
+  details: 'details',
+  summary: 'summary',
+  canvas: 'canvas',
   list: 'div',
   item: 'div',
   scroll: 'div',
@@ -70,7 +78,7 @@ const TAG_OF: Record<string, string> = {
   view: 'div',
   header: 'header',
   footer: 'footer',
-  nav: 'nav',
+  navigation: 'nav',
   main: 'main',
   aside: 'aside',
   section: 'section',
@@ -99,7 +107,7 @@ const TAG_OF: Record<string, string> = {
   icon: 'span',
   spinner: 'div',
   skeleton: 'div',
-  tip: 'span',
+  tooltip: 'span',
 
   /* 浮层与链接 */
   overlay: 'div',
@@ -224,7 +232,7 @@ function makeNode(rule: CuiRule, it: Identity, parentTag: string): CuiNode {
     attrs.type = 'checkbox';
     attrs.role = 'switch';
   }
-  if (it.kind === 'tip') attrs.role = 'tooltip';
+  if (it.kind === 'tooltip') attrs.role = 'tooltip';
   if (it.kind === 'toast') { attrs.role = 'status'; attrs['aria-live'] = 'polite'; }
 
   /* view 靠 data-view 认页：先写 #实例名，没有就用第一个类名 */

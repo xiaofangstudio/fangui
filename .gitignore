@@ -8,6 +8,10 @@ target/
 
 # 测试中间产物
 **/tests/.*.mjs
+**/.preview-new*.png
+
+# 运行时缓存（预览工程里的编译产物）
+**/.float/
 
 # 本地临时目录（不属于仓库）
 .screenshots/

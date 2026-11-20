@@ -1,5 +1,9 @@
 # CUI + Copper：一套软件怎么由这两层拼起来
 
+## 一句话
+
+**CUI 就是 HTML + CSS 的合体**（声明式结构 + 样式 + 内置交互），**CO 就是逻辑层**。用户写的软件里只出现这两种语言：`.cui` 和 `.co`。
+
 ## 分工
 
 | 层 | 管什么 | 不碰什么 |
@@ -44,10 +48,10 @@ fn 全部常驻(sel)
 
 元件库存按用途分好了组（见 `guide.md` 第 5 节）：
 
-- 骨架：`window main header footer nav aside section card grid view`
+- 骨架：`window main header footer navigation aside section card grid view`
 - 表单：`form field label input textarea dropdown option checkbox radio switch slider progress`
 - 数据：`table row cell badge tag avatar icon image skeleton spinner code text`
-- 浮层：`overlay modal drawer popover toast menu menuitem tip`
+- 浮层：`overlay modal drawer popover toast menu menuitem tooltip`
 - 媒体与嵌入：`video audio frame`（`frame` 的 `doc` 直接写内联 HTML）
 
 配合 `act` 的声明式动作（`go / open / close / add / toggle / theme / accent / copy / motion / call`）与 `act call` 到 Copper，
@@ -59,9 +63,11 @@ fn 全部常驻(sel)
 2. **样式规则可拆写**。同身份（元件 + 类 + #id）的多条规则合并，属性后者覆盖前者，不会多长元素。
 3. **状态与事件规则不长元素**（`when hover` / `when click` / `+done`），可以放心堆。
 4. **多页首屏是结构事实**：编译器给第一个 view 打 .active，非 .active 的页用 `!important` 藏起来——页自己的 layout 类抢不走可见性。`act go` 只改类。
-5. **没有全局脚本**。`.cui` 里只有声明式动作，预览永远不会跑出死循环；真正的计算在 Copper 里。
+5. **不写 HTML / CSS 字面量**。`.cui` 里只有 CUI 的词（元件、属性、令牌、函数）；没有 `raw`、没有 `css "…"` 逃生口。覆盖不到的能力由框架补属性，不交给用户改行。
+6. **没有全局脚本**。`.cui` 里只有声明式动作，预览永远不会跑出死循环；真正的计算在 Copper 里。
+7. **无极缩放靠 `zoom` + 相对单位**。`%` `vh` `vw` `rem` `em`、`clamp()` / `min()` / `max()` 原样透传；`zoom 1.25` 连字体和矢量图标一起连续缩放，不是断点跳变。
 
-自测里有一条 400 块页面的用例（建树 + 渲染 + 用时 < 1s），以及"元件名唯一 / 属性名唯一 / 元件都进得了选择器"的契约体检，
+自测里有一条 400 块页面的用例（建树 + 渲染 + 用时 < 1s），以及“元件名唯一 / 属性名唯一 / 元件都进得了选择器”的契约体检，
 防止后续加元件时把命名空间撞坏。
 
 ## 已知边界

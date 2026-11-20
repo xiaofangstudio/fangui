@@ -50,7 +50,7 @@ window show
                 size 13
 
     /* ── 标签导航 ── */
-    nav tabs
+    navigation tabs
         layout row
         gap 2
         padding 0 12

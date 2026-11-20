@@ -50,14 +50,14 @@ type BaseColors = {
 
 export const THEMES: Record<ThemeName, BaseColors> = {
   light: {
-    canvas: '#f7f7f7', surface: '#fafafa', card: '#ffffff', wash: '#f2f2f2', sunken: '#e8e8e8',
-    hairline: '#efefef', line: '#e3e3e3', edge: '#cfcfcf',
+    canvas: '#f0f4f6', surface: '#f4f8fa', card: '#fcfdfe', wash: '#e7edf1', sunken: '#dfe6eb',
+    hairline: '#e8ecee', line: '#dce1e4', edge: '#c6cdd2',
     ink: '#16181a', soft: '#4b5054', faint: '#787e82', ghost: '#a8adb1',
-    control: '#ffffff', controlHover: '#f6f7f7', controlPressed: '#edeff0', controlDisabled: '#f5f6f6',
-    field: '#ffffff', fieldHover: '#fcfcfd',
+    control: '#fafbfb', controlHover: '#f2f5f6', controlPressed: '#e9eef0', controlDisabled: '#f4f6f7',
+    field: '#fbfcfc', fieldHover: '#f4f7f8',
     track: '#e6e8ea',
     ok: '#12783f', err: '#b42318', warn: '#8a5a00', info: '#0a63b0',
-    dangerFill: '#c42b1c', onDanger: '#ffffff',
+    dangerFill: '#c42b1c', onDanger: '#f4f6f7',
     shadow1: '0 1px 2px rgba(16, 24, 32, .06), 0 2px 8px rgba(16, 24, 32, .05)',
     shadow2: '0 2px 6px rgba(16, 24, 32, .07), 0 10px 24px rgba(16, 24, 32, .10)',
     shadow3: '0 8px 20px rgba(16, 24, 32, .10), 0 24px 56px rgba(16, 24, 32, .16)',
@@ -73,7 +73,7 @@ export const THEMES: Record<ThemeName, BaseColors> = {
     field: '#1c1f21', fieldHover: '#202325',
     track: '#33383b',
     ok: '#4cc38a', err: '#f0716a', warn: '#e0a13e', info: '#6ab4ff',
-    dangerFill: '#d13c2d', onDanger: '#ffffff',
+    dangerFill: '#d13c2d', onDanger: '#f4f6f7',
     shadow1: '0 1px 2px rgba(0, 0, 0, .35), 0 2px 8px rgba(0, 0, 0, .28)',
     shadow2: '0 2px 8px rgba(0, 0, 0, .40), 0 12px 28px rgba(0, 0, 0, .36)',
     shadow3: '0 8px 24px rgba(0, 0, 0, .45), 0 28px 64px rgba(0, 0, 0, .48)',
@@ -91,23 +91,23 @@ type AccentColors = {
 
 export const ACCENTS: Record<AccentName, Record<ThemeName, AccentColors>> = {
   green: {
-    light: { accent: '#0d8a4c', primary: '#0f9d58', accentHover: '#11a65c', accentPressed: '#0a7040', tint: '#e8f7ee', tone: '#cdeed9', onAccent: '#ffffff', focus: '#0d8a4c' },
+    light: { accent: '#0d8a4c', primary: '#0f9d58', accentHover: '#11a65c', accentPressed: '#0a7040', tint: '#e8f7ee', tone: '#cdeed9', onAccent: '#f4f6f7', focus: '#0d8a4c' },
     dark: { accent: '#37c185', primary: '#2fae72', accentHover: '#48d394', accentPressed: '#2a9e6b', tint: '#19362a', tone: '#244b39', onAccent: '#04150d', focus: '#37c185' }
   },
   blue: {
-    light: { accent: '#0b62c4', primary: '#0f72e0', accentHover: '#1174e6', accentPressed: '#094fa0', tint: '#e8f1fd', tone: '#cfdffb', onAccent: '#ffffff', focus: '#0b62c4' },
+    light: { accent: '#0b62c4', primary: '#0f72e0', accentHover: '#1174e6', accentPressed: '#094fa0', tint: '#e8f1fd', tone: '#cfdffb', onAccent: '#f4f6f7', focus: '#0b62c4' },
     dark: { accent: '#5aa9ff', primary: '#4a9bf5', accentHover: '#74b8ff', accentPressed: '#438edb', tint: '#14283c', tone: '#1d3a55', onAccent: '#04121f', focus: '#5aa9ff' }
   },
   violet: {
-    light: { accent: '#6b3fc4', primary: '#7c4ddb', accentHover: '#7b4ddb', accentPressed: '#57329f', tint: '#efe9fd', tone: '#ded0f8', onAccent: '#ffffff', focus: '#6b3fc4' },
+    light: { accent: '#6b3fc4', primary: '#7c4ddb', accentHover: '#7b4ddb', accentPressed: '#57329f', tint: '#efe9fd', tone: '#ded0f8', onAccent: '#f4f6f7', focus: '#6b3fc4' },
     dark: { accent: '#a98bfa', primary: '#9d7cf5', accentHover: '#b79ffc', accentPressed: '#9374e0', tint: '#241a38', tone: '#33254f', onAccent: '#0e061c', focus: '#a98bfa' }
   },
   amber: {
-    light: { accent: '#a86200', primary: '#bd6f00', accentHover: '#bd6f00', accentPressed: '#8a5100', tint: '#fdf1dd', tone: '#f7dfb6', onAccent: '#ffffff', focus: '#a86200' },
+    light: { accent: '#a86200', primary: '#bd6f00', accentHover: '#bd6f00', accentPressed: '#8a5100', tint: '#fdf1dd', tone: '#f7dfb6', onAccent: '#f4f6f7', focus: '#a86200' },
     dark: { accent: '#e8a33c', primary: '#f0ad46', accentHover: '#f2b455', accentPressed: '#cc8a28', tint: '#2e2314', tone: '#47351d', onAccent: '#1b1204', focus: '#e8a33c' }
   },
   rose: {
-    light: { accent: '#b42318', primary: '#c42b1c', accentHover: '#cc2a1e', accentPressed: '#941c12', tint: '#fdecea', tone: '#f8d5d2', onAccent: '#ffffff', focus: '#b42318' },
+    light: { accent: '#b42318', primary: '#c42b1c', accentHover: '#cc2a1e', accentPressed: '#941c12', tint: '#fdecea', tone: '#f8d5d2', onAccent: '#f4f6f7', focus: '#b42318' },
     dark: { accent: '#ff8b80', primary: '#ff7a6e', accentHover: '#ffa199', accentPressed: '#e2726a', tint: '#331917', tone: '#4c241f', onAccent: '#1a0504', focus: '#ff8b80' }
   }
 };

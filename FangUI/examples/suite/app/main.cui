@@ -1,5 +1,8 @@
 /* 一套完整软件的最小骨架：多页 + 表格 + 表单 + 浮层 + 媒体 + 图标。
    全部内容只用 CUI；逻辑位留给 Copper（app/main.co 里的 act call）。 */
+col suite-ink #1f2937
+col suite-brand #3b82f6
+
 window suite
     theme light
     layout column
@@ -24,6 +27,7 @@ window suite
         heading brand
             text "FangUI Suite"
             size 15
+            color suite-ink
         text sub
             text "CUI + Copper · 一套骨架能长成任何软件"
             size 11
@@ -31,7 +35,7 @@ window suite
 
         spacer spring
 
-        tabs nav
+        tabs navigation
             layout row
             gap 4
 
@@ -62,6 +66,7 @@ window suite
                     layout column
                     gap 4
                     padding 14
+                    background gradient(135deg, var(--card), var(--wash))
                     heading
                         text "本周提交"
                     text
@@ -169,8 +174,19 @@ window suite
                 heading
                     text "内嵌网页（frame + doc）"
                 frame f1
-                    doc "<h3>这一段在 .cui 里</h3><p>iframe 直接吃内联 HTML，不需要外部文件。</p>"
+                    doc "<h3>这一段在 .cui 里</h3><p>iframe 直接吃内联标记，不需要外部文件。</p>"
                     height 150
+
+                row flavor
+                    layout row
+                    align center
+                    gap 8
+                    mark beta
+                        text "新"
+                    strong keyhint
+                        text "Ctrl + K"
+                    quote motto
+                        text "标记和样式归 CUI，逻辑归 CO。"
 
         /* 第三页：设置（表单） */
         view settings
@@ -210,6 +226,16 @@ window suite
                         label
                             text "开机自启"
                         switch autostart
+                    field
+                        layout column
+                        gap 4
+                        label
+                            text "界面缩放"
+                        slider zoomctl
+                            min 0.8
+                            max 2
+                            step 0.05
+                            value 1
                     button save-btn
                         accent
                         text "保存"
@@ -256,4 +282,7 @@ button dlg-ok when click
     act close
 button save-btn when click
     act open on toast ts
+
+slider zoomctl when input
+    act zoom
 

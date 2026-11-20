@@ -284,7 +284,134 @@ ok('多页只露 active', BASE_CSS.includes('[data-view]:not(.active)'));
 const allSrc = 'window app\n' + ELEMENTS.map((e) => `    ${e.name} t_${e.name}\n        text "x"`).join('\n');
 const allHtml = renderCuiHtml(allSrc).html;
 const missingEls = ELEMENTS.filter((e) => !allHtml.includes(`data-t="${e.name}"`)).map((e) => e.name);
-ok('60 个元件全部可渲染', missingEls.length === 0);
+ok(`${ELEMENTS.length} 个元件全部可渲染`, missingEls.length === 0);
+
+/* 无极缩放与连续尺寸 */
+const fluidCss = compileCui(`window app
+    card a
+        zoom 1.25
+        width clamp(120px, 20vw, 240px)
+`).css;
+ok('无极缩放 zoom 生效', fluidCss.includes('zoom: 1.25'));
+ok('clamp() 原样透传', fluidCss.includes('clamp(120px, 20vw, 240px)'));
+
+/* act zoom：写值 / 读滑块 */
+const zoomActs = parseCui(`window app
+    slider z
+button b when click
+    act zoom 1.5
+slider z when input
+    act zoom
+`).rules.flatMap((r) => r.actions);
+ok('act zoom 带值', zoomActs.some((a) => a.kind === 'zoom' && a.arg === '1.5'));
+ok('act zoom 读滑块', zoomActs.some((a) => a.kind === 'zoom' && a.arg === 'from'));
+
+/* 语言纯度：.cui 里不许出现 HTML / CSS 字面量，这两个口子必须关死 */
+ok('没有 css 字面量口子', !PROPS.some((p) => p.name === 'css'));
+ok('没有 raw HTML 口子', !PROPS.some((p) => p.name === 'raw') && !ELEMENTS.some((e) => e.name === 'html'));
+
+/* 新元件：语义行内、折叠、画布 */
+const semHtml = renderCuiHtml(`window app
+    mark hl
+        text "高亮"
+    strong st
+        text "重点"
+    canvas cv
+        width 320
+`).html;
+ok('mark/strong/canvas 落成真标签', semHtml.includes('<mark') && semHtml.includes('<strong') && semHtml.includes('<canvas'));
+
+/* 滤镜分量合成一条，不互相覆盖 */
+const filters = compileCui(`window app
+    card f
+        blur 8
+        grayscale 60
+        saturate 140
+        hue 90
+`).css;
+ok('滤镜合成一条', (filters.match(/filter:/g) ?? []).length === 1);
+ok('滤镜分量都在', filters.includes('blur(8px)') && filters.includes('grayscale(60%)') && filters.includes('hue-rotate(90deg)'));
+
+/* col 颜色变量：只存色值，不做运算；引用走 var(--col-*) */
+const colDoc = compileCui(`col brand #2563eb
+col wash #fff8
+window app
+    card a
+        color brand
+        background wash
+`);
+ok('col 变量生成本色表', colDoc.css.includes('--col-brand: #2563eb') && colDoc.css.includes('--col-wash: #fff8'));
+ok('col 引用成 var', colDoc.css.includes('var(--col-brand)') && colDoc.css.includes('var(--col-wash)'));
+ok('col 与主题令牌同名时 col 优先', !colDoc.css.includes('background: var(--wash)'));
+
+const dupCol = compileCui(`col brand #fff
+col brand #000
+window app
+`).diags;
+ok('col 重复声明报错', dupCol.some((d) => d.msg.includes('重复')));
+
+const badCol = compileCui(`col brand red
+window app
+`).diags;
+ok('col 只收十六进制', badCol.some((d) => d.msg.includes('十六进制')));
+
+/* 自定义动画 motion：源码不写 @，编译成 @keyframes；引用走 animation */
+const motionDoc = compileCui(`motion rise
+    from
+        opacity 0
+        move 0 8
+    step 50
+        opacity .8
+    to
+        opacity 1
+        move 0 0
+
+window app
+    card a
+        animation rise 320
+`);
+ok('motion 生成 keyframes', motionDoc.css.includes('@keyframes rise'));
+ok('motion 关键帧完整', ['0%', '50%', '100%'].every((k) => motionDoc.css.includes(`${k} {`)));
+ok('motion 帧里属性生效', motionDoc.css.includes('translate: 0px 8px') && motionDoc.css.includes('opacity: 0.8'));
+ok('motion 被 animation 引用', motionDoc.css.includes('animation: rise 320ms'));
+ok('motion 不产生解析诊断', motionDoc.diags.length === 0);
+ok('motion 记进 AST', (parseCui(`motion rise
+    from
+        opacity 0
+    to
+        opacity 1
+`).motions ?? []).length === 1);
+
+const dupMotion = compileCui(`motion rise
+    from
+        opacity 0
+motion rise
+    to
+        opacity 1
+`).diags;
+ok('motion 重名报错', dupMotion.some((d) => d.msg.includes('重复')));
+ok('motion 没有帧报错', compileCui(`motion rise\nwindow app\n`).diags.some((d) => d.msg.includes('关键帧')));
+ok('motion 与 col 同名报错', compileCui(`col rise #fff
+motion rise
+    from
+        opacity 0
+    to
+        opacity 1
+`).diags.some((d) => d.msg.includes('同名')));
+ok('icon 的 motion 属性不被当成动画块', compileCui(`window app
+    icon i
+        motion hover
+`).css.includes('@keyframes') === false);
+const tokenNameMotion = compileCui(`motion wash
+    from
+        opacity 0
+    to
+        opacity 1
+window app
+    card a
+        animation wash 200
+`).css;
+ok('动画名和令牌同名也不被换掉', tokenNameMotion.includes('animation: wash 200ms') && !tokenNameMotion.includes('animation: var('));
 
 if (bad > 0) {
   throw new Error(`${bad} 项未通过`);

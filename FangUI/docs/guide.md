@@ -184,7 +184,7 @@ button sw-violet when click
 
 ## 5. 组件与变体
 
-41 个元件、七组：按钮 / 输入 / 选择 / 容器 / 数据展示 / 反馈 / 浮层。完整表见 `docs/components.md`（由代码生成，永远和实现对得上）。
+68 个元件、九组：按钮 / 输入 / 选择 / 容器 / 数据展示 / 语义 / 结构 / 媒体 / 反馈。完整表见 `docs/components.md`（由代码生成，永远和实现对得上）。
 
 **变体是类名，尺寸也是类名：**
 
@@ -217,9 +217,11 @@ button b-loading
 | --- | --- |
 | 按钮 | `button` `tab` `menuitem` `link` |
 | 输入 | `input` `textarea` `dropdown` `option` `checkbox` `radio` `switch` `slider` `progress` |
-| 容器 | `window` `box` `card` `section` `grid` `list` `item` `form` `field` `toolbar` `header` `footer` `nav` `main` `aside` `scroll` `view` `spacer` `divider` |
-| 数据 | `table` `row` `heading` `cell` `badge` `tag` `avatar` `icon` `image` `skeleton` `spinner` `code` `text` `label` `tip` |
-| 媒体 | `video` `audio` `frame`（iframe，`doc` 写内联 HTML） |
+| 容器 | `window` `box` `card` `section` `grid` `list` `item` `form` `field` `toolbar` `header` `footer` `navigation` `main` `aside` `scroll` `view` `spacer` `divider` |
+| 数据 | `table` `row` `heading` `cell` `badge` `tag` `avatar` `icon` `image` `skeleton` `spinner` `code` `text` `label` `tooltip` |
+| 语义 | `strong` `italic` `mark` `key` `quote` |
+| 结构 | `details` `summary` `canvas` |
+| 媒体 | `video` `audio` `frame`（iframe，`doc` 写内联标记） |
 | 反馈 | `alert` `empty` `toast` `popover` `menu` `overlay` `modal` `drawer` `tabs` |
 
 ---
@@ -246,6 +248,25 @@ grid in-grid
 ```
 
 工具类可以直接写在元件后面：`center middle between end wrap fill fit pill round nowrap mono muted strong`。
+
+### 语言纯度
+
+`.cui` 里只写 CUI 的词：元件名、属性名、令牌、函数（`gradient` / `mix` / `clamp` / `calc`）。**不写 HTML 标签，也不写 CSS 声明字面量**——没有 `raw`、没有 `css "…"` 这种逃逸口。CSS 能做到的事靠 CUI 自己的属性表覆盖，覆盖不到的是框架要补的课，不是让用户改行写 CSS。
+
+`frame` 的 `doc` 是内嵌文档的正文（`srcdoc`），属于被嵌入内容，不算 `.cui` 语法。
+
+### 无极缩放
+
+尺寸不是只有 px：`%` `vh` `vw` `rem` `em` 都能直接写，`clamp()` / `min()` / `max()` 原样透传。
+
+```cui
+window app
+    zoom 1.25                  /* 整棵界面连续放大，像浏览器缩放 */
+side meta
+    width clamp(180px, 22vw, 280px)
+```
+
+`zoom` 是倍率而不是断点：字体、间距、圆角、矢量图标一起缩放，放大到 4 倍也不糊。多页 + 断点（`narrow` / `wide`）负责“换布局”，`zoom` 和 `clamp()` 负责“同布局连续伸缩”，两者不冲突。
 
 ---
 
@@ -282,8 +303,12 @@ tab t1 when click
 | `act go 视图名` | 切 `view` |
 | `act toggle night on window` | 加/去类名 |
 | `act add` / `act remove` | 加 / 去类名 |
+| `act call 函数名` | 调 CO 函数；触发元素作为第二个参数传进去（能读 `value` / `checked`） |
+| `act zoom 1.25` | 无极缩放；只写 `act zoom` 就读触发滑块的值，夹在 0.5–4 |
 
 `when` 后面可以跟状态，例：`when change`、`when enter`。
+
+**CUI 与 CO 的接线只有一条**：`act call`。CUI 不碰逻辑，CO 通过 `page.*` 改界面。触发元素一起传进去，表单值不用再按 id 二次查找，少一次 DOM 查询就是连接上的“快”。
 
 ---
 
@@ -336,6 +361,8 @@ skeleton sk-1 title      /* 对：类名写在元件同一行 */
 一句话：**跟元件或属性同名的类，必须写在元件名那一行。**
 
 其余类名（`accent` `pill` `zebra` `active` `vertical` `between`）单独一行没有问题，解析器会把它们并进父规则的选择器。
+
+**用词规则**：元件名和属性名一律用完整的英文单词，不用缩写（`key` 不是 `kbd`，`italic` 不是 `em`）；复合词用空格分开（`background size`、`text decoration thickness`），和现有词表保持一致。写进去的词要能在 `docs/components.md` 里查到。
 
 ---
 
@@ -406,3 +433,21 @@ npm run check            # typecheck + test + build
 
 判断标准很简单：任何组件样式里出现 `#` 开头的颜色，就是写错了。
 
+
+## 14. 自定义动画 `motion`
+
+顶层声明，不加 `@`；编译后才是 CSS 的 `@keyframes`。
+
+```
+motion rise
+    from
+        opacity 0
+        move 0 10
+    step 60
+        opacity .9
+    to
+        opacity 1
+        move 0 0
+```
+
+引用：`animation rise 320`（裸数字自动补 `ms`）。`from` = 0%，`to` = 100%，`step N` 是中间档。名字不能重复、不能叫 `none`、不能和 `col` 同名；帧里只写可插值属性。系统「减少动态效果」开启时自动降级。

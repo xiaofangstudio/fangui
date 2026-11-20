@@ -178,6 +178,22 @@ export function attachCuiRuntime(
           continue;
         }
 
+        case 'zoom': {
+          /* 无极缩放：值来自动作参数，或读触发滑块（act zoom 不带值）。
+             夹在 0.5–4 之间，免得一次误操作把界面缩没。 */
+          const raw = a.arg === 'from' || !a.arg ? (hit as HTMLInputElement)?.value : a.arg;
+          const n = Number(raw);
+          if (!Number.isFinite(n)) continue;
+          const z = Math.min(4, Math.max(0.5, n));
+          const nodes = a.target ? query(a.target) : query('[data-t="window"]');
+          const list = nodes.length > 0 ? nodes : [doc.documentElement];
+          for (const el of list) {
+            (el as HTMLElement).style.zoom = String(z);
+            el.dispatchEvent(new CustomEvent('cui-zoom', { detail: z, bubbles: true }));
+          }
+          continue;
+        }
+
         case 'accent': {
           const wanted = a.arg.trim().toLowerCase();
           doc.documentElement.setAttribute('data-accent', wanted);

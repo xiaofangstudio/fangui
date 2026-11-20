@@ -57,14 +57,21 @@ function asLength(v: CuiValue): string {
   return renderValue(v);
 }
 
+/** 当前文档声明的颜色变量名（col name #hex）。renderValue 用它把裸名字变成 var(--col-*)。 */
+let activeColors = new Set<string>();
+
 /** 把一个值渲染成 CSS 片段 */
 function renderValue(v: CuiValue): string {
   switch (v.k) {
     case 'num': return v.unit ? `${v.v}${v.unit}` : String(v.v);
     case 'color': return v.v;
     case 'str': return v.v;
-    case 'token': return tokenVar(v.v);
-    case 'ident': return v.v;
+    case 'token':
+      /* col 变量和令牌同名时，col 声明优先（作者显式定义的颜色不能被主题令牌抢走） */
+      return activeColors.has(v.v) ? `var(--col-${v.v})` : tokenVar(v.v);
+    case 'ident':
+      /* col 变量优先：写了 col brand，之后任何 color brand 都指向同一个值 */
+      return activeColors.has(v.v) ? `var(--col-${v.v})` : v.v;
     case 'call': return renderCall(v.name, v.args);
     default: return '';
   }
@@ -108,6 +115,31 @@ function renderCall(name: string, args: CuiValue[]): string {
     default:
       return `${name}(${a.join(', ')})`;
   }
+}
+
+/* 滤镜分量：blur / grayscale / saturate / contrast / brightness / hue 写几条，
+   合成一条 filter，别互相覆盖。 */
+const FILTER_FNS: Record<string, string> = {
+  grayscale: 'grayscale',
+  saturate: 'saturate',
+  contrast: 'contrast',
+  brightness: 'brightness'
+};
+
+function filterOf(rule: CuiRule): string {
+  const parts: string[] = [];
+  for (const d of rule.decls) {
+    if (d.prop === 'blur') {
+      parts.push(`blur(${asLength(d.values[0])})`);
+    } else if (FILTER_FNS[d.prop] && d.values[0]) {
+      const n = Number(renderValue(d.values[0]).replace(/[^\d.]/g, ''));
+      parts.push(`${FILTER_FNS[d.prop]}(${Number.isFinite(n) ? n : 100}%)`);
+    } else if (d.prop === 'hue' && d.values[0]) {
+      const raw = renderValue(d.values[0]);
+      parts.push(`hue-rotate(${/(deg|turn|rad)$/.test(raw) ? raw : `${raw}deg`})`);
+    }
+  }
+  return parts.join(' ');
 }
 
 /** 一组值 → CSS 值串（多值用空格连接） */
@@ -155,8 +187,14 @@ function declToCss(d: CuiDecl, def: PropDef): string[] {
          只写动画名时补默认时长（走令牌），免得 0 秒看不出效果 */
       const v = d.values;
       if (v.length === 0) return out;
-      const name = renderValue(v[0]);
-      const rest = v.slice(1).map(renderValue).join(' ');
+      /* 动画名一律按字面走：哪怕和令牌同名（wash）也不能换成 var(--wash) */
+      const first = v[0];
+      const name = first.k === 'num' || first.k === 'call' ? renderValue(first) : first.v;
+      /* 时长/延迟的裸数字补 ms：animation rise 320 就是 320ms，不写单位在 CSS 里是无效值 */
+      const rest = v
+        .slice(1)
+        .map((x) => (x.k === 'num' && !x.unit ? `${x.v}ms` : renderValue(x)))
+        .join(' ');
       out.push(`animation: ${name} ${rest || 'var(--cui-anim-dur, 300ms)'};`);
       return out;
     }
@@ -373,7 +411,15 @@ function eventOf(rule: CuiRule): CuiBehavior['event'] | null {
 
 export function compileDocument(doc: CuiDocument): CuiCompileResult {
   const chunks: string[] = [];
-  /* 断点规则单独收着，最后包进 @media；子规则继承父规则的断点 */
+  /* col 变量：本文件的颜色表。编译完不残留，避免跨文件串色。 */
+  activeColors = new Set((doc.colors ?? []).map((c) => c.name));
+  if (doc.colors && doc.colors.length > 0) {
+    const lines = doc.colors
+      .filter((c) => /^[A-Za-z_][\w-]*$/.test(c.name))
+      .map((c) => `  --col-${c.name}: ${c.value};`);
+    if (lines.length > 0) chunks.push(`:root {\n${lines.join('\n')}\n}`);
+  }
+
   const mediaChunks: { media: string; css: string }[] = [];
   const diags: CuiDiag[] = [...doc.diags];
   const texts: { sel: string; text: string }[] = [];
@@ -383,6 +429,37 @@ export function compileDocument(doc: CuiDocument): CuiCompileResult {
   let declCount = 0;
   let ruleCount = 0;
 
+  /* 自定义动画：motion 块编译成 @keyframes。
+     CUI 源码里不出现 @，@ 只在产物 CSS 里。 */
+  if (doc.motions && doc.motions.length > 0) {
+    for (const m of doc.motions) {
+      const frames = [...m.frames].sort((a, b) => a.offset - b.offset);
+      const body: string[] = [];
+      for (const f of frames) {
+        const lines: string[] = [];
+        for (const d of f.decls) {
+          if (d.prop === 'text' || d.prop === 'source' || d.prop === 'hint' || d.prop === 'type') continue;
+          const def = PROP_BY_NAME.get(d.prop);
+          if (!def) {
+            diags.push({ line: d.span.line, col: 1, level: 'warn', msg: `不认识的属性「${d.raw}」，已忽略` });
+            continue;
+          }
+          const css = declToCss(d, def);
+          if (css.length > 0) lines.push(...css);
+        }
+        if (lines.length > 0) {
+          body.push(`  ${f.offset}% {\n    ${lines.join('\n    ')}\n  }`);
+        }
+      }
+      if (body.length > 0) {
+        chunks.push(`@keyframes ${m.name} {\n${body.join('\n')}\n}`);
+        ruleCount++;
+      } else {
+        diags.push({ line: m.span.line, col: 1, level: 'warn', msg: `动画「${m.name}」没有任何可生效的属性` });
+      }
+    }
+  }
+
   const walk = (rule: CuiRule, parentSel: string, inheritedMedia: string): void => {
     const sel = selectorOf(rule.selectors);
     const full = parentSel ? `${parentSel} ${sel}` : sel;
@@ -391,7 +468,12 @@ export function compileDocument(doc: CuiDocument): CuiCompileResult {
     /* icon 的 text 是图标名：已经写进 data-icon，运行时注入 SVG，不能再当文字写回元素 */
     const isIcon = rule.selectors.some((s) => s.kind === 'type' && s.value === 'icon');
 
+    /* 滤镜分量先合成一条，后面的循环跳过它们，免得互相覆盖 */
+    const filterValue = filterOf(rule);
+    if (filterValue) body.push(`filter: ${filterValue};`);
+
     for (const d of rule.decls) {
+      if (d.prop === 'blur' || FILTER_FNS[d.prop] || d.prop === 'hue') continue;
       if (d.prop === 'text') {
         if (isIcon) continue;
         const v = d.values[0];

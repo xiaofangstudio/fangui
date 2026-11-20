@@ -59,7 +59,9 @@ export type CuiActionKind =
   /** 复制文本：act copy "内容" */
   | 'copy'
   /** 图标动画开关：act motion hover | always | still */
-  | 'motion';
+  | 'motion'
+  /** 无极缩放：act zoom 1.5 / act zoom（读滑块值） */
+  | 'zoom';
 
 export type CuiAction = {
   kind: CuiActionKind;
@@ -81,7 +83,32 @@ export type CuiRule = {
 
 export type CuiDocument = {
   rules: CuiRule[];
+  /** 颜色变量：`col brand #2563eb`。只存名字与色值，不做运算。 */
+  colors?: CuiColorDef[];
+  /** 自定义动画：`motion rise` + from / step / to 三档关键帧。 */
+  motions?: CuiMotionDef[];
   diags: CuiDiag[];
+};
+
+/** 自定义动画。写在顶层，不加 @；引用时用 `animation rise 320`。 */
+export type CuiMotionDef = {
+  name: string;
+  frames: CuiMotionFrame[];
+  span: CuiSpan;
+};
+
+/** 一档关键帧：offset 是 0–100 的百分比，from=0、to=100。 */
+export type CuiMotionFrame = {
+  offset: number;
+  decls: CuiDecl[];
+  span: CuiSpan;
+};
+
+/** 一种只表示颜色的变量。CUI 里不允许对它做加减乘除，只允许相等比较。 */
+export type CuiColorDef = {
+  name: string;
+  value: string;
+  span: CuiSpan;
 };
 
 /** 编译出来的交互行为：哪个元素、什么事件、做哪些动作 */

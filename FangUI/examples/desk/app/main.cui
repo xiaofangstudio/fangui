@@ -47,7 +47,7 @@ window app
             color accent
 
     /* ── 标签导航：点谁就切到哪一页 ── */
-    nav tabs
+    navigation tabs
         layout row
         gap 2
         padding 0 12
@@ -108,7 +108,7 @@ window app
                         text "plus"
                         size 14
 
-                    tip new-tip
+                    tooltip new-tip
                         text "创建一条新任务"
                         position absolute
                         top calc(100% + 6)

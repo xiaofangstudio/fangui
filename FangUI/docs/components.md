@@ -1,7 +1,7 @@
 # FangUI 组件目录
 
 > 本文件由 `npm run build:docs` 从 `src/cui/components.ts` 生成，别手改。
-> 共 41 个元件，60 个词（含别名），153 个属性。
+> 共 41 个元件，68 个词（含别名），187 个属性。
 
 写法就一句：**元件名开头，类名跟在后面**。类名可以是变体、尺寸、语义色，顺序不限。
 
@@ -290,12 +290,12 @@ skeleton title
 | `alert` | 提示横幅：info / ok / warn / err | `info` `ok` `warn` `err` `banner` | — |
 | `empty` | 空状态：图标 + 一句话 | — | — |
 | `toast` | 轻提示：act open 显示，4 秒自动走 | `ok` `err` `sticky` | — |
-| `tip` | 悬停提示：贴在父元素上 | `below` | `text` |
+| `tooltip` | 悬停提示：贴在父元素上 | `below` | `text` |
 
 **alert**
 
 ```
-alert tip ok
+alert tooltip ok
     icon
         text "success"
     text "已完成"
@@ -318,12 +318,12 @@ toast saved
     ok
 ```
 
-**tip**
+**tooltip**
 
 ```
 button help
     text "?"
-    tip
+    tooltip
         text "快捷键 Ctrl+S"
 ```
 

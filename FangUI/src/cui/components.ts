@@ -216,7 +216,7 @@ export const COMPONENTS: ComponentSpec[] = [
     variants: ['info', 'ok', 'warn', 'err', 'banner'],
     sizes: [],
     props: [],
-    sample: 'alert tip ok\n    icon\n        text "success"\n    text "已完成"'
+    sample: 'alert tooltip ok\n    icon\n        text "success"\n    text "已完成"'
   },
   {
     name: 'empty', group: '反馈', summary: '空状态：图标 + 一句话',
@@ -233,11 +233,11 @@ export const COMPONENTS: ComponentSpec[] = [
     sample: 'toast saved\n    text "已保存"\n    ok'
   },
   {
-    name: 'tip', group: '反馈', summary: '悬停提示：贴在父元素上',
+    name: 'tooltip', group: '反馈', summary: '悬停提示：贴在父元素上',
     variants: ['below'],
     sizes: [],
     props: ['text'],
-    sample: 'button help\n    text "?"\n    tip\n        text "快捷键 Ctrl+S"'
+    sample: 'button help\n    text "?"\n    tooltip\n        text "快捷键 Ctrl+S"'
   },
   {
     name: 'overlay', group: '浮层', summary: '遮罩层：open 打开，点空白处关闭',

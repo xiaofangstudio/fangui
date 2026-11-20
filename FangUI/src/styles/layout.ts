@@ -28,12 +28,12 @@ export const LAYOUT_CSS = `
   background: var(--surface); border-top: 1px solid var(--hairline);
   min-height: 44px; flex: none;
 }
-[data-t="nav"] {
+[data-t="navigation"] {
   display: flex; align-items: center; gap: var(--space-1);
   padding: 0 var(--space-3);
   background: var(--card); border-bottom: 1px solid var(--line);
 }
-[data-t="nav"].rail {
+[data-t="navigation"].rail {
   flex-direction: column; align-items: stretch;
   width: 220px; padding: var(--space-2) var(--space-1);
   border-bottom: 0; border-right: 1px solid var(--line);
@@ -113,6 +113,28 @@ export const LAYOUT_CSS = `
   display: inline; padding: 1px 5px; border: 0; border-radius: var(--radius-s);
   background: var(--wash); vertical-align: baseline;
 }
+
+/* ── 行内语义与折叠 / 画布 ── */
+[data-t="strong"] { display: inline; font-weight: 600; }
+[data-t="italic"] { display: inline; font-style: italic; }
+[data-t="mark"] {
+  display: inline; padding: 0 3px; border-radius: 3px;
+  background: var(--accent-weak, var(--wash)); color: var(--ink);
+}
+[data-t="key"] {
+  display: inline-block; padding: 1px 5px; border-radius: var(--radius-s);
+  font-family: "Cascadia Mono", "JetBrains Mono", Consolas, monospace;
+  font-size: var(--font-xs); line-height: 1.4;
+  background: var(--card); color: var(--ink);
+  border: 1px solid var(--line); border-bottom-width: 2px;
+}
+[data-t="quote"] {
+  display: block; margin: 0; padding: 2px 0 2px var(--space-3);
+  border-left: 2px solid var(--accent); color: var(--soft);
+}
+[data-t="details"] { display: block; }
+[data-t="summary"] { display: block; cursor: pointer; font-weight: 500; }
+[data-t="canvas"] { display: block; max-width: 100%; background: var(--card); border-radius: var(--radius-m); }
 
 /* ── 列表 ── */
 [data-t="list"] { display: block; margin: 0; padding: 0; list-style: none; }

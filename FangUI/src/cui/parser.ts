@@ -11,7 +11,7 @@
  * 选择器由「元件 + 类 + #实例 + when 状态」自由组合，顺序不限。
  */
 
-import type { CuiAction, CuiActionKind, CuiDecl, CuiDiag, CuiDocument, CuiRule, CuiSelector, CuiValue } from './ast';
+import type { CuiAction, CuiActionKind, CuiColorDef, CuiDecl, CuiDiag, CuiDocument, CuiMotionDef, CuiMotionFrame, CuiRule, CuiSelector, CuiValue } from './ast';
 import type { OutlineItem } from '../lang/analyze';
 import { COMPONENTS, UTILITIES } from './components';
 import { ALL_ELEMENT_WORDS, ALL_TOKEN_WORDS, COMBINATOR_MAP, EVENT_MAP, STATE_MAP, elementName, matchProp } from './props';
@@ -327,7 +327,7 @@ function parseSelector(toks: Tok[], line: number): CuiSelector[] {
 
 const ACTION_KINDS = new Set<string>([
   'add', 'remove', 'toggle', 'text', 'say', 'go', 'call', 'theme',
-  'open', 'close', 'accent', 'copy', 'motion'
+  'open', 'close', 'accent', 'copy', 'motion', 'zoom'
 ]);
 
 /** `act toggle active on card` / `act say "已提交"` / `act call add_item`
@@ -382,6 +382,14 @@ function parseAction(toks: Tok[], line: number, diags: CuiDiag[]): CuiAction | n
       return null;
     }
     return { kind, target, arg: (s as { v: string }).v, span };
+  }
+
+  if (kind === 'zoom') {
+    /* 无极缩放：act zoom 1.25 / act zoom on window app / 只写 act zoom 就读触发控件的值（滑块） */
+    const onIdx = rest.findIndex((t) => t.k === 'word' && t.v === 'on');
+    const target = onIdx >= 0 ? parseSelector(rest.slice(onIdx + 1), line) : [];
+    const s = rest.slice(0, onIdx >= 0 ? onIdx : rest.length).find((t) => t.k === 'word' || t.k === 'text' || t.k === 'num');
+    return { kind, target, arg: s ? String((s as { v: string | number }).v) : 'from', span };
   }
 
   if (kind === 'copy') {
@@ -453,8 +461,112 @@ function stripComment(line: string): string {
 
 type Frame = { rule: CuiRule; indent: number };
 
+const MOTION_NAME = /^[A-Za-z_][\w-]*$/;
+
+/** 自定义动画块：
+ *
+ *   motion rise
+ *       from
+ *           opacity 0
+ *           move 0 8
+ *       step 50
+ *           opacity .85
+ *       to
+ *           opacity 1
+ *           move 0 0
+ *
+ * 顶层、不加 @；引用时写 `animation rise 320`。
+ * 这里只吃缩进块，不碰主循环的栈，所以不会影响普通规则的解析。
+ * 返回块结束后下一行的下标（调用方把 ln 设成它再 --）。
+ */
+function parseMotionBlock(
+  lines: string[],
+  start: number,
+  name: string,
+  lineNo: number,
+  motions: CuiMotionDef[],
+  diags: CuiDiag[]
+): number {
+  const def: CuiMotionDef = { name, frames: [], span: { line: lineNo, col: 1 } };
+  motions.push(def);
+  let frame: CuiMotionFrame | null = null;
+  let frameIndent = -1;
+
+  let i = start + 1;
+  for (; i < lines.length; i++) {
+    const raw = stripComment(lines[i].replace(/\r$/, ''));
+    if (!raw.trim()) continue;
+    const indent = indentOf(raw);
+    if (indent === 0) break;
+
+    const toks = tokenize(raw);
+    if (toks.length === 0) continue;
+    const words = toks.filter((t) => t.k === 'word').map((t) => (t as { v: string }).v);
+    const t0 = toks[0];
+
+    /* 帧头：from / to / step N */
+    const isFrameHead =
+      t0.k === 'word' &&
+      (t0.v === 'from' || t0.v === 'to' || (t0.v === 'step' && toks.length >= 2 && toks[1].k === 'num'));
+    if (isFrameHead) {
+      let offset = 0;
+      if (t0.v === 'to') offset = 100;
+      else if (t0.v === 'step') {
+        const n = toks[1];
+        offset = n.k === 'num' ? n.v : 0;
+      }
+      if (!(offset >= 0 && offset <= 100)) {
+        diags.push({ line: i + 1, col: 1, level: 'error', msg: 'motion 的 step 要写 0–100 的百分比，如 step 50' });
+        frame = null;
+        frameIndent = indent;
+        continue;
+      }
+      if (def.frames.some((f) => f.offset === offset)) {
+        diags.push({ line: i + 1, col: 1, level: 'error', msg: `motion「${name}」的 ${offset}% 重复了` });
+      }
+      frame = { offset, decls: [], span: { line: i + 1, col: 1 } };
+      def.frames.push(frame);
+      frameIndent = indent;
+      continue;
+    }
+
+    /* 帧里的声明行 */
+    if (!frame) {
+      diags.push({ line: i + 1, col: 1, level: 'error', msg: `motion「${name}」里要先写 from / step / to，再写属性` });
+      continue;
+    }
+    if (indent <= frameIndent) {
+      diags.push({ line: i + 1, col: 1, level: 'error', msg: `motion「${name}」的 ${frame.offset}% 里，属性要再缩进一层` });
+      continue;
+    }
+    const hit = matchProp(words);
+    if (!hit) {
+      diags.push({ line: i + 1, col: 1, level: 'warn', msg: `motion 里只写属性，「${words[0] ?? ''}」已忽略` });
+      continue;
+    }
+    const values = parseValues(toks.slice(hit.used));
+    if (values.length === 0 && hit.prop.type !== 'text') {
+      diags.push({ line: i + 1, col: 1, level: 'warn', msg: `「${hit.raw}」没有值，已忽略` });
+      continue;
+    }
+    frame.decls.push({
+      prop: hit.prop.name,
+      raw: hit.raw,
+      values,
+      span: { line: i + 1, col: 1 }
+    });
+  }
+
+  if (def.frames.length === 0) {
+    diags.push({ line: lineNo, col: 1, level: 'error', msg: `motion「${name}」没有任何关键帧（至少要 from 和 to）` });
+  }
+  return i;
+}
+
 export function parseCui(src: string): CuiDocument {
   const rules: CuiRule[] = [];
+  const colors: CuiColorDef[] = [];
+  const motions: CuiMotionDef[] = [];
   const diags: CuiDiag[] = [];
   const stack: Frame[] = [];
   const lines = src.split('\n');
@@ -473,9 +585,49 @@ export function parseCui(src: string): CuiDocument {
 
     const parent = stack.length > 0 ? stack[stack.length - 1].rule : null;
     const words = toks.filter((t) => t.k === 'word').map((t) => (t as { v: string }).v);
+    const t0 = toks[0];
+
+    /* ── 颜色变量（col name #hex）：顶层声明，先收集，编译期变成 --col-* ── */
+    if (t0.k === 'word' && t0.v === 'col' && indent === 0) {
+      const name = toks[1];
+      const value = toks.filter((t) => t.k === 'hex' || t.k === 'text')[0];
+      if (!name || name.k !== 'word') {
+        diags.push({ line: lineNo, col: 1, level: 'error', msg: '「col」后面要跟变量名，如 col brand #2563eb' });
+        continue;
+      }
+      const hex = value && (value.k === 'hex' || value.k === 'text') ? value.v : '';
+      if (!/^#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(hex)) {
+        diags.push({ line: lineNo, col: 1, level: 'error', msg: '「col」只接受十六进制色值，如 #2563eb / #fff8' });
+        continue;
+      }
+      if (colors.some((c) => c.name === name.v)) {
+        diags.push({ line: lineNo, col: 1, level: 'error', msg: `颜色变量「${name.v}」重复声明` });
+        continue;
+      }
+      colors.push({ name: name.v, value: hex, span: { line: lineNo, col: 1 } });
+      continue;
+    }
+
+    /* ── 自定义动画（motion name）：顶层声明，不加 @ ── */
+    if (t0.k === 'word' && t0.v === 'motion' && indent === 0) {
+      const name = toks[1];
+      if (!name || name.k !== 'word' || !MOTION_NAME.test(name.v)) {
+        diags.push({ line: lineNo, col: 1, level: 'error', msg: '「motion」后面要跟动画名，如 motion rise' });
+        continue;
+      }
+      if (motions.some((m) => m.name === name.v)) {
+        diags.push({ line: lineNo, col: 1, level: 'error', msg: `动画「${name.v}」重复声明` });
+        continue;
+      }
+      if (name.v === 'none') {
+        diags.push({ line: lineNo, col: 1, level: 'error', msg: '「none」在 CSS 里表示无动画，不能当动画名' });
+        continue;
+      }
+      ln = parseMotionBlock(lines, ln, name.v, lineNo, motions, diags) - 1;
+      continue;
+    }
 
     /* ── 动作行（act …）：挂在当前规则上，点/输入时执行 ── */
-    const t0 = toks[0];
     if (t0.k === 'word' && t0.v === 'act') {
       if (!parent) {
         diags.push({ line: lineNo, col: 1, level: 'error', msg: '「act」前面缺少选择器' });
@@ -561,7 +713,18 @@ export function parseCui(src: string): CuiDocument {
 
   liftBareClasses(rules);
 
-  return { rules, diags };
+  /* 动画名会和 col 变量抢同一个裸名字： animation 一读就被换成 var(--col-*)，
+     所以重名必须在解析期就拦下来，别等到运行期动画凭空不动。 */
+  for (const m of motions) {
+    if (colors.some((c) => c.name === m.name)) {
+      diags.push({
+        line: m.span.line, col: 1, level: 'error',
+        msg: `动画「${m.name}」和颜色变量同名了，改一个名字`
+      });
+    }
+  }
+
+  return { rules, colors, motions, diags };
 }
 
 /** 单独一行写变体也算数。

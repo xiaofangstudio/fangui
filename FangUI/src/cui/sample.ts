@@ -78,7 +78,7 @@ window
             padding 9 11
             size 13
 
-        text tip
+        text tooltip
             text "改右边，左边立刻变"
             size 12
             color ghost

@@ -22,13 +22,23 @@ export const ELEMENTS: { name: string; desc: string }[] = [
   { name: 'column', desc: '纵向排列容器' },
   { name: 'text', desc: '文本' },
   { name: 'code', desc: '等宽代码块（inline 类退化成行内片段）' },
+  /* 行内语义：CUI 自己的词，不再需要 <b> <mark> 这些标签 */
+  { name: 'strong', desc: '强调（加粗）' },
+  { name: 'italic', desc: '侧重（斜体）' },
+  { name: 'mark', desc: '高亮片段（底色随主题）' },
+  { name: 'key', desc: '按键（等宽 + 下边框，像个键帽）' },
+  { name: 'quote', desc: '引用块（左侧竖线）' },
+  /* 结构：可折叠面板与画布 */
+  { name: 'details', desc: '可折叠面板' },
+  { name: 'summary', desc: '折叠面板的标题行' },
+  { name: 'canvas', desc: '画布（图表 / 自绘图形，交给 CO 驱动）' },
   { name: 'button', desc: '按钮' },
   { name: 'input', desc: '单行输入框' },
   { name: 'textarea', desc: '多行输入框' },
   { name: 'image', desc: '图片' },
   { name: 'video', desc: '视频' },
   { name: 'audio', desc: '音频' },
-  { name: 'frame', desc: '内嵌网页（iframe，可用 doc 写内联 HTML）' },
+  { name: 'frame', desc: '内嵌网页（iframe，可用 doc 写内联标记）' },
   { name: 'list', desc: '列表容器' },
   { name: 'item', desc: '列表项' },
   { name: 'checkbox', desc: '复选框' },
@@ -42,7 +52,7 @@ export const ELEMENTS: { name: string; desc: string }[] = [
   { name: 'view', desc: '一页：配合 act go 切换的多页容器' },
   { name: 'header', desc: '页头' },
   { name: 'footer', desc: '页脚' },
-  { name: 'nav', desc: '导航栏（横排链接）' },
+  { name: 'navigation', desc: '导航栏（横排链接）' },
   { name: 'main', desc: '主内容区' },
   { name: 'aside', desc: '侧栏' },
   { name: 'section', desc: '带标题的内容分区' },
@@ -71,7 +81,7 @@ export const ELEMENTS: { name: string; desc: string }[] = [
   { name: 'icon', desc: '图标：内置字形（写单词）或 Kubai 两态资产（name + motion）' },
   { name: 'spinner', desc: '加载指示' },
   { name: 'skeleton', desc: '骨架占位（加载中的灰条）' },
-  { name: 'tip', desc: '悬停提示（父元素 hover 时出现）' },
+  { name: 'tooltip', desc: '悬停提示（父元素 hover 时出现）' },
 
   /* ── 浮层与链接 ── */
   { name: 'overlay', desc: '遮罩层（铺满、半透明）' },
@@ -217,6 +227,8 @@ export type PropDef = {
 };
 
 export const PROPS: PropDef[] = [
+  /* 无极缩放：整棵子树连同字体、间距、圆角一起放大缩小，矢量图标不掉清晰度 */
+  { name: 'zoom', css: 'zoom', type: 'num', desc: '整体缩放倍率（0.5–4），像浏览器缩放一样连续' },
   /* ── 尺寸 ── */
   { name: 'width', css: 'width', type: 'len', desc: '宽度；也可写 fill（撑满）或 fit（贴合内容）' },
   { name: 'height', css: 'height', type: 'len', desc: '高度；也可写 fill 或 fit' },
@@ -342,7 +354,42 @@ export const PROPS: PropDef[] = [
   { name: 'visibility', css: 'visibility', type: 'kw', desc: '可见性：show / hide' },
   { name: 'pointer', css: 'pointer-events', type: 'kw', desc: '是否接收鼠标：auto / none' },
   { name: 'clip', css: 'clip-path', type: 'any', multi: true, desc: '裁剪路径，如 clip circle(50%)' },
+  { name: 'mask', css: 'mask-image', type: 'any', multi: true, desc: '遮罩，如 mask gradient(90deg, black, transparent)' },
   { name: 'scroll behavior', css: 'scroll-behavior', type: 'kw', desc: '滚动方式：auto / smooth' },
+  { name: 'snap', css: 'scroll-snap-type', type: 'kw', desc: '滚动吸附：x / y / both，可加 mandatory' },
+  { name: 'snap align', css: 'scroll-snap-align', type: 'kw', desc: '吸附点：start / center / end' },
+  { name: 'object position', css: 'object-position', type: 'kw', desc: '图片裁切位置：center / top / bottom / left / right' },
+  { name: 'caret', css: 'caret-color', type: 'color', desc: '输入光标颜色' },
+  { name: 'mask size', css: 'mask-size', type: 'any', multi: true, desc: '遮罩尺寸：cover / contain / 宽 高' },
+  { name: 'mask repeat', css: 'mask-repeat', type: 'kw', desc: '遮罩平铺：repeat / none / x / y' },
+  { name: 'mask position', css: 'mask-position', type: 'any', multi: true, desc: '遮罩位置：center / 左 上' },
+  { name: 'background attachment', css: 'background-attachment', type: 'kw', desc: '背景滚动：scroll / fixed / local' },
+  { name: 'background origin', css: 'background-origin', type: 'kw', desc: '背景起点：border / padding / content' },
+  { name: 'border collapse', css: 'border-collapse', type: 'kw', desc: '表格边框：collapse / separate' },
+  { name: 'table layout', css: 'table-layout', type: 'kw', desc: '表格布局：auto / fixed' },
+  { name: 'caption side', css: 'caption-side', type: 'kw', desc: '表题位置：top / bottom' },
+  { name: 'empty cells', css: 'empty-cells', type: 'kw', desc: '空单元格：show / hide' },
+  { name: 'list style position', css: 'list-style-position', type: 'kw', desc: '列表符号位置：inside / outside' },
+  { name: 'font variant', css: 'font-variant', type: 'kw', desc: '字形变体：normal / small-caps' },
+  { name: 'hyphens', css: 'hyphens', type: 'kw', desc: '断词：none / manual / auto' },
+  { name: 'tab size', css: 'tab-size', type: 'num', desc: '制表符宽度（字符数）' },
+  { name: 'color scheme', css: 'color-scheme', type: 'any', multi: true, desc: '系统控件配色：light / dark / light dark' },
+  { name: 'accent color', css: 'accent-color', type: 'color', desc: '原生控件强调色（勾选框、滑块）' },
+  { name: 'will change', css: 'will-change', type: 'any', multi: true, desc: '提前告诉浏览器会变什么，如 will change transform' },
+  { name: 'isolation', css: 'isolation', type: 'kw', desc: '是否新建层叠上下文：auto / isolate' },
+  { name: 'contain', css: 'contain', type: 'kw', desc: '渲染隔离：none / strict / content / size / layout' },
+  { name: 'touch action', css: 'touch-action', type: 'kw', desc: '触摸手势：auto / none / pan-x / pan-y' },
+  { name: 'text decoration style', css: 'text-decoration-style', type: 'kw', desc: '下划线样式：solid / double / dotted / dashed / wavy' },
+  { name: 'text decoration thickness', css: 'text-decoration-thickness', type: 'any', desc: '下划线粗细，如 text decoration thickness 2' },
+  { name: 'scroll margin', css: 'scroll-margin', type: 'len', multi: true, desc: '滚动落脚留白' },
+  { name: 'scroll padding', css: 'scroll-padding', type: 'len', multi: true, desc: '滚动容器内边距（吸附用）' },
+
+  /* ── 滤镜分量（单独写时和 blur 叠加成一条 filter） ── */
+  { name: 'grayscale', css: 'filter', type: 'num', desc: '去色百分比 0–100' },
+  { name: 'saturate', css: 'filter', type: 'num', desc: '饱和度百分比，100 为原始' },
+  { name: 'contrast', css: 'filter', type: 'num', desc: '对比度百分比，100 为原始' },
+  { name: 'brightness', css: 'filter', type: 'num', desc: '亮度百分比，100 为原始' },
+  { name: 'hue', css: 'filter', type: 'any', desc: '色相旋转角度，如 hue 90' },
 
   /* ── 变换 ── */
   { name: 'move', css: 'translate', type: 'any', multi: true, desc: '平移，如 move 4 -2' },
@@ -517,5 +564,6 @@ for (const p of PROPS) {
     if (owners.length === 1) PROP_ALIASES[p.css] = p.name;
   }
 }
+
 
 

@@ -81,7 +81,7 @@ const RUNTIME_CSS = `
 #cui-toast {
   position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%);
   max-width: 80vw; padding: 8px 14px; border-radius: 8px;
-  background: #171717; color: #fff; font-size: 12.5px; line-height: 1.5;
+  background: #171717; color: #f4f6f7; font-size: 12.5px; line-height: 1.5;
   opacity: 0; transition: opacity .18s; pointer-events: none; z-index: 9999;
 }
 `;
